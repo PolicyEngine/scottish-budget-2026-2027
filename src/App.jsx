@@ -6,7 +6,7 @@ function App() {
     <div className="app">
       <header className="title-row">
         <div className="title-row-inner">
-          <h1>Post-Scottish Budget 2026 Analysis</h1>
+          <h1>Scottish Budget 2026</h1>
         </div>
       </header>
       <main className="main-content">
