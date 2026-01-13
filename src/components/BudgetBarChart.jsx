@@ -10,31 +10,39 @@ import {
 import "./BudgetBarChart.css";
 
 /**
- * Bar chart showing budgetary impact by year.
+ * Bar chart showing values by year.
  */
-export default function BudgetBarChart({ data, title }) {
+export default function BudgetBarChart({
+  data,
+  title,
+  description,
+  yLabel = "Cost (£ millions)",
+  yFormat,
+  tooltipLabel = "Value",
+}) {
   if (!data || data.length === 0) {
     return (
       <div className="budget-bar-chart">
-        <h3 className="chart-title">{title || "Budgetary impact"}</h3>
+        {title && <h3 className="chart-title">{title}</h3>}
         <div className="chart-empty">No data available</div>
       </div>
     );
   }
 
-  const formatValue = (value) => `£${value.toFixed(0)}m`;
+  const defaultFormat = (value) => `£${value.toFixed(0)}m`;
+  const formatValue = yFormat || defaultFormat;
   const formatYearRange = (year) => `${year}–${(year + 1).toString().slice(-2)}`;
 
   // Calculate y-axis domain
-  const maxValue = Math.max(...data.map((d) => d.value));
-  const yMax = Math.ceil(maxValue / 10) * 10 + 10; // Round up to nearest 10 + buffer
+  const maxValue = Math.max(...data.map((d) => Math.abs(d.value)));
+  const minValue = Math.min(...data.map((d) => d.value));
+  const yMin = minValue < 0 ? Math.floor(minValue * 1.1) : 0;
+  const yMax = Math.ceil(maxValue * 1.2);
 
   return (
     <div className="budget-bar-chart">
-      <h3 className="chart-title">{title || "Budgetary impact by year"}</h3>
-      <p className="chart-description">
-        Estimated annual cost of the SCP baby boost policy in Scotland.
-      </p>
+      {title && <h3 className="chart-title">{title}</h3>}
+      {description && <p className="chart-description">{description}</p>}
 
       <ResponsiveContainer width="100%" height={300}>
         <BarChart
@@ -54,11 +62,11 @@ export default function BudgetBarChart({ data, title }) {
             }}
           />
           <YAxis
-            domain={[0, yMax]}
+            domain={[yMin, yMax]}
             tickFormatter={formatValue}
             tick={{ fontSize: 12, fill: "#666" }}
             label={{
-              value: "Cost (£ millions)",
+              value: yLabel,
               angle: -90,
               position: "insideLeft",
               dx: -15,
@@ -71,7 +79,7 @@ export default function BudgetBarChart({ data, title }) {
             }}
           />
           <Tooltip
-            formatter={(value) => [formatValue(value), "Cost"]}
+            formatter={(value) => [formatValue(value), tooltipLabel]}
             labelFormatter={(label) => formatYearRange(label)}
             contentStyle={{
               background: "white",
@@ -84,7 +92,7 @@ export default function BudgetBarChart({ data, title }) {
             dataKey="value"
             fill="#319795"
             radius={[4, 4, 0, 0]}
-            name="Cost"
+            name={tooltipLabel}
           />
         </BarChart>
       </ResponsiveContainer>

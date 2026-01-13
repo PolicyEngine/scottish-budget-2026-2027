@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import D3LineChart from "./D3LineChart";
 import DecileChart from "./DecileChart";
 import BudgetBarChart from "./BudgetBarChart";
 import PovertyImpactTable from "./PovertyImpactTable";
@@ -14,41 +13,11 @@ const SECTIONS = [
   { id: "local-areas", label: "Local areas" },
 ];
 
-// Historical household income data
-const HISTORICAL_HOUSEHOLD_INCOME_DATA = [
-  { year: 2021, meanIncome: 41200, medianIncome: 35800, meanIncomeReal: 48000, medianIncomeReal: 41700 },
-  { year: 2022, meanIncome: 45000, medianIncome: 39200, meanIncomeReal: 48000, medianIncomeReal: 41800 },
-  { year: 2023, meanIncome: 49700, medianIncome: 43200, meanIncomeReal: 49700, medianIncomeReal: 43200 },
-];
-
-// CPI deflators to convert future nominal values to 2023 real prices
-const CPI_DEFLATORS = {
-  2023: 1.00, 2024: 1.03, 2025: 1.05, 2026: 1.07,
-  2027: 1.09, 2028: 1.11, 2029: 1.13, 2030: 1.16,
-};
-
-// Fallback data in case JSON files don't load
-const FALLBACK_BASELINE_DATA = [
-  { year: 2023, meanHouseholdIncome: 49700, medianHouseholdIncome: 43200, povertyBHC: 18.0, povertyAHC: 20.0, absolutePovertyBHC: 15.0, absolutePovertyAHC: 17.0, childPovertyBHC: 20.0, childPovertyAHC: 23.0 },
-  { year: 2024, meanHouseholdIncome: 51500, medianHouseholdIncome: 44800, povertyBHC: 17.8, povertyAHC: 19.8, absolutePovertyBHC: 14.8, absolutePovertyAHC: 16.8, childPovertyBHC: 19.5, childPovertyAHC: 22.5 },
-  { year: 2025, meanHouseholdIncome: 53400, medianHouseholdIncome: 46500, povertyBHC: 17.5, povertyAHC: 19.5, absolutePovertyBHC: 14.5, absolutePovertyAHC: 16.5, childPovertyBHC: 19.0, childPovertyAHC: 22.0 },
-  { year: 2026, meanHouseholdIncome: 55400, medianHouseholdIncome: 48200, povertyBHC: 17.2, povertyAHC: 19.2, absolutePovertyBHC: 14.2, absolutePovertyAHC: 16.2, childPovertyBHC: 18.5, childPovertyAHC: 21.5 },
-  { year: 2027, meanHouseholdIncome: 57500, medianHouseholdIncome: 50000, povertyBHC: 16.9, povertyAHC: 18.9, absolutePovertyBHC: 13.9, absolutePovertyAHC: 15.9, childPovertyBHC: 18.0, childPovertyAHC: 21.0 },
-  { year: 2028, meanHouseholdIncome: 59700, medianHouseholdIncome: 51900, povertyBHC: 16.6, povertyAHC: 18.6, absolutePovertyBHC: 13.6, absolutePovertyAHC: 15.6, childPovertyBHC: 17.5, childPovertyAHC: 20.5 },
-  { year: 2029, meanHouseholdIncome: 62000, medianHouseholdIncome: 53900, povertyBHC: 16.3, povertyAHC: 18.3, absolutePovertyBHC: 13.3, absolutePovertyAHC: 15.3, childPovertyBHC: 17.0, childPovertyAHC: 20.0 },
-  { year: 2030, meanHouseholdIncome: 64400, medianHouseholdIncome: 56000, povertyBHC: 16.0, povertyAHC: 18.0, absolutePovertyBHC: 13.0, absolutePovertyAHC: 15.0, childPovertyBHC: 16.5, childPovertyAHC: 19.5 },
-];
-
 export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [livingStandardsData, setLivingStandardsData] = useState(null);
-  const [povertyData, setPovertyData] = useState(null);
   const [povertyMetrics, setPovertyMetrics] = useState([]);
   const [budgetaryData, setBudgetaryData] = useState(null);
-  const [baselineData, setBaselineData] = useState(FALLBACK_BASELINE_DATA);
-  const [incomeType, setIncomeType] = useState("mean");
-  const [incomeAdjustment, setIncomeAdjustment] = useState("nominal");
-  const [incomeViewMode, setIncomeViewMode] = useState("both");
   const [activeSection, setActiveSection] = useState("introduction");
 
   // Refs for section elements
@@ -126,31 +95,6 @@ export default function Dashboard() {
               value: parseFloat(row.value),
             }));
           setPovertyMetrics(scpMetrics);
-
-          // Extract poverty metrics for 2026
-          const metrics2026 = data.filter(row =>
-            row.year === "2026" && row.reform_id === "scp_baby_boost"
-          );
-
-          const povertyRates = {};
-          metrics2026.forEach(row => {
-            povertyRates[row.metric] = parseFloat(row.value);
-          });
-
-          setPovertyData({
-            rates: {
-              overall: {
-                baseline: povertyRates.poverty_rate_baseline || 18.2,
-                reform: povertyRates.poverty_rate_reform || 16.8,
-                change: povertyRates.poverty_rate_change || -1.4,
-              },
-              child: {
-                baseline: povertyRates.child_poverty_rate_baseline || 24.1,
-                reform: povertyRates.child_poverty_rate_reform || 21.5,
-                change: povertyRates.child_poverty_rate_change || -2.6,
-              },
-            },
-          });
         }
 
         if (budgetRes.ok) {
@@ -249,6 +193,8 @@ export default function Dashboard() {
             .map(([year, value]) => ({ year: parseInt(year), value }))
             .sort((a, b) => a.year - b.year)}
           title="Estimated budgetary impact"
+          description="Estimated annual cost of the SCP baby boost policy in Scotland."
+          tooltipLabel="Cost"
         />
       )}
 
@@ -265,107 +211,26 @@ export default function Dashboard() {
       {/* Living Standards Section */}
       <h2 className="section-title" id="living-standards" ref={(el) => (sectionRefs.current["living-standards"] = el)}>Living standards</h2>
       <p className="chart-description">
-        This section shows how household incomes in Scotland are projected to change following the budget measures,
-        comparing pre-budget forecasts with post-budget impacts.
+        This section shows how household incomes in Scotland change as a result of the SCP baby boost policy.
       </p>
 
-      <div className="charts-row">
-        <div className="section-box">
-          <h3 className="chart-title">Household income</h3>
-          <p className="chart-description">
-            {incomeType === "mean"
-              ? "Mean income is total disposable income divided by the number of households."
-              : "Median income is the middle value when all households are ranked by income."}{" "}
-            {incomeAdjustment === "real" ? "Values adjusted to 2023 prices. " : ""}
-            Solid lines show official ONS data; dashed lines show PolicyEngine projections.
-          </p>
-          {baselineData.length > 0 && (() => {
-            const year2023 = baselineData.find(d => d.year === 2023);
-            const year2030 = baselineData.find(d => d.year === 2030);
-            if (!year2023 || !year2030) return null;
-            let startValue = incomeType === "mean" ? year2023.meanHouseholdIncome : year2023.medianHouseholdIncome;
-            let endValue = incomeType === "mean" ? year2030.meanHouseholdIncome : year2030.medianHouseholdIncome;
-            if (incomeAdjustment === "real") {
-              startValue = startValue / CPI_DEFLATORS[2023];
-              endValue = endValue / CPI_DEFLATORS[2030];
-            }
-            const pctChange = ((endValue - startValue) / startValue) * 100;
-            const realSuffix = incomeAdjustment === "real" ? " (in 2023 prices)" : "";
-            return (
-              <p className="chart-summary">
-                {incomeType === "mean" ? "Mean" : "Median"} household income is forecast to {pctChange > 0 ? "increase" : "decrease"} by {Math.abs(pctChange).toFixed(0)}% from £{(startValue / 1000).toFixed(0)}k to £{(endValue / 1000).toFixed(0)}k by 2030{realSuffix}.
-              </p>
-            );
+      <div className="section-box" style={{ marginTop: "var(--pe-space-lg)" }}>
+        <h3 className="chart-title">Average income change from SCP baby boost</h3>
+        <p className="chart-description">
+          Average change in household net income due to the policy, across all Scottish households.
+          The change is small when averaged across all households because only families with babies under 1 receiving SCP benefit.
+        </p>
+        <BudgetBarChart
+          data={(() => {
+            const avgChange = livingStandardsData?.avgChangeByYear || {};
+            return [2026, 2027, 2028, 2029, 2030]
+              .filter(year => avgChange[year] !== undefined)
+              .map(year => ({ year, value: avgChange[year] }));
           })()}
-          <div className="chart-controls">
-            <select
-              className="chart-select"
-              value={incomeType}
-              onChange={(e) => setIncomeType(e.target.value)}
-            >
-              <option value="mean">Mean income</option>
-              <option value="median">Median income</option>
-            </select>
-            <div className="view-toggle">
-              <button className={incomeAdjustment === "nominal" ? "active" : ""} onClick={() => setIncomeAdjustment("nominal")}>Nominal</button>
-              <button className={incomeAdjustment === "real" ? "active" : ""} onClick={() => setIncomeAdjustment("real")}>Real</button>
-            </div>
-            <div className="view-toggle">
-              <button className={incomeViewMode === "outturn" ? "active" : ""} onClick={() => setIncomeViewMode("outturn")}>Outturn</button>
-              <button className={incomeViewMode === "both" ? "active" : ""} onClick={() => setIncomeViewMode("both")}>Both</button>
-              <button className={incomeViewMode === "forecast" ? "active" : ""} onClick={() => setIncomeViewMode("forecast")}>Forecast</button>
-            </div>
-          </div>
-          <D3LineChart
-            data={(() => {
-              const merged = {};
-              const avgChange = livingStandardsData?.avgChangeByYear || {};
-
-              HISTORICAL_HOUSEHOLD_INCOME_DATA.forEach(d => {
-                const historicalKey = incomeAdjustment === "real"
-                  ? (incomeType === "mean" ? "meanIncomeReal" : "medianIncomeReal")
-                  : (incomeType === "mean" ? "meanIncome" : "medianIncome");
-                merged[d.year] = {
-                  year: d.year,
-                  historical: d[historicalKey],
-                };
-              });
-              baselineData.filter(d => d.year >= 2023).forEach(d => {
-                let projectionValue = incomeType === "mean" ? d.meanHouseholdIncome : d.medianHouseholdIncome;
-                if (incomeAdjustment === "real" && CPI_DEFLATORS[d.year]) {
-                  projectionValue = projectionValue / CPI_DEFLATORS[d.year];
-                }
-
-                // Calculate reform value (baseline + average change from SCP baby boost)
-                let reformValue = projectionValue;
-                if (avgChange[d.year]) {
-                  let change = avgChange[d.year];
-                  if (incomeAdjustment === "real" && CPI_DEFLATORS[d.year]) {
-                    change = change / CPI_DEFLATORS[d.year];
-                  }
-                  reformValue = projectionValue + change;
-                }
-
-                if (merged[d.year]) {
-                  merged[d.year].projection = projectionValue;
-                  merged[d.year].reform = d.year >= 2026 ? reformValue : null;
-                } else {
-                  merged[d.year] = {
-                    year: d.year,
-                    projection: projectionValue,
-                    reform: d.year >= 2026 ? reformValue : null,
-                  };
-                }
-              });
-              return Object.values(merged).sort((a, b) => a.year - b.year);
-            })()}
-            yLabel={`Household income${incomeAdjustment === "real" ? " (2023 prices)" : ""}`}
-            yFormat={(v) => `£${(v / 1000).toFixed(0)}k`}
-            yDomain={[0, 70000]}
-            viewMode={incomeViewMode}
-            showReform={true}
-          />
-        </div>
+          yLabel="Average income change (£)"
+          yFormat={(v) => `£${v.toFixed(2)}`}
+          tooltipLabel="Income change"
+        />
       </div>
 
       {/* Decile Impact Chart */}
