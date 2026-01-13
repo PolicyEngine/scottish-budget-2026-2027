@@ -3,14 +3,14 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import ScotlandMap from "./ScotlandMap";
 import "./LocalAreaSection.css";
 
-// Parse CSV text into array of objects
+// Parse CSV text into array of objects (handles quoted values with commas)
 function parseCSV(csvText) {
   const lines = csvText.trim().split("\n");
-  const headers = lines[0].split(",");
+  const headers = parseCSVLine(lines[0]);
   const data = [];
 
   for (let i = 1; i < lines.length; i++) {
-    const values = lines[i].split(",");
+    const values = parseCSVLine(lines[i]);
     const row = {};
     headers.forEach((header, idx) => {
       row[header.trim()] = values[idx]?.trim();
@@ -18,6 +18,27 @@ function parseCSV(csvText) {
     data.push(row);
   }
   return data;
+}
+
+// Parse a single CSV line, handling quoted values with commas
+function parseCSVLine(line) {
+  const result = [];
+  let current = "";
+  let inQuotes = false;
+
+  for (let i = 0; i < line.length; i++) {
+    const char = line[i];
+    if (char === '"') {
+      inQuotes = !inQuotes;
+    } else if (char === "," && !inQuotes) {
+      result.push(current);
+      current = "";
+    } else {
+      current += char;
+    }
+  }
+  result.push(current);
+  return result;
 }
 
 // Scottish regions mapping
@@ -57,9 +78,9 @@ export default function LocalAreaSection() {
           const csvText = await res.text();
           const data = parseCSV(csvText);
 
-          // Transform to expected format and add region
+          // Transform to expected format and add region (filter to 2026 data only)
           const transformed = data
-            .filter(row => row.constituency_code?.startsWith("S"))
+            .filter(row => row.constituency_code?.startsWith("S") && row.year === "2026")
             .map(row => ({
               code: row.constituency_code,
               name: row.constituency_name,
