@@ -231,9 +231,14 @@ class ConstituencyCalculator:
             constituency_df: DataFrame with 'code' and 'name' columns.
                 The index should correspond to the row indices in weights.
         """
-        baseline_income = baseline.calculate("household_net_income", year)
-        reformed_income = reformed.calculate("household_net_income", year)
-        income_change = reformed_income - baseline_income
+        from microdf import MicroSeries
+
+        baseline_income = baseline.calculate(
+            "household_net_income", period=year, map_to="household"
+        ).values
+        reform_income = reformed.calculate(
+            "household_net_income", period=year, map_to="household"
+        ).values
 
         results = []
 
@@ -249,14 +254,13 @@ class ConstituencyCalculator:
 
             const_weights = weights[idx, :]
 
-            # Calculate weighted average
-            if const_weights.sum() > 0:
-                avg_gain = (income_change * const_weights).sum() / const_weights.sum()
-                avg_baseline = (baseline_income * const_weights).sum() / const_weights.sum()
-                relative_change = (avg_gain / avg_baseline) * 100 if avg_baseline > 0 else 0
-            else:
-                avg_gain = 0
-                relative_change = 0
+            # Calculate weighted average using MicroSeries
+            baseline_ms = MicroSeries(baseline_income, weights=const_weights)
+            reform_ms = MicroSeries(reform_income, weights=const_weights)
+
+            avg_gain = (reform_ms.sum() - baseline_ms.sum()) / baseline_ms.count()
+            avg_baseline = baseline_ms.sum() / baseline_ms.count()
+            relative_change = (avg_gain / avg_baseline) * 100 if avg_baseline > 0 else 0
 
             results.append({
                 "reform_id": reform_id,
