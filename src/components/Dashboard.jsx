@@ -14,13 +14,6 @@ const SECTIONS = [
   { id: "local-areas", label: "Local areas" },
 ];
 
-// Historical official poverty data (Scottish Government, 3-year averages)
-const HISTORICAL_POVERTY_DATA = [
-  { year: 2021, relativeBHC: 18, relativeAHC: 20, absoluteBHC: 15, absoluteAHC: 17 },
-  { year: 2022, relativeBHC: 18, relativeAHC: 20, absoluteBHC: 15, absoluteAHC: 17 },
-  { year: 2023, relativeBHC: 18, relativeAHC: 20, absoluteBHC: 15, absoluteAHC: 17 },
-];
-
 // Historical household income data
 const HISTORICAL_HOUSEHOLD_INCOME_DATA = [
   { year: 2021, meanIncome: 41200, medianIncome: 35800, meanIncomeReal: 48000, medianIncomeReal: 41700 },
@@ -53,12 +46,9 @@ export default function Dashboard() {
   const [povertyMetrics, setPovertyMetrics] = useState([]);
   const [budgetaryData, setBudgetaryData] = useState(null);
   const [baselineData, setBaselineData] = useState(FALLBACK_BASELINE_DATA);
-  const [povertyType, setPovertyType] = useState("absoluteBHC");
-  const [povertyAgeGroup, setPovertyAgeGroup] = useState("all");
   const [incomeType, setIncomeType] = useState("mean");
   const [incomeAdjustment, setIncomeAdjustment] = useState("nominal");
   const [incomeViewMode, setIncomeViewMode] = useState("both");
-  const [povertyViewMode, setPovertyViewMode] = useState("both");
   const [activeSection, setActiveSection] = useState("introduction");
 
   // Refs for section elements
@@ -402,113 +392,6 @@ export default function Dashboard() {
           title="Poverty rate impact by year"
         />
       )}
-
-      <div className="charts-row">
-        <div className="section-box">
-          <h3 className="chart-title">Poverty rate</h3>
-          <p className="chart-description">
-            {povertyType.includes("absolute")
-              ? "Absolute poverty measures income below a fixed threshold adjusted for inflation."
-              : "Relative poverty measures income below 60% of UK median income."}{" "}
-            {povertyType.includes("AHC") ? "After housing costs." : "Before housing costs."}
-          </p>
-          {baselineData.length > 0 && (() => {
-            const year2023 = baselineData.find(d => d.year === 2023);
-            const year2030 = baselineData.find(d => d.year === 2030);
-            if (!year2023 || !year2030) return null;
-
-            let startValue, endValue;
-            if (povertyAgeGroup === "all") {
-              if (povertyType === "absoluteBHC") { startValue = year2023.absolutePovertyBHC; endValue = year2030.absolutePovertyBHC; }
-              else if (povertyType === "absoluteAHC") { startValue = year2023.absolutePovertyAHC; endValue = year2030.absolutePovertyAHC; }
-              else if (povertyType === "relativeBHC") { startValue = year2023.povertyBHC; endValue = year2030.povertyBHC; }
-              else { startValue = year2023.povertyAHC; endValue = year2030.povertyAHC; }
-            } else if (povertyAgeGroup === "children") {
-              startValue = povertyType.includes("AHC") ? year2023.childPovertyAHC : year2023.childPovertyBHC;
-              endValue = povertyType.includes("AHC") ? year2030.childPovertyAHC : year2030.childPovertyBHC;
-            }
-
-            if (startValue == null || endValue == null) return null;
-            const ppChange = endValue - startValue;
-            const ageLabel = povertyAgeGroup === "all" ? "" : " child";
-            return (
-              <p className="chart-summary">
-                The{ageLabel} poverty rate is forecast to {ppChange > 0 ? "increase" : "decrease"} by {Math.abs(ppChange).toFixed(1)}pp from {startValue.toFixed(1)}% to {endValue.toFixed(1)}% by 2030.
-              </p>
-            );
-          })()}
-          <div className="chart-controls">
-            <select
-              className="chart-select"
-              value={povertyType}
-              onChange={(e) => setPovertyType(e.target.value)}
-            >
-              <option value="absoluteBHC">Absolute (BHC)</option>
-              <option value="absoluteAHC">Absolute (AHC)</option>
-              <option value="relativeBHC">Relative (BHC)</option>
-              <option value="relativeAHC">Relative (AHC)</option>
-            </select>
-            <select
-              className="chart-select"
-              value={povertyAgeGroup}
-              onChange={(e) => setPovertyAgeGroup(e.target.value)}
-            >
-              <option value="all">All people</option>
-              <option value="children">Children</option>
-            </select>
-            <div className="view-toggle">
-              <button className={povertyViewMode === "outturn" ? "active" : ""} onClick={() => setPovertyViewMode("outturn")}>Outturn</button>
-              <button className={povertyViewMode === "both" ? "active" : ""} onClick={() => setPovertyViewMode("both")}>Both</button>
-              <button className={povertyViewMode === "forecast" ? "active" : ""} onClick={() => setPovertyViewMode("forecast")}>Forecast</button>
-            </div>
-          </div>
-          <D3LineChart
-            data={(() => {
-              const merged = {};
-              if (povertyAgeGroup === "all") {
-                HISTORICAL_POVERTY_DATA.forEach(d => {
-                  let value;
-                  if (povertyType === "absoluteBHC") value = d.absoluteBHC;
-                  else if (povertyType === "absoluteAHC") value = d.absoluteAHC;
-                  else if (povertyType === "relativeBHC") value = d.relativeBHC;
-                  else value = d.relativeAHC;
-                  merged[d.year] = {
-                    year: d.year,
-                    historical: value,
-                  };
-                });
-              }
-              baselineData.filter(d => d.year >= 2023).forEach(d => {
-                let value;
-                const isAHC = povertyType.includes("AHC");
-
-                if (povertyAgeGroup === "all") {
-                  if (povertyType === "absoluteBHC") value = d.absolutePovertyBHC;
-                  else if (povertyType === "absoluteAHC") value = d.absolutePovertyAHC;
-                  else if (povertyType === "relativeBHC") value = d.povertyBHC;
-                  else value = d.povertyAHC;
-                } else if (povertyAgeGroup === "children") {
-                  value = isAHC ? d.childPovertyAHC : d.childPovertyBHC;
-                }
-
-                if (merged[d.year]) {
-                  merged[d.year].projection = value;
-                } else {
-                  merged[d.year] = {
-                    year: d.year,
-                    projection: value,
-                  };
-                }
-              });
-              return Object.values(merged).sort((a, b) => a.year - b.year);
-            })()}
-            yLabel="Poverty rate"
-            yFormat={(v) => `${v.toFixed(0)}%`}
-            yDomain={[0, 30]}
-            viewMode={povertyViewMode}
-          />
-        </div>
-      </div>
 
       {/* Local Areas Section */}
       <h2 className="section-title" id="local-areas" ref={(el) => (sectionRefs.current["local-areas"] = el)}>Local areas</h2>
