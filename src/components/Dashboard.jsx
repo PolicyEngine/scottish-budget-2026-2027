@@ -13,7 +13,33 @@ const SECTIONS = [
   { id: "local-areas", label: "Local areas" },
 ];
 
-export default function Dashboard() {
+// Policy descriptions
+const POLICY_INFO = {
+  scp_baby_boost: {
+    name: "SCP baby boost",
+    description: "Scottish Child Payment boosted to £40/week for babies under 1",
+    explanation: (
+      <li>
+        <strong>Scottish Child Payment baby boost</strong>: The Scottish Child Payment is boosted to £40/week
+        for families with babies under 1 year old (up from £27.15/week), delivering the "strongest package
+        of support for families with young children anywhere in the UK".
+      </li>
+    ),
+  },
+  income_tax_threshold_uplift: {
+    name: "Income tax threshold uplift",
+    description: "Basic and intermediate rate thresholds increased by 7.4%",
+    explanation: (
+      <li>
+        <strong>Income tax threshold uplift (7.4%)</strong>: The basic rate (20%) threshold rises from £15,398
+        to £16,537, and the intermediate rate (21%) threshold rises from £27,492 to £29,527. This means
+        taxpayers pay the lower 19% starter rate on more of their income.
+      </li>
+    ),
+  },
+};
+
+export default function Dashboard({ selectedPolicy = "scp_baby_boost" }) {
   const [loading, setLoading] = useState(true);
   const [livingStandardsData, setLivingStandardsData] = useState(null);
   const [povertyMetrics, setPovertyMetrics] = useState([]);
@@ -55,7 +81,7 @@ export default function Dashboard() {
 
           // Transform to decile format for chart (2026 data)
           const decileData = data
-            .filter(row => row.year === "2026" && row.reform_id === "scp_baby_boost")
+            .filter(row => row.year === "2026" && row.reform_id === selectedPolicy)
             .map(row => ({
               decile: row.decile,
               relativeChange: parseFloat(row.value) || 0,
@@ -64,7 +90,7 @@ export default function Dashboard() {
 
           // Calculate average income change per year for baseline vs reform chart
           const incomeChangeByYear = {};
-          data.filter(row => row.reform_id === "scp_baby_boost").forEach(row => {
+          data.filter(row => row.reform_id === selectedPolicy).forEach(row => {
             const year = parseInt(row.year);
             if (!incomeChangeByYear[year]) {
               incomeChangeByYear[year] = { totalChange: 0, count: 0 };
@@ -86,15 +112,15 @@ export default function Dashboard() {
           const csvText = await metricsRes.text();
           const data = parseCSV(csvText);
 
-          // Filter to scp_baby_boost and transform for table
-          const scpMetrics = data
-            .filter(row => row.reform_id === "scp_baby_boost")
+          // Filter to selected policy and transform for table
+          const policyMetrics = data
+            .filter(row => row.reform_id === selectedPolicy)
             .map(row => ({
               year: parseInt(row.year),
               metric: row.metric,
               value: parseFloat(row.value),
             }));
-          setPovertyMetrics(scpMetrics);
+          setPovertyMetrics(policyMetrics);
         }
 
         if (budgetRes.ok) {
@@ -124,7 +150,7 @@ export default function Dashboard() {
       }
     }
     loadData();
-  }, []);
+  }, [selectedPolicy]);
 
   // Scroll to section handler
   const scrollToSection = useCallback((sectionId) => {
@@ -155,6 +181,8 @@ export default function Dashboard() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const policyInfo = POLICY_INFO[selectedPolicy] || POLICY_INFO.scp_baby_boost;
+
   if (loading) {
     return (
       <div className="dashboard-loading">
@@ -176,24 +204,20 @@ export default function Dashboard() {
         and distributes impacts across Scotland's local areas.
       </p>
       <p className="chart-description" style={{ marginTop: "12px" }}>
-        The budget includes a key measure for families with young children:
+        Currently viewing:
       </p>
       <ul className="policy-list">
-        <li>
-          <strong>Scottish Child Payment baby boost</strong>: The Scottish Child Payment is boosted to £40/week
-          for families with babies under 1 year old (up from £27.15/week), delivering the "strongest package
-          of support for families with young children anywhere in the UK".
-        </li>
+        {policyInfo.explanation}
       </ul>
 
       {/* Budgetary Impact Bar Chart */}
-      {budgetaryData && budgetaryData.scp_baby_boost && (
+      {budgetaryData && budgetaryData[selectedPolicy] && (
         <BudgetBarChart
-          data={Object.entries(budgetaryData.scp_baby_boost.years)
+          data={Object.entries(budgetaryData[selectedPolicy].years)
             .map(([year, value]) => ({ year: parseInt(year), value }))
             .sort((a, b) => a.year - b.year)}
           title="Estimated budgetary impact"
-          description="Estimated annual cost of the SCP baby boost policy in Scotland."
+          description={`Estimated annual ${selectedPolicy === "income_tax_threshold_uplift" ? "cost (revenue foregone)" : "cost"} of the ${policyInfo.name} policy in Scotland.`}
           tooltipLabel="Cost"
         />
       )}
@@ -211,14 +235,15 @@ export default function Dashboard() {
       {/* Living Standards Section */}
       <h2 className="section-title" id="living-standards" ref={(el) => (sectionRefs.current["living-standards"] = el)}>Living standards</h2>
       <p className="chart-description">
-        This section shows how household incomes in Scotland change as a result of the SCP baby boost policy.
+        This section shows how household incomes in Scotland change as a result of the {policyInfo.name} policy.
       </p>
 
       <div className="section-box" style={{ marginTop: "var(--pe-space-lg)" }}>
-        <h3 className="chart-title">Average income change from SCP baby boost</h3>
+        <h3 className="chart-title">Average income change from {policyInfo.name}</h3>
         <p className="chart-description">
           Average change in household net income due to the policy, across all Scottish households.
-          The change is small when averaged across all households because only families with babies under 1 receiving SCP benefit.
+          {selectedPolicy === "scp_baby_boost" && " The change is small when averaged across all households because only families with babies under 1 receiving SCP benefit."}
+          {selectedPolicy === "income_tax_threshold_uplift" && " Most Scottish taxpayers will see a benefit from the increased thresholds."}
         </p>
         <BudgetBarChart
           data={(() => {
@@ -234,11 +259,15 @@ export default function Dashboard() {
       </div>
 
       {/* Decile Impact Chart */}
-      {livingStandardsData?.byDecile && (
+      {livingStandardsData?.byDecile && livingStandardsData.byDecile.length > 0 && (
         <DecileChart
           data={livingStandardsData.byDecile}
           title="Impact by income decile"
-          description="The SCP baby boost is a targeted policy that only benefits families receiving Scottish Child Payment (a means-tested benefit) with babies under 1. Higher income deciles show no impact because they don't qualify for SCP. Values shown are averages across all households in each decile."
+          description={
+            selectedPolicy === "scp_baby_boost"
+              ? "The SCP baby boost is a targeted policy that only benefits families receiving Scottish Child Payment (a means-tested benefit) with babies under 1. Higher income deciles show no impact because they don't qualify for SCP. Values shown are averages across all households in each decile."
+              : "The income tax threshold uplift benefits taxpayers across income levels, with the largest absolute gains in middle deciles where more taxpayers are affected by the threshold changes."
+          }
         />
       )}
 
@@ -246,8 +275,11 @@ export default function Dashboard() {
       <h2 className="section-title" id="poverty" ref={(el) => (sectionRefs.current["poverty"] = el)}>Poverty</h2>
       <p className="chart-description">
         This section shows how poverty rates are projected to change under the budget measures.
-        The Scottish Government has set ambitious targets to reduce child poverty, and the budget
-        includes the SCP baby boost to support families with young children.
+        The Scottish Government has set ambitious targets to reduce child poverty.
+        {selectedPolicy === "income_tax_threshold_uplift" && (
+          <strong> Note: Income tax threshold increases have minimal direct impact on poverty rates
+          because people in poverty typically pay little or no income tax.</strong>
+        )}
       </p>
 
       {/* Poverty Impact Table */}
@@ -265,7 +297,7 @@ export default function Dashboard() {
         to see the estimated impact on households in that area.
       </p>
 
-      <LocalAreaSection />
+      <LocalAreaSection selectedPolicy={selectedPolicy} />
     </div>
   );
 }

@@ -63,7 +63,7 @@ function getRegion(constituencyName) {
   return "Scotland";
 }
 
-export default function LocalAreaSection() {
+export default function LocalAreaSection({ selectedPolicy = "scp_baby_boost" }) {
   const [constituencyData, setConstituencyData] = useState([]);
   const [selectedConstituency, setSelectedConstituency] = useState(null);
   const [selectedRegion, setSelectedRegion] = useState("All regions");
@@ -78,9 +78,13 @@ export default function LocalAreaSection() {
           const csvText = await res.text();
           const data = parseCSV(csvText);
 
-          // Transform to expected format and add region (filter to 2026 data only)
+          // Transform to expected format and add region (filter to 2026 data and selected policy)
           const transformed = data
-            .filter(row => row.constituency_code?.startsWith("S") && row.year === "2026")
+            .filter(row =>
+              row.constituency_code?.startsWith("S") &&
+              row.year === "2026" &&
+              row.reform_id === selectedPolicy
+            )
             .map(row => ({
               code: row.constituency_code,
               name: row.constituency_name,
@@ -88,7 +92,7 @@ export default function LocalAreaSection() {
               relativeChange: parseFloat(row.relative_change) || 0,
               region: getRegion(row.constituency_name),
               // Estimate poverty reduction from relative change (placeholder)
-              povertyReduction: Math.max(0, (parseFloat(row.relative_change) || 0) * 1.5).toFixed(1),
+              povertyReduction: Math.max(0, (parseFloat(row.relative_change) || 0) * 1.5),
               households: 40000, // Placeholder
             }));
 
@@ -101,7 +105,7 @@ export default function LocalAreaSection() {
       }
     }
     loadData();
-  }, []);
+  }, [selectedPolicy]);
 
   // Convert constituency data for the map component
   const mapConstituencyData = useMemo(() => {
@@ -160,6 +164,23 @@ export default function LocalAreaSection() {
     return <div className="local-area-section"><p>Loading constituency data...</p></div>;
   }
 
+  // Show message if no constituency data for this policy
+  if (constituencyData.length === 0) {
+    return (
+      <div className="local-area-section">
+        <div className="section-box">
+          <p className="chart-description">
+            Constituency-level data is not yet available for this policy reform.
+            {selectedPolicy === "income_tax_threshold_uplift" && (
+              <> The income tax threshold uplift affects taxpayers across Scotland relatively uniformly,
+              with minor variations based on local income distributions.</>
+            )}
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="local-area-section">
       {/* Interactive Map */}
@@ -186,7 +207,7 @@ export default function LocalAreaSection() {
               </div>
               <div className="metric-card">
                 <span className="metric-label">Poverty rate reduction</span>
-                <span className="metric-value">{(selectedConstituency.relativeChange * 1.5).toFixed(3)}pp</span>
+                <span className="metric-value">{selectedConstituency.povertyReduction.toFixed(3)}pp</span>
               </div>
             </div>
           </div>
