@@ -1,0 +1,25 @@
+{
+  "title": "How household income changes",
+  "description": "Average change in household income by decile under the Scottish Budget 2025-26.",
+  "metric": "income_change",
+  "unit": "£/year",
+  "byDecile": [
+    { "decile": 1, "baseline": 12500, "reform": 13100, "change": 600, "percentChange": 4.8 },
+    { "decile": 2, "baseline": 18200, "reform": 18750, "change": 550, "percentChange": 3.0 },
+    { "decile": 3, "baseline": 23100, "reform": 23580, "change": 480, "percentChange": 2.1 },
+    { "decile": 4, "baseline": 28400, "reform": 28820, "change": 420, "percentChange": 1.5 },
+    { "decile": 5, "baseline": 34200, "reform": 34550, "change": 350, "percentChange": 1.0 },
+    { "decile": 6, "baseline": 41000, "reform": 41280, "change": 280, "percentChange": 0.7 },
+    { "decile": 7, "baseline": 49500, "reform": 49710, "change": 210, "percentChange": 0.4 },
+    { "decile": 8, "baseline": 60200, "reform": 60350, "change": 150, "percentChange": 0.2 },
+    { "decile": 9, "baseline": 76800, "reform": 76880, "change": 80, "percentChange": 0.1 },
+    { "decile": 10, "baseline": 125000, "reform": 124950, "change": -50, "percentChange": 0.0 }
+  ],
+  "summary": {
+    "winnersPercent": 68,
+    "losersPercent": 5,
+    "noChangePercent": 27,
+    "averageGain": 340,
+    "totalCost": 850000000
+  }
+}

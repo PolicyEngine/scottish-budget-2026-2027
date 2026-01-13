@@ -1,0 +1,39 @@
+{
+  "title": "Poverty impact",
+  "description": "Change in poverty rates under the Scottish Budget 2025-26.",
+  "rates": {
+    "overall": {
+      "baseline": 18.2,
+      "reform": 16.8,
+      "change": -1.4
+    },
+    "child": {
+      "baseline": 24.1,
+      "reform": 21.5,
+      "change": -2.6
+    },
+    "pensioner": {
+      "baseline": 14.5,
+      "reform": 13.9,
+      "change": -0.6
+    },
+    "workingAge": {
+      "baseline": 17.8,
+      "reform": 16.5,
+      "change": -1.3
+    }
+  },
+  "deepPoverty": {
+    "baseline": 4.8,
+    "reform": 4.2,
+    "change": -0.6
+  },
+  "timeSeries": [
+    { "year": 2024, "baseline": 18.5, "reform": 18.5 },
+    { "year": 2025, "baseline": 18.3, "reform": 17.2 },
+    { "year": 2026, "baseline": 18.2, "reform": 16.8 },
+    { "year": 2027, "baseline": 18.0, "reform": 16.5 },
+    { "year": 2028, "baseline": 17.9, "reform": 16.3 }
+  ],
+  "personsLiftedOut": 42000
+}

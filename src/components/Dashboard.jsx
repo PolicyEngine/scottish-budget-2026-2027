@@ -1,21 +1,24 @@
-import { useState, useEffect, useMemo, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import D3LineChart from "./D3LineChart";
 import LocalAreaSection from "./LocalAreaSection";
 import "./Dashboard.css";
 
-// Format year for display (e.g., 2026 -> "2026–27")
-const formatYearRange = (year) => `${year}-${(year + 1).toString().slice(-2)}`;
+// Section definitions for navigation
+const SECTIONS = [
+  { id: "introduction", label: "Introduction" },
+  { id: "living-standards", label: "Living standards" },
+  { id: "poverty", label: "Poverty" },
+  { id: "local-areas", label: "Local areas" },
+];
 
 // Historical official poverty data (Scottish Government, 3-year averages)
-// Source: https://data.gov.scot/poverty/
 const HISTORICAL_POVERTY_DATA = [
   { year: 2021, relativeBHC: 18, relativeAHC: 20, absoluteBHC: 15, absoluteAHC: 17 },
   { year: 2022, relativeBHC: 18, relativeAHC: 20, absoluteBHC: 15, absoluteAHC: 17 },
   { year: 2023, relativeBHC: 18, relativeAHC: 20, absoluteBHC: 15, absoluteAHC: 17 },
 ];
 
-// Historical household income data (derived from GDHI / households)
-// Source: https://www.ons.gov.uk/economy/regionalaccounts/grossdisposablehouseholdincome
+// Historical household income data
 const HISTORICAL_HOUSEHOLD_INCOME_DATA = [
   { year: 2021, meanIncome: 41200, medianIncome: 35800, meanIncomeReal: 48000, medianIncomeReal: 41700 },
   { year: 2022, meanIncome: 45000, medianIncome: 39200, meanIncomeReal: 48000, medianIncomeReal: 41800 },
@@ -24,18 +27,12 @@ const HISTORICAL_HOUSEHOLD_INCOME_DATA = [
 
 // CPI deflators to convert future nominal values to 2023 real prices
 const CPI_DEFLATORS = {
-  2023: 1.00,
-  2024: 1.03,
-  2025: 1.05,
-  2026: 1.07,
-  2027: 1.09,
-  2028: 1.11,
-  2029: 1.13,
-  2030: 1.16,
+  2023: 1.00, 2024: 1.03, 2025: 1.05, 2026: 1.07,
+  2027: 1.09, 2028: 1.11, 2029: 1.13, 2030: 1.16,
 };
 
-// Sample baseline projection data (will be replaced with actual CSV data)
-const SAMPLE_BASELINE_DATA = [
+// Fallback data in case JSON files don't load
+const FALLBACK_BASELINE_DATA = [
   { year: 2023, meanHouseholdIncome: 49700, medianHouseholdIncome: 43200, povertyBHC: 18.0, povertyAHC: 20.0, absolutePovertyBHC: 15.0, absolutePovertyAHC: 17.0, childPovertyBHC: 20.0, childPovertyAHC: 23.0 },
   { year: 2024, meanHouseholdIncome: 51500, medianHouseholdIncome: 44800, povertyBHC: 17.8, povertyAHC: 19.8, absolutePovertyBHC: 14.8, absolutePovertyAHC: 16.8, childPovertyBHC: 19.5, childPovertyAHC: 22.5 },
   { year: 2025, meanHouseholdIncome: 53400, medianHouseholdIncome: 46500, povertyBHC: 17.5, povertyAHC: 19.5, absolutePovertyBHC: 14.5, absolutePovertyAHC: 16.5, childPovertyBHC: 19.0, childPovertyAHC: 22.0 },
@@ -46,17 +43,11 @@ const SAMPLE_BASELINE_DATA = [
   { year: 2030, meanHouseholdIncome: 64400, medianHouseholdIncome: 56000, povertyBHC: 16.0, povertyAHC: 18.0, absolutePovertyBHC: 13.0, absolutePovertyAHC: 15.0, childPovertyBHC: 16.5, childPovertyAHC: 19.5 },
 ];
 
-// Section definitions for navigation
-const SECTIONS = [
-  { id: "introduction", label: "Introduction" },
-  { id: "living-standards", label: "Living standards" },
-  { id: "poverty", label: "Poverty" },
-  { id: "local-areas", label: "Local areas" },
-];
-
 export default function Dashboard() {
-  const [loading, setLoading] = useState(false);
-  const [baselineData, setBaselineData] = useState(SAMPLE_BASELINE_DATA);
+  const [loading, setLoading] = useState(true);
+  const [livingStandardsData, setLivingStandardsData] = useState(null);
+  const [povertyData, setPovertyData] = useState(null);
+  const [baselineData, setBaselineData] = useState(FALLBACK_BASELINE_DATA);
   const [povertyType, setPovertyType] = useState("absoluteBHC");
   const [povertyAgeGroup, setPovertyAgeGroup] = useState("all");
   const [incomeType, setIncomeType] = useState("mean");
@@ -67,6 +58,32 @@ export default function Dashboard() {
 
   // Refs for section elements
   const sectionRefs = useRef({});
+
+  // Load data from JSON files
+  useEffect(() => {
+    async function loadData() {
+      try {
+        const [lsRes, povRes] = await Promise.all([
+          fetch("/data/living-standards.json"),
+          fetch("/data/poverty.json"),
+        ]);
+
+        if (lsRes.ok) {
+          const ls = await lsRes.json();
+          setLivingStandardsData(ls);
+        }
+        if (povRes.ok) {
+          const pov = await povRes.json();
+          setPovertyData(pov);
+        }
+      } catch (err) {
+        console.warn("Using fallback data:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadData();
+  }, []);
 
   // Scroll to section handler
   const scrollToSection = useCallback((sectionId) => {
