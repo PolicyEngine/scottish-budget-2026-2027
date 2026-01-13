@@ -1,0 +1,631 @@
+import { useEffect, useRef, useState, useMemo } from "react";
+import * as d3 from "d3";
+import { CHART_LOGO } from "../utils/chartLogo.jsx";
+import { exportMapAsSvg } from "../utils/exportMapAsSvg";
+import "./ScotlandMap.css";
+
+// Chart metadata for export
+const CHART_TITLE = "Scottish constituency-level impacts";
+const CHART_DESCRIPTION =
+  "This map shows the average annual change in household net income across Scottish constituencies. Green shading indicates gains, amber indicates losses, measured as a percentage of baseline income.";
+
+// Fixed color scale extent - consistent across all years
+const FIXED_COLOR_EXTENT = 1.5;
+
+// Format year for display (e.g., 2026 -> "2026-27")
+const formatYearRange = (year) => `${year}-${(year + 1).toString().slice(-2)}`;
+
+// Scottish constituency codes start with 'S'
+const isScottishConstituency = (code) => code && code.startsWith("S");
+
+export default function ScotlandMap({
+  constituencyData = [],
+  selectedYear = 2026,
+  selectedConstituency: controlledConstituency = null,
+  onConstituencySelect = null,
+}) {
+  const svgRef = useRef(null);
+  const [internalSelectedConstituency, setInternalSelectedConstituency] = useState(null);
+  const [tooltipData, setTooltipData] = useState(null);
+  const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
+  const [geoData, setGeoData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+
+  // Use controlled or internal state
+  const selectedConstituency = controlledConstituency !== null
+    ? controlledConstituency
+    : internalSelectedConstituency;
+
+  const setSelectedConstituency = (constData) => {
+    if (onConstituencySelect) {
+      if (constData) {
+        onConstituencySelect({
+          code: constData.constituency_code,
+          name: constData.constituency_name,
+        });
+      } else {
+        onConstituencySelect(null);
+      }
+    } else {
+      setInternalSelectedConstituency(constData);
+    }
+  };
+
+  // Load GeoJSON data
+  useEffect(() => {
+    fetch("/data/uk_constituencies_2024.geojson")
+      .then((r) => r.json())
+      .then((geojson) => {
+        // Filter to only Scottish constituencies
+        const scottishGeoData = {
+          ...geojson,
+          features: geojson.features.filter((f) =>
+            isScottishConstituency(f.properties.GSScode)
+          ),
+        };
+        setGeoData(scottishGeoData);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error loading GeoJSON:", error);
+        setLoading(false);
+      });
+  }, []);
+
+  // Create data map from constituency data
+  const dataMap = useMemo(() => {
+    return new Map(
+      constituencyData.map((d) => [d.constituency_code, d])
+    );
+  }, [constituencyData]);
+
+  // Highlight and zoom to controlled constituency when it changes
+  useEffect(() => {
+    if (!controlledConstituency || !geoData || !svgRef.current) return;
+
+    const svg = d3.select(svgRef.current);
+
+    // Reset all paths
+    svg
+      .selectAll(".constituency-path")
+      .attr("stroke", "#fff")
+      .attr("stroke-width", 0.3);
+
+    // Highlight selected constituency
+    const selectedPath = svg
+      .selectAll(".constituency-path")
+      .filter((d) => d.properties.GSScode === controlledConstituency.code);
+
+    selectedPath.attr("stroke", "#1D4044").attr("stroke-width", 1.5);
+
+    // Zoom to the selected constituency
+    const pathNode = selectedPath.node();
+    if (!pathNode) return;
+
+    const bbox = pathNode.getBBox();
+    const centerX = bbox.x + bbox.width / 2;
+    const centerY = bbox.y + bbox.height / 2;
+
+    // Find constituency data
+    const constData = dataMap.get(controlledConstituency.code) || {
+      constituency_code: controlledConstituency.code,
+      constituency_name: controlledConstituency.name,
+      average_gain: 0,
+      relative_change: 0,
+    };
+
+    // Show tooltip
+    setTooltipData(constData);
+    setTooltipPosition({ x: centerX, y: centerY });
+
+    // Smooth zoom to constituency
+    const scale = Math.min(4, 0.9 / Math.max(bbox.width / 600, bbox.height / 600));
+    const translate = [600 / 2 - scale * centerX, 600 / 2 - scale * centerY];
+
+    if (window.scotlandMapZoomBehavior) {
+      const { svg: svgZoom, zoom } = window.scotlandMapZoomBehavior;
+      svgZoom
+        .transition()
+        .duration(750)
+        .call(
+          zoom.transform,
+          d3.zoomIdentity.translate(translate[0], translate[1]).scale(scale),
+        );
+    }
+  }, [controlledConstituency, geoData, dataMap]);
+
+  // Render map
+  useEffect(() => {
+    if (!svgRef.current || !geoData) return;
+
+    const svg = d3.select(svgRef.current);
+    svg.selectAll("*").remove();
+
+    const width = 600;
+    const height = 700;
+
+    const g = svg.append("g");
+
+    // Get bounds of Scottish constituencies
+    const bounds = {
+      xMin: Infinity,
+      xMax: -Infinity,
+      yMin: Infinity,
+      yMax: -Infinity,
+    };
+
+    geoData.features.forEach((feature) => {
+      const coords = feature.geometry?.coordinates;
+      if (!coords) return;
+
+      const traverse = (c) => {
+        if (typeof c[0] === "number") {
+          bounds.xMin = Math.min(bounds.xMin, c[0]);
+          bounds.xMax = Math.max(bounds.xMax, c[0]);
+          bounds.yMin = Math.min(bounds.yMin, c[1]);
+          bounds.yMax = Math.max(bounds.yMax, c[1]);
+        } else {
+          c.forEach(traverse);
+        }
+      };
+      traverse(coords);
+    });
+
+    // Create scale to fit into SVG
+    const padding = 20;
+    const dataWidth = bounds.xMax - bounds.xMin;
+    const dataHeight = bounds.yMax - bounds.yMin;
+    const scale = Math.min(
+      (width - 2 * padding) / dataWidth,
+      (height - 2 * padding) / dataHeight,
+    );
+
+    // Calculate centering offsets
+    const scaledWidth = dataWidth * scale;
+    const scaledHeight = dataHeight * scale;
+    const offsetX = (width - scaledWidth) / 2;
+    const offsetY = (height - scaledHeight) / 2;
+
+    const projection = d3.geoTransform({
+      point: function (x, y) {
+        this.stream.point(
+          (x - bounds.xMin) * scale + offsetX,
+          height - ((y - bounds.yMin) * scale + offsetY),
+        );
+      },
+    });
+
+    const path = d3.geoPath().projection(projection);
+
+    // Color scale - diverging with white at 0, amber for losses, teal for gains
+    const getValue = (d) => d.relative_change || 0;
+
+    const colorScale = d3
+      .scaleDiverging()
+      .domain([-FIXED_COLOR_EXTENT, 0, FIXED_COLOR_EXTENT])
+      .interpolator((t) => {
+        if (t < 0.5) {
+          const ratio = t * 2;
+          return d3.interpolateRgb("#D97706", "#E5E7EB")(ratio);
+        } else {
+          const ratio = (t - 0.5) * 2;
+          return d3.interpolateRgb("#E5E7EB", "#14B8A6")(ratio);
+        }
+      });
+
+    // Draw constituencies
+    const paths = g
+      .selectAll("path")
+      .data(geoData.features)
+      .join("path")
+      .attr("d", path)
+      .attr("stroke", "#fff")
+      .attr("stroke-width", 0.3)
+      .attr("class", "constituency-path")
+      .style("cursor", "pointer");
+
+    // Animate fill colors
+    paths
+      .transition()
+      .duration(500)
+      .attr("fill", (d) => {
+        const constData = dataMap.get(d.properties.GSScode);
+        return constData ? colorScale(getValue(constData)) : "#ddd";
+      });
+
+    // Add event handlers
+    paths
+      .on("click", function (event, d) {
+        event.stopPropagation();
+
+        const gssCode = d.properties.GSScode;
+        const constData = dataMap.get(gssCode);
+
+        const constituencyName = constData?.constituency_name
+          || d.properties.Name
+          || gssCode;
+
+        // Update styling
+        svg
+          .selectAll(".constituency-path")
+          .attr("stroke", "#fff")
+          .attr("stroke-width", 0.3);
+
+        d3.select(this).attr("stroke", "#1D4044").attr("stroke-width", 1.5);
+
+        const selectionData = constData || {
+          constituency_code: gssCode,
+          constituency_name: constituencyName,
+        };
+
+        setSelectedConstituency(selectionData);
+
+        // Get centroid for tooltip
+        const pathBounds = path.bounds(d);
+        const centerX = (pathBounds[0][0] + pathBounds[1][0]) / 2;
+        const centerY = (pathBounds[0][1] + pathBounds[1][1]) / 2;
+
+        if (constData) {
+          setTooltipData(constData);
+          setTooltipPosition({ x: centerX, y: centerY });
+        }
+
+        // Zoom to constituency
+        const dx = pathBounds[1][0] - pathBounds[0][0];
+        const dy = pathBounds[1][1] - pathBounds[0][1];
+        const x = centerX;
+        const y = centerY;
+        const zoomScale = Math.min(4, 0.9 / Math.max(dx / width, dy / height));
+        const translate = [width / 2 - zoomScale * x, height / 2 - zoomScale * y];
+
+        svg
+          .transition()
+          .duration(750)
+          .call(
+            zoom.transform,
+            d3.zoomIdentity
+              .translate(translate[0], translate[1])
+              .scale(zoomScale),
+          );
+      })
+      .on("mouseover", function () {
+        const currentStrokeWidth = d3.select(this).attr("stroke-width");
+        if (currentStrokeWidth === "0.3") {
+          d3.select(this).attr("stroke", "#666").attr("stroke-width", 0.8);
+        }
+      })
+      .on("mouseout", function () {
+        const currentStrokeWidth = d3.select(this).attr("stroke-width");
+        if (currentStrokeWidth !== "1.5") {
+          d3.select(this).attr("stroke", "#fff").attr("stroke-width", 0.3);
+        }
+      });
+
+    // Zoom behavior
+    const zoom = d3
+      .zoom()
+      .scaleExtent([1, 8])
+      .on("zoom", (event) => {
+        g.attr("transform", event.transform);
+      });
+
+    svg.call(zoom);
+    window.scotlandMapZoomBehavior = { svg, zoom };
+
+    // Add PolicyEngine logo
+    svg
+      .append("image")
+      .attr("href", CHART_LOGO.href)
+      .attr("width", CHART_LOGO.width)
+      .attr("height", CHART_LOGO.height)
+      .attr("x", width - CHART_LOGO.width - CHART_LOGO.padding)
+      .attr("y", height - CHART_LOGO.height - CHART_LOGO.padding);
+  }, [geoData, dataMap, onConstituencySelect]);
+
+  // Handle search
+  useEffect(() => {
+    if (!searchQuery.trim() || !constituencyData.length) {
+      setSearchResults([]);
+      return;
+    }
+
+    const query = searchQuery.toLowerCase();
+    const results = constituencyData
+      .filter((d) => d.constituency_name.toLowerCase().includes(query))
+      .slice(0, 5);
+
+    setSearchResults(results);
+  }, [searchQuery, constituencyData]);
+
+  // Zoom control functions
+  const handleZoomIn = () => {
+    if (window.scotlandMapZoomBehavior) {
+      const { svg, zoom } = window.scotlandMapZoomBehavior;
+      svg.transition().duration(300).call(zoom.scaleBy, 1.5);
+    }
+  };
+
+  const handleZoomOut = () => {
+    if (window.scotlandMapZoomBehavior) {
+      const { svg, zoom } = window.scotlandMapZoomBehavior;
+      svg.transition().duration(300).call(zoom.scaleBy, 0.67);
+    }
+  };
+
+  const handleResetZoom = () => {
+    if (window.scotlandMapZoomBehavior) {
+      const { svg, zoom } = window.scotlandMapZoomBehavior;
+      svg.transition().duration(750).call(zoom.transform, d3.zoomIdentity);
+    }
+    setTooltipData(null);
+    if (svgRef.current) {
+      const svg = d3.select(svgRef.current);
+      svg
+        .selectAll(".constituency-path")
+        .attr("stroke", "#fff")
+        .attr("stroke-width", 0.3);
+    }
+  };
+
+  const selectConstituency = (constData) => {
+    setSelectedConstituency(constData);
+    setSearchQuery("");
+    setSearchResults([]);
+
+    if (!geoData || !svgRef.current) return;
+
+    const svg = d3.select(svgRef.current);
+
+    svg
+      .selectAll(".constituency-path")
+      .attr("stroke", "#fff")
+      .attr("stroke-width", 0.3);
+
+    const selectedPath = svg
+      .selectAll(".constituency-path")
+      .filter((d) => d.properties.GSScode === constData.constituency_code);
+
+    selectedPath.attr("stroke", "#1D4044").attr("stroke-width", 1.5);
+
+    const pathNode = selectedPath.node();
+    if (!pathNode) return;
+
+    const bbox = pathNode.getBBox();
+    const centerX = bbox.x + bbox.width / 2;
+    const centerY = bbox.y + bbox.height / 2;
+
+    setTooltipData(constData);
+    setTooltipPosition({ x: centerX, y: centerY });
+
+    const dx = bbox.width;
+    const dy = bbox.height;
+    const scale = Math.min(4, 0.9 / Math.max(dx / 600, dy / 700));
+    const translate = [600 / 2 - scale * centerX, 700 / 2 - scale * centerY];
+
+    if (window.scotlandMapZoomBehavior) {
+      const { svg: svgZoom, zoom } = window.scotlandMapZoomBehavior;
+      svgZoom
+        .transition()
+        .duration(750)
+        .call(
+          zoom.transform,
+          d3.zoomIdentity.translate(translate[0], translate[1]).scale(scale),
+        );
+    }
+  };
+
+  const handleExportSvg = async () => {
+    if (!svgRef.current) return;
+
+    await exportMapAsSvg(svgRef.current, `scotland-map-${selectedYear}`, {
+      title: `${CHART_TITLE}, ${formatYearRange(selectedYear)}`,
+      description: CHART_DESCRIPTION,
+      logo: CHART_LOGO,
+      tooltipData,
+    });
+  };
+
+  if (loading) {
+    return <div className="scotland-map-loading">Loading map...</div>;
+  }
+
+  if (!geoData) {
+    return null;
+  }
+
+  return (
+    <div className="scotland-map-wrapper">
+      {/* Header section */}
+      <div className="map-header">
+        <div className="chart-header">
+          <div>
+            <h3 className="chart-title">Constituency impacts, {formatYearRange(selectedYear)}</h3>
+            <p className="chart-description">
+              This map shows the average annual change in household net income
+              across Scottish constituencies. Green shading indicates gains,
+              amber indicates losses.
+            </p>
+          </div>
+          <button
+            className="export-button"
+            onClick={handleExportSvg}
+            title="Download as SVG"
+            aria-label="Download map as SVG"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      {/* Search and legend */}
+      <div className="map-top-bar">
+        <div className="map-search-section">
+          <div className="search-container">
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search constituency..."
+              className="constituency-search"
+            />
+            {searchResults.length > 0 && (
+              <div className="search-results">
+                {searchResults.map((result) => (
+                  <button
+                    key={result.constituency_code}
+                    onClick={() => selectConstituency(result)}
+                    className="search-result-item"
+                  >
+                    <div className="result-name">
+                      {result.constituency_name}
+                    </div>
+                    <div className="result-value">
+                      £{result.average_gain?.toFixed(0) || 0} (
+                      {(result.relative_change || 0).toFixed(2)}%)
+                    </div>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="map-legend-horizontal">
+          <div className="legend-horizontal-content">
+            <div className="legend-gradient-horizontal" />
+            <div className="legend-labels-horizontal">
+              <span>-{FIXED_COLOR_EXTENT}%</span>
+              <span className="legend-zero">0%</span>
+              <span>+{FIXED_COLOR_EXTENT}%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Map */}
+      <div className="map-content">
+        <div className="map-canvas">
+          <svg
+            ref={svgRef}
+            width="600"
+            height="700"
+            viewBox="0 0 600 700"
+            preserveAspectRatio="xMidYMid meet"
+            onClick={() => {
+              setTooltipData(null);
+              if (svgRef.current) {
+                const svg = d3.select(svgRef.current);
+                svg
+                  .selectAll(".constituency-path")
+                  .attr("stroke", "#fff")
+                  .attr("stroke-width", 0.3);
+              }
+            }}
+          />
+
+          {/* Map controls */}
+          <div
+            className="map-controls-container"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="zoom-controls">
+              <button
+                className="zoom-control-btn"
+                onClick={handleZoomIn}
+                title="Zoom in"
+                aria-label="Zoom in"
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                  <circle cx="10" cy="10" r="7" stroke="currentColor" strokeWidth="2" />
+                  <path d="M10 7V13M7 10H13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                  <path d="M15 15L20 20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                </svg>
+              </button>
+              <button
+                className="zoom-control-btn"
+                onClick={handleZoomOut}
+                title="Zoom out"
+                aria-label="Zoom out"
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                  <circle cx="10" cy="10" r="7" stroke="currentColor" strokeWidth="2" />
+                  <path d="M7 10H13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                  <path d="M15 15L20 20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                </svg>
+              </button>
+              <button
+                className="zoom-control-btn"
+                onClick={handleResetZoom}
+                title="Reset zoom"
+                aria-label="Reset zoom"
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                  <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C14.8273 3 17.35 4.30367 19 6.34267" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                  <path d="M21 3V8H16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          {/* Tooltip overlay */}
+          {tooltipData && (
+            <div
+              className="constituency-tooltip"
+              style={{
+                left: `${tooltipPosition.x}px`,
+                top: `${tooltipPosition.y}px`,
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div
+                className="tooltip-close"
+                onClick={() => setTooltipData(null)}
+              >
+                ×
+              </div>
+              <h4>{tooltipData.constituency_name}</h4>
+              <p
+                className="tooltip-value"
+                style={{
+                  color: (tooltipData.average_gain || 0) >= 0 ? "#16a34a" : "#dc2626",
+                }}
+              >
+                {(tooltipData.average_gain || 0) < 0 ? "-" : ""}£
+                {Math.abs(tooltipData.average_gain || 0).toLocaleString("en-GB", {
+                  maximumFractionDigits: 0,
+                })}
+              </p>
+              <p className="tooltip-label">Average household impact</p>
+              <p
+                className="tooltip-value-secondary"
+                style={{
+                  color: (tooltipData.relative_change || 0) >= 0 ? "#16a34a" : "#dc2626",
+                }}
+              >
+                {(tooltipData.relative_change || 0) >= 0 ? "+" : ""}
+                {(tooltipData.relative_change || 0).toFixed(2)}%
+              </p>
+              <p className="tooltip-label">Relative change</p>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}

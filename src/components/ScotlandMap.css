@@ -1,0 +1,408 @@
+/* Scotland Map styling */
+
+.scotland-map-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: white;
+  padding: var(--pe-space-lg);
+  border-radius: var(--pe-radius-lg);
+  border: 1px solid var(--pe-gray-200);
+}
+
+/* Header section */
+.map-header {
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--pe-gray-200);
+  margin-bottom: 4px;
+}
+
+.map-header .chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.map-header .chart-header > div {
+  flex: 1;
+}
+
+.map-header .chart-title {
+  margin: 0 0 6px 0;
+  color: var(--pe-gray-800);
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.map-header .chart-description {
+  margin: 0;
+  color: var(--pe-gray-500);
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+/* Export button */
+.export-button {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  background: var(--pe-gray-100);
+  border: 1px solid var(--pe-gray-200);
+  border-radius: 6px;
+  color: var(--pe-gray-500);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.export-button:hover {
+  background: var(--pe-gray-200);
+  color: var(--pe-gray-700);
+  border-color: var(--pe-gray-300);
+}
+
+.export-button:active {
+  background: var(--pe-gray-300);
+}
+
+.export-button:focus {
+  outline: 2px solid var(--pe-teal-500);
+  outline-offset: 2px;
+}
+
+.export-button svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Top bar with search and legend */
+.map-top-bar {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* Search section */
+.map-search-section {
+  flex: 1;
+  min-width: 200px;
+  max-width: 300px;
+}
+
+.search-container {
+  position: relative;
+}
+
+.constituency-search {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--pe-gray-300);
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-family: var(--pe-font-body);
+  transition: all 0.2s ease;
+}
+
+.constituency-search:focus {
+  outline: none;
+  border-color: var(--pe-teal-500);
+  box-shadow: var(--pe-shadow-focus);
+}
+
+.search-results {
+  position: absolute;
+  z-index: 10;
+  width: 100%;
+  margin-top: 4px;
+  background: white;
+  border: 1px solid var(--pe-gray-300);
+  border-radius: 6px;
+  box-shadow: var(--pe-shadow-md);
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.search-result-item {
+  width: 100%;
+  text-align: left;
+  padding: 10px 12px;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--pe-gray-100);
+  cursor: pointer;
+  transition: background 0.2s ease;
+  font-family: var(--pe-font-body);
+}
+
+.search-result-item:last-child {
+  border-bottom: none;
+}
+
+.search-result-item:hover {
+  background: var(--pe-gray-50);
+}
+
+.result-name {
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: var(--pe-gray-800);
+  margin-bottom: 2px;
+}
+
+.result-value {
+  font-size: 0.75rem;
+  color: var(--pe-gray-500);
+}
+
+/* Horizontal legend */
+.map-legend-horizontal {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.legend-horizontal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-start;
+}
+
+.legend-gradient-horizontal {
+  width: 180px;
+  height: 12px;
+  border-radius: 3px;
+  background: linear-gradient(to right, #D97706, #e5e7eb, #14b8a6);
+}
+
+.legend-labels-horizontal {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--pe-gray-500);
+  width: 180px;
+}
+
+.legend-labels-horizontal span {
+  flex: 1;
+  text-align: center;
+}
+
+.legend-labels-horizontal span:first-child {
+  text-align: left;
+}
+
+.legend-labels-horizontal span:last-child {
+  text-align: right;
+}
+
+.legend-zero {
+  color: var(--pe-gray-400);
+}
+
+/* Map content container */
+.map-content {
+  width: 100%;
+}
+
+.map-canvas {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.map-canvas svg {
+  background: white;
+  border-radius: 4px;
+  width: 100%;
+  height: auto;
+  max-width: 600px;
+  display: block;
+}
+
+/* Map controls container */
+.map-controls-container {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  z-index: 10;
+}
+
+/* Zoom controls */
+.zoom-controls {
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+  background: white;
+  padding: 2px;
+  border-radius: 4px;
+  box-shadow: var(--pe-shadow-sm);
+}
+
+.zoom-control-btn {
+  width: 28px;
+  height: 28px;
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--pe-gray-500);
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.zoom-control-btn:hover {
+  background: var(--pe-gray-100);
+  color: var(--pe-teal-600);
+}
+
+.zoom-control-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+.zoom-control-btn:active {
+  transform: scale(0.95);
+}
+
+/* Tooltip */
+.constituency-tooltip {
+  position: absolute;
+  background: white;
+  border: 2px solid var(--pe-teal-500);
+  border-radius: 8px;
+  padding: 12px 16px;
+  box-shadow: var(--pe-shadow-lg);
+  pointer-events: auto;
+  min-width: 180px;
+  transform: translate(-50%, -100%);
+  margin-top: -10px;
+  z-index: 100;
+  animation: tooltipFadeIn 0.2s ease;
+}
+
+@keyframes tooltipFadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -90%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -100%);
+  }
+}
+
+.tooltip-close {
+  position: absolute;
+  top: 4px;
+  right: 8px;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 20px;
+  color: var(--pe-gray-400);
+  line-height: 1;
+  transition: color 0.2s ease;
+}
+
+.tooltip-close:hover {
+  color: var(--pe-gray-700);
+}
+
+.constituency-tooltip h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--pe-gray-800);
+  margin: 0 0 8px 0;
+  padding-right: 20px;
+}
+
+.tooltip-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 4px 0;
+  line-height: 1;
+}
+
+.tooltip-label {
+  font-size: 0.75rem;
+  color: var(--pe-gray-500);
+  margin: 4px 0 0 0;
+}
+
+.tooltip-value-secondary {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 8px 0 4px 0;
+  line-height: 1;
+}
+
+/* Loading state */
+.scotland-map-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
+  font-size: 1rem;
+  color: var(--pe-gray-500);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .map-top-bar {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .map-search-section {
+    max-width: 100%;
+  }
+
+  .map-legend-horizontal {
+    width: 100%;
+  }
+
+  .legend-gradient-horizontal,
+  .legend-labels-horizontal {
+    width: 100%;
+  }
+
+  .map-controls-container {
+    top: 8px;
+    right: 8px;
+    gap: 8px;
+  }
+
+  .zoom-controls {
+    padding: 1px;
+  }
+
+  .zoom-control-btn {
+    width: 24px;
+    height: 24px;
+  }
+
+  .zoom-control-btn svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  .map-canvas svg {
+    max-width: 100%;
+  }
+}
