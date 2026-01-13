@@ -126,6 +126,51 @@ def get_scottish_budget_reforms() -> list[Reform]:
         )
     )
 
+    # Scottish income tax threshold uplift (7.4%)
+    # Raises basic and intermediate rate thresholds per Scottish Budget 2026-27
+    # Basic (20%): £15,398 → £16,537 absolute = £3,966 above PA
+    # Intermediate (21%): £27,492 → £29,527 absolute = £16,956 above PA
+    reforms.append(
+        Reform(
+            id="income_tax_threshold_uplift",
+            name="Income tax threshold uplift (7.4%)",
+            description=(
+                "Scottish basic and intermediate rate thresholds increased by 7.4%. "
+                "Basic rate starts at £16,537, intermediate at £29,527."
+            ),
+            parameter_changes={
+                "gov.hmrc.income_tax.rates.scotland.rates.brackets[1].threshold": {
+                    "2026-04-06.2030-04-05": 3_966,  # Basic: £16,537 - £12,571 PA
+                },
+                "gov.hmrc.income_tax.rates.scotland.rates.brackets[2].threshold": {
+                    "2026-04-06.2030-04-05": 16_956,  # Intermediate: £29,527 - £12,571 PA
+                },
+            },
+        )
+    )
+
+    # Combined Scottish Budget 2026-27 reform
+    # Combines all individual reforms into a single scenario
+    reforms.append(
+        Reform(
+            id="scottish_budget_2026",
+            name="Scottish Budget 2026-27",
+            description=(
+                "Full Scottish Budget 2026-27 package: SCP baby boost (£40/week for under 1s) "
+                "plus income tax threshold uplift (7.4%)."
+            ),
+            parameter_changes={
+                "gov.hmrc.income_tax.rates.scotland.rates.brackets[1].threshold": {
+                    "2026-04-06.2030-04-05": 3_966,  # Basic: £16,537 - £12,571 PA
+                },
+                "gov.hmrc.income_tax.rates.scotland.rates.brackets[2].threshold": {
+                    "2026-04-06.2030-04-05": 16_956,  # Intermediate: £29,527 - £12,571 PA
+                },
+            },
+            simulation_modifier=_scp_baby_boost_modifier,
+        )
+    )
+
     return reforms
 
 
@@ -142,12 +187,34 @@ POLICIES = [
             in the UK, as announced by Finance Secretary Shona Robison on 13 January 2026.
         """,
     },
+    {
+        "id": "income_tax_threshold_uplift",
+        "name": "Income tax threshold uplift (7.4%)",
+        "description": "Scottish basic and intermediate rate thresholds increased by 7.4%",
+        "explanation": """
+            The Scottish basic and intermediate income tax rate thresholds are raised by 7.4%.
+            The basic rate (20%) threshold rises from £15,398 to £16,537, and the intermediate
+            rate (21%) threshold rises from £27,492 to £29,527. The higher rate (42%) remains
+            unchanged at £43,663. This means people pay the lower 19% starter rate on more of
+            their income.
+        """,
+    },
+    {
+        "id": "scottish_budget_2026",
+        "name": "Scottish Budget 2026-27",
+        "description": "Full Scottish Budget 2026-27 package",
+        "explanation": """
+            The complete Scottish Budget 2026-27 package combining:
+            - SCP baby boost: £40/week for babies under 1 (up from £27.15/week)
+            - Income tax threshold uplift: Basic and intermediate rate thresholds increased by 7.4%
+        """,
+    },
 ]
 
 PRESETS = [
     {
         "id": "scottish-budget-2026",
         "name": "Scottish Budget 2026",
-        "policies": ["scp_baby_boost"],
+        "policies": ["scp_baby_boost", "income_tax_threshold_uplift"],
     },
 ]
