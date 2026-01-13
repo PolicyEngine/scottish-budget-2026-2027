@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import DecileChart from "./DecileChart";
 import BudgetBarChart from "./BudgetBarChart";
+import StackedBudgetBarChart from "./StackedBudgetBarChart";
+import StackedDecileChart from "./StackedDecileChart";
 import PovertyImpactTable from "./PovertyImpactTable";
 import LocalAreaSection from "./LocalAreaSection";
 import "./Dashboard.css";
@@ -42,6 +44,8 @@ const POLICY_INFO = {
 export default function Dashboard({ selectedPolicy = "scp_baby_boost" }) {
   const [loading, setLoading] = useState(true);
   const [livingStandardsData, setLivingStandardsData] = useState(null);
+  const [stackedDecileData, setStackedDecileData] = useState([]);
+  const [stackedIncomeChangeData, setStackedIncomeChangeData] = useState([]);
   const [povertyMetrics, setPovertyMetrics] = useState([]);
   const [budgetaryData, setBudgetaryData] = useState(null);
   const [activeSection, setActiveSection] = useState("introduction");
@@ -79,7 +83,7 @@ export default function Dashboard({ selectedPolicy = "scp_baby_boost" }) {
           const csvText = await distRes.text();
           const data = parseCSV(csvText);
 
-          // Transform to decile format for chart (2026 data)
+          // Transform to decile format for chart (2026 data) - single policy
           const decileData = data
             .filter(row => row.year === "2026" && row.reform_id === selectedPolicy)
             .map(row => ({
@@ -88,22 +92,52 @@ export default function Dashboard({ selectedPolicy = "scp_baby_boost" }) {
               absoluteChange: parseFloat(row.absolute_change) || 0,
             }));
 
-          // Calculate average income change per year for baseline vs reform chart
-          const incomeChangeByYear = {};
-          data.filter(row => row.reform_id === selectedPolicy).forEach(row => {
+          // Create STACKED decile data (both reforms, 2026)
+          const deciles = ["1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th"];
+          const stackedDecile = deciles.map(decile => {
+            const row = { decile };
+            ["scp_baby_boost", "income_tax_threshold_uplift"].forEach(reformId => {
+              const match = data.find(d => d.year === "2026" && d.reform_id === reformId && d.decile === decile);
+              row[`${reformId}_relative`] = match ? parseFloat(match.value) || 0 : 0;
+              row[`${reformId}_absolute`] = match ? parseFloat(match.absolute_change) || 0 : 0;
+            });
+            return row;
+          });
+          setStackedDecileData(stackedDecile);
+
+          // Calculate average income change per year for each reform
+          const incomeChangeByYearReform = {};
+          data.forEach(row => {
             const year = parseInt(row.year);
-            if (!incomeChangeByYear[year]) {
-              incomeChangeByYear[year] = { totalChange: 0, count: 0 };
+            const reformId = row.reform_id;
+            const key = `${year}_${reformId}`;
+            if (!incomeChangeByYearReform[key]) {
+              incomeChangeByYearReform[key] = { year, reformId, totalChange: 0, count: 0 };
             }
-            incomeChangeByYear[year].totalChange += parseFloat(row.absolute_change) || 0;
-            incomeChangeByYear[year].count += 1;
+            incomeChangeByYearReform[key].totalChange += parseFloat(row.absolute_change) || 0;
+            incomeChangeByYearReform[key].count += 1;
           });
 
-          // Calculate average change per year
-          const avgChangeByYear = {};
-          Object.entries(incomeChangeByYear).forEach(([year, data]) => {
-            avgChangeByYear[year] = data.count > 0 ? data.totalChange / data.count : 0;
+          // Create STACKED income change data by year
+          const years = [2026, 2027, 2028, 2029, 2030];
+          const stackedIncome = years.map(year => {
+            const row = { year };
+            ["scp_baby_boost", "income_tax_threshold_uplift"].forEach(reformId => {
+              const key = `${year}_${reformId}`;
+              const d = incomeChangeByYearReform[key];
+              row[reformId] = d && d.count > 0 ? d.totalChange / d.count : 0;
+            });
+            return row;
           });
+          setStackedIncomeChangeData(stackedIncome);
+
+          // Calculate average change per year (single policy - for backward compatibility)
+          const avgChangeByYear = {};
+          Object.values(incomeChangeByYearReform)
+            .filter(d => d.reformId === selectedPolicy)
+            .forEach(d => {
+              avgChangeByYear[d.year] = d.count > 0 ? d.totalChange / d.count : 0;
+            });
 
           setLivingStandardsData({ byDecile: decileData, avgChangeByYear });
         }
@@ -210,15 +244,20 @@ export default function Dashboard({ selectedPolicy = "scp_baby_boost" }) {
         {policyInfo.explanation}
       </ul>
 
-      {/* Budgetary Impact Bar Chart */}
-      {budgetaryData && budgetaryData[selectedPolicy] && (
-        <BudgetBarChart
-          data={Object.entries(budgetaryData[selectedPolicy].years)
-            .map(([year, value]) => ({ year: parseInt(year), value }))
-            .sort((a, b) => a.year - b.year)}
+      {/* Budgetary Impact Stacked Bar Chart */}
+      {budgetaryData && (
+        <StackedBudgetBarChart
+          data={(() => {
+            // Combine both reforms into stacked data by year
+            const years = [2026, 2027, 2028, 2029, 2030];
+            return years.map(year => ({
+              year,
+              scp_baby_boost: budgetaryData.scp_baby_boost?.years[year] || 0,
+              income_tax_threshold_uplift: budgetaryData.income_tax_threshold_uplift?.years[year] || 0,
+            }));
+          })()}
           title="Estimated budgetary impact"
-          description={`Estimated annual ${selectedPolicy === "income_tax_threshold_uplift" ? "cost (revenue foregone)" : "cost"} of the ${policyInfo.name} policy in Scotland.`}
-          tooltipLabel="Cost"
+          description="Estimated annual cost of the Scottish Budget 2026-27 measures. The income tax threshold uplift represents revenue foregone."
         />
       )}
 
@@ -235,39 +274,28 @@ export default function Dashboard({ selectedPolicy = "scp_baby_boost" }) {
       {/* Living Standards Section */}
       <h2 className="section-title" id="living-standards" ref={(el) => (sectionRefs.current["living-standards"] = el)}>Living standards</h2>
       <p className="chart-description">
-        This section shows how household incomes in Scotland change as a result of the {policyInfo.name} policy.
+        This section shows how household incomes in Scotland change as a result of the Scottish Budget 2026-27 measures.
       </p>
 
       <div className="section-box" style={{ marginTop: "var(--pe-space-lg)" }}>
-        <h3 className="chart-title">Average income change from {policyInfo.name}</h3>
+        <h3 className="chart-title">Average income change from Scottish Budget 2026-27</h3>
         <p className="chart-description">
-          Average change in household net income due to the policy, across all Scottish households.
-          {selectedPolicy === "scp_baby_boost" && " The change is small when averaged across all households because only families with babies under 1 receiving SCP benefit."}
-          {selectedPolicy === "income_tax_threshold_uplift" && " Most Scottish taxpayers will see a benefit from the increased thresholds."}
+          Average change in household net income due to both policies, across all Scottish households.
+          The SCP baby boost only affects families with babies under 1 receiving SCP, while the income tax threshold uplift benefits most Scottish taxpayers.
         </p>
-        <BudgetBarChart
-          data={(() => {
-            const avgChange = livingStandardsData?.avgChangeByYear || {};
-            return [2026, 2027, 2028, 2029, 2030]
-              .filter(year => avgChange[year] !== undefined)
-              .map(year => ({ year, value: avgChange[year] }));
-          })()}
+        <StackedBudgetBarChart
+          data={stackedIncomeChangeData}
           yLabel="Average income change (£)"
           yFormat={(v) => `£${v.toFixed(2)}`}
-          tooltipLabel="Income change"
         />
       </div>
 
-      {/* Decile Impact Chart */}
-      {livingStandardsData?.byDecile && livingStandardsData.byDecile.length > 0 && (
-        <DecileChart
-          data={livingStandardsData.byDecile}
+      {/* Stacked Decile Impact Chart */}
+      {stackedDecileData.length > 0 && (
+        <StackedDecileChart
+          data={stackedDecileData}
           title="Impact by income decile"
-          description={
-            selectedPolicy === "scp_baby_boost"
-              ? "The SCP baby boost is a targeted policy that only benefits families receiving Scottish Child Payment (a means-tested benefit) with babies under 1. Higher income deciles show no impact because they don't qualify for SCP. Values shown are averages across all households in each decile."
-              : "The income tax threshold uplift benefits taxpayers across income levels, with the largest absolute gains in middle deciles where more taxpayers are affected by the threshold changes."
-          }
+          description="Combined impact of both Scottish Budget measures by income decile. The SCP baby boost primarily benefits lower income households (who qualify for SCP), while the income tax threshold uplift benefits taxpayers across income levels."
         />
       )}
 
