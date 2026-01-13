@@ -139,10 +139,10 @@ def get_scottish_budget_reforms() -> list[Reform]:
                 "Basic rate starts at £16,537, intermediate at £29,527."
             ),
             parameter_changes={
-                "gov.hmrc.income_tax.rates.scotland.rates.brackets[1].threshold": {
+                "gov.hmrc.income_tax.rates.scotland.rates[1].threshold": {
                     "2026-04-06.2030-04-05": 3_966,  # Basic: £16,537 - £12,571 PA
                 },
-                "gov.hmrc.income_tax.rates.scotland.rates.brackets[2].threshold": {
+                "gov.hmrc.income_tax.rates.scotland.rates[2].threshold": {
                     "2026-04-06.2030-04-05": 16_956,  # Intermediate: £29,527 - £12,571 PA
                 },
             },
@@ -160,10 +160,10 @@ def get_scottish_budget_reforms() -> list[Reform]:
                 "plus income tax threshold uplift (7.4%)."
             ),
             parameter_changes={
-                "gov.hmrc.income_tax.rates.scotland.rates.brackets[1].threshold": {
+                "gov.hmrc.income_tax.rates.scotland.rates[1].threshold": {
                     "2026-04-06.2030-04-05": 3_966,  # Basic: £16,537 - £12,571 PA
                 },
-                "gov.hmrc.income_tax.rates.scotland.rates.brackets[2].threshold": {
+                "gov.hmrc.income_tax.rates.scotland.rates[2].threshold": {
                     "2026-04-06.2030-04-05": 16_956,  # Intermediate: £29,527 - £12,571 PA
                 },
             },
