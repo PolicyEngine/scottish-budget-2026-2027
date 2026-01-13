@@ -1,51 +1,101 @@
 reform_id,reform_name,year,decile,value,absolute_change
-scp_baby_boost,SCP baby boost (£40/week),2026,1st,0.013750751,2.538686
-scp_baby_boost,SCP baby boost (£40/week),2026,2nd,0.009549242,2.8399804
-scp_baby_boost,SCP baby boost (£40/week),2026,3rd,0.0046487893,1.7095026
-scp_baby_boost,SCP baby boost (£40/week),2026,4th,0.0017536965,0.703212
+scp_baby_boost,SCP baby boost (£40/week),2026,1st,0.013750706,2.538686
+scp_baby_boost,SCP baby boost (£40/week),2026,2nd,0.00955264,2.8403523
+scp_baby_boost,SCP baby boost (£40/week),2026,3rd,0.004646807,1.7092732
+scp_baby_boost,SCP baby boost (£40/week),2026,4th,0.0017538692,0.7035709
 scp_baby_boost,SCP baby boost (£40/week),2026,5th,0.0,0.0
 scp_baby_boost,SCP baby boost (£40/week),2026,6th,0.0,0.0
 scp_baby_boost,SCP baby boost (£40/week),2026,7th,0.0,0.0
 scp_baby_boost,SCP baby boost (£40/week),2026,8th,0.0,0.0
 scp_baby_boost,SCP baby boost (£40/week),2026,9th,0.0,0.0
 scp_baby_boost,SCP baby boost (£40/week),2026,10th,0.0,0.0
-scp_baby_boost,SCP baby boost (£40/week),2027,1st,0.00879621,1.6255368
-scp_baby_boost,SCP baby boost (£40/week),2027,2nd,0.009487345,2.8543546
-scp_baby_boost,SCP baby boost (£40/week),2027,3rd,0.0045820647,1.7259245
-scp_baby_boost,SCP baby boost (£40/week),2027,4th,0.0023599237,0.9657055
+scp_baby_boost,SCP baby boost (£40/week),2027,1st,0.008794848,1.6254679
+scp_baby_boost,SCP baby boost (£40/week),2027,2nd,0.009488232,2.8546035
+scp_baby_boost,SCP baby boost (£40/week),2027,3rd,0.0045789685,1.7250258
+scp_baby_boost,SCP baby boost (£40/week),2027,4th,0.0023612578,0.9661204
 scp_baby_boost,SCP baby boost (£40/week),2027,5th,0.0,0.0
 scp_baby_boost,SCP baby boost (£40/week),2027,6th,0.0,0.0
 scp_baby_boost,SCP baby boost (£40/week),2027,7th,0.0,0.0
 scp_baby_boost,SCP baby boost (£40/week),2027,8th,0.0,0.0
 scp_baby_boost,SCP baby boost (£40/week),2027,9th,0.0,0.0
 scp_baby_boost,SCP baby boost (£40/week),2027,10th,0.0,0.0
-scp_baby_boost,SCP baby boost (£40/week),2028,1st,0.010504788,1.9641074
-scp_baby_boost,SCP baby boost (£40/week),2028,2nd,0.009344136,2.8496056
-scp_baby_boost,SCP baby boost (£40/week),2028,3rd,0.0045627975,1.7478071
-scp_baby_boost,SCP baby boost (£40/week),2028,4th,0.0029043865,1.2093745
+scp_baby_boost,SCP baby boost (£40/week),2028,1st,0.010505008,1.9641317
+scp_baby_boost,SCP baby boost (£40/week),2028,2nd,0.009340579,2.8491776
+scp_baby_boost,SCP baby boost (£40/week),2028,3rd,0.004559984,1.7465329
+scp_baby_boost,SCP baby boost (£40/week),2028,4th,0.00290655,1.2103196
 scp_baby_boost,SCP baby boost (£40/week),2028,5th,0.0,0.0
-scp_baby_boost,SCP baby boost (£40/week),2028,6th,3.7057686e-07,0.0001851669
+scp_baby_boost,SCP baby boost (£40/week),2028,6th,3.7062858e-07,0.0001851732
 scp_baby_boost,SCP baby boost (£40/week),2028,7th,0.0,0.0
 scp_baby_boost,SCP baby boost (£40/week),2028,8th,0.0,0.0
 scp_baby_boost,SCP baby boost (£40/week),2028,9th,0.0,0.0
 scp_baby_boost,SCP baby boost (£40/week),2028,10th,0.0,0.0
-scp_baby_boost,SCP baby boost (£40/week),2029,1st,0.010373728,1.9553937
-scp_baby_boost,SCP baby boost (£40/week),2029,2nd,0.0092110755,2.856536
-scp_baby_boost,SCP baby boost (£40/week),2029,3rd,0.0044343127,1.7187428
-scp_baby_boost,SCP baby boost (£40/week),2029,4th,0.0028625992,1.2069119
+scp_baby_boost,SCP baby boost (£40/week),2029,1st,0.010374104,1.9554162
+scp_baby_boost,SCP baby boost (£40/week),2029,2nd,0.009210617,2.8565335
+scp_baby_boost,SCP baby boost (£40/week),2029,3rd,0.004439223,1.7225099
+scp_baby_boost,SCP baby boost (£40/week),2029,4th,0.002861707,1.2049541
 scp_baby_boost,SCP baby boost (£40/week),2029,5th,0.0,0.0
-scp_baby_boost,SCP baby boost (£40/week),2029,6th,3.6931775e-07,0.00018708479
+scp_baby_boost,SCP baby boost (£40/week),2029,6th,3.6925167e-07,0.0001869772
 scp_baby_boost,SCP baby boost (£40/week),2029,7th,0.0,0.0
 scp_baby_boost,SCP baby boost (£40/week),2029,8th,0.0,0.0
 scp_baby_boost,SCP baby boost (£40/week),2029,9th,0.0,0.0
 scp_baby_boost,SCP baby boost (£40/week),2029,10th,0.0,0.0
-scp_baby_boost,SCP baby boost (£40/week),2030,1st,0.011576037,2.1803045
-scp_baby_boost,SCP baby boost (£40/week),2030,2nd,0.009104096,2.8765109
-scp_baby_boost,SCP baby boost (£40/week),2030,3rd,0.004373116,1.7092174
-scp_baby_boost,SCP baby boost (£40/week),2030,4th,0.0027991668,1.1956496
+scp_baby_boost,SCP baby boost (£40/week),2030,1st,0.011575464,2.1802773
+scp_baby_boost,SCP baby boost (£40/week),2030,2nd,0.009097629,2.8733478
+scp_baby_boost,SCP baby boost (£40/week),2030,3rd,0.004373011,1.71053
+scp_baby_boost,SCP baby boost (£40/week),2030,4th,0.0028008418,1.19617
 scp_baby_boost,SCP baby boost (£40/week),2030,5th,0.0,0.0
-scp_baby_boost,SCP baby boost (£40/week),2030,6th,3.591472e-07,0.00018546896
+scp_baby_boost,SCP baby boost (£40/week),2030,6th,3.5914482e-07,0.00018545649
 scp_baby_boost,SCP baby boost (£40/week),2030,7th,0.0,0.0
 scp_baby_boost,SCP baby boost (£40/week),2030,8th,0.0,0.0
 scp_baby_boost,SCP baby boost (£40/week),2030,9th,0.0,0.0
 scp_baby_boost,SCP baby boost (£40/week),2030,10th,0.0,0.0
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,1st,0.0007148328,0.13197404
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,2nd,0.0025249107,0.7507491
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,3rd,0.0025166862,0.9257333
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,4th,0.0032762596,1.3142833
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,5th,0.0034481073,1.6263605
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,6th,0.0033815852,1.6483262
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,7th,0.0068056323,3.864246
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,8th,0.0063433587,4.291211
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,9th,0.0042731566,3.2829719
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,10th,0.001404113,1.9011565
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,1st,0.0007010697,0.12957203
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,2nd,0.0023180405,0.6973992
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,3rd,0.0024644763,0.9284372
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,4th,0.0028685979,1.1737012
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,5th,0.0031629216,1.5025207
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,6th,0.0028719262,1.4169453
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,7th,0.0060733533,3.493715
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,8th,0.0056996713,3.9091973
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,9th,0.003599587,2.839993
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,10th,0.0012218229,1.6835722
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,1st,0.00068983197,0.12897857
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,2nd,0.002099862,0.64052564
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,3rd,0.002188974,0.8384054
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,4th,0.002601413,1.0832572
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,5th,0.0027655181,1.3411877
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,6th,0.002453653,1.2258923
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,7th,0.0052591264,3.0795898
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,8th,0.0049239043,3.4043636
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,9th,0.0030103277,2.4281087
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,10th,0.0009932892,1.3977911
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,1st,0.00071045477,0.13391371
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,2nd,0.0018540443,0.57500374
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,3rd,0.0020168826,0.78259194
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,4th,0.002201209,0.92684406
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,5th,0.00237216,1.1754584
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,6th,0.0020316346,1.0287546
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,7th,0.004289614,2.5438898
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,8th,0.0041613793,2.9454026
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,9th,0.0023364495,1.8972623
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,10th,0.0008229588,1.1767073
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,1st,0.0006855647,0.12912841
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,2nd,0.0017179344,0.54258347
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,3rd,0.0017159441,0.671202
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,4th,0.0018191265,0.77690375
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,5th,0.0019289298,0.97290206
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,6th,0.0015728627,0.8122005
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,7th,0.0032030751,1.9265682
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,8th,0.003454887,2.4839761
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,9th,0.0017815597,1.4753312
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,10th,0.00061975006,0.9028238
