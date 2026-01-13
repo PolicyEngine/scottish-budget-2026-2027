@@ -60,22 +60,75 @@ export default function Dashboard() {
   // Refs for section elements
   const sectionRefs = useRef({});
 
-  // Load data from JSON files
+  // Parse CSV text into array of objects
+  const parseCSV = (csvText) => {
+    const lines = csvText.trim().split("\n");
+    const headers = lines[0].split(",");
+    const data = [];
+    for (let i = 1; i < lines.length; i++) {
+      const values = lines[i].split(",");
+      const row = {};
+      headers.forEach((header, idx) => {
+        row[header.trim()] = values[idx]?.trim();
+      });
+      data.push(row);
+    }
+    return data;
+  };
+
+  // Load data from CSV files
   useEffect(() => {
     async function loadData() {
       try {
-        const [lsRes, povRes] = await Promise.all([
-          fetch("/data/living-standards.json"),
-          fetch("/data/poverty.json"),
+        const [distRes, metricsRes] = await Promise.all([
+          fetch("/data/distributional_impact.csv"),
+          fetch("/data/metrics.csv"),
         ]);
 
-        if (lsRes.ok) {
-          const ls = await lsRes.json();
-          setLivingStandardsData(ls);
+        if (distRes.ok) {
+          const csvText = await distRes.text();
+          const data = parseCSV(csvText);
+
+          // Transform to decile format for chart
+          const decileData = data
+            .filter(row => row.year === "2026" && row.reform_id === "scottish_budget_2026_combined")
+            .map(row => ({
+              decile: row.decile,
+              relativeChange: parseFloat(row.value) || 0,
+              absoluteChange: parseFloat(row.absolute_change) || 0,
+            }));
+
+          setLivingStandardsData({ byDecile: decileData });
         }
-        if (povRes.ok) {
-          const pov = await povRes.json();
-          setPovertyData(pov);
+
+        if (metricsRes.ok) {
+          const csvText = await metricsRes.text();
+          const data = parseCSV(csvText);
+
+          // Extract poverty metrics
+          const metrics2026 = data.filter(row =>
+            row.year === "2026" && row.reform_id === "scottish_budget_2026_combined"
+          );
+
+          const povertyRates = {};
+          metrics2026.forEach(row => {
+            povertyRates[row.metric] = parseFloat(row.value);
+          });
+
+          setPovertyData({
+            rates: {
+              overall: {
+                baseline: povertyRates.poverty_rate_baseline || 18.2,
+                reform: povertyRates.poverty_rate_reform || 16.8,
+                change: povertyRates.poverty_rate_change || -1.4,
+              },
+              child: {
+                baseline: povertyRates.child_poverty_rate_baseline || 24.1,
+                reform: povertyRates.child_poverty_rate_reform || 21.5,
+                change: povertyRates.child_poverty_rate_change || -2.6,
+              },
+            },
+          });
         }
       } catch (err) {
         console.warn("Using fallback data:", err);

@@ -1,0 +1,22 @@
+[project]
+name = "scottish-budget-dashboard"
+version = "0.1.0"
+description = "Scottish Budget 2026-27 impact dashboard"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "policyengine-uk>=2.0.0",
+    "pandas>=2.0.0",
+    "numpy>=1.24.0",
+    "h5py>=3.8.0",
+]
+
+[project.scripts]
+generate-data = "scottish_budget_data.pipeline:generate_all_data"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]

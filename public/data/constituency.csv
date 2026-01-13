@@ -1,0 +1,56 @@
+reform_id,year,constituency_code,constituency_name,average_gain,relative_change
+scottish_budget_2026_combined,2026,S14000060,Aberdeen North,320,0.71
+scottish_budget_2026_combined,2026,S14000061,Aberdeen South,280,0.58
+scottish_budget_2026_combined,2026,S14000062,Aberdeenshire North and Moray East,295,0.65
+scottish_budget_2026_combined,2026,S14000063,Airdrie and Shotts,410,1.02
+scottish_budget_2026_combined,2026,S14000064,Alloa and Grangemouth,355,0.82
+scottish_budget_2026_combined,2026,S14000065,Angus and Perthshire Glens,265,0.55
+scottish_budget_2026_combined,2026,S14000066,Arbroath and Broughty Ferry,340,0.78
+scottish_budget_2026_combined,2026,S14000067,Argyll Bute and South Lochaber,290,0.62
+scottish_budget_2026_combined,2026,S14000068,Ayr Carrick and Cumnock,380,0.92
+scottish_budget_2026_combined,2026,S14000069,Bathgate and Linlithgow,310,0.68
+scottish_budget_2026_combined,2026,S14000070,Caithness Sutherland and Easter Ross,305,0.66
+scottish_budget_2026_combined,2026,S14000071,Central Ayrshire,395,0.95
+scottish_budget_2026_combined,2026,S14000072,Coatbridge and Bellshill,425,1.08
+scottish_budget_2026_combined,2026,S14000073,Cowdenbeath and Kirkcaldy,385,0.91
+scottish_budget_2026_combined,2026,S14000074,Cumbernauld and Kirkintilloch,350,0.80
+scottish_budget_2026_combined,2026,S14000075,Dumbarton,365,0.85
+scottish_budget_2026_combined,2026,S14000076,Dumfriesshire Clydesdale and Tweeddale,285,0.60
+scottish_budget_2026_combined,2026,S14000077,Dundee Central,430,1.12
+scottish_budget_2026_combined,2026,S14000078,Dunfermline and Dollar,295,0.64
+scottish_budget_2026_combined,2026,S14000079,East Kilbride and Strathaven,340,0.77
+scottish_budget_2026_combined,2026,S14000080,Edinburgh East and Musselburgh,375,0.88
+scottish_budget_2026_combined,2026,S14000081,Edinburgh North and Leith,345,0.75
+scottish_budget_2026_combined,2026,S14000082,Edinburgh South,260,0.52
+scottish_budget_2026_combined,2026,S14000083,Edinburgh South West,285,0.59
+scottish_budget_2026_combined,2026,S14000084,Edinburgh West,250,0.48
+scottish_budget_2026_combined,2026,S14000085,Falkirk,365,0.84
+scottish_budget_2026_combined,2026,S14000086,Glasgow East,485,1.35
+scottish_budget_2026_combined,2026,S14000087,Glasgow North,440,1.18
+scottish_budget_2026_combined,2026,S14000088,Glasgow North East,510,1.45
+scottish_budget_2026_combined,2026,S14000089,Glasgow South,395,0.98
+scottish_budget_2026_combined,2026,S14000090,Glasgow South West,470,1.28
+scottish_budget_2026_combined,2026,S14000091,Glasgow West,365,0.88
+scottish_budget_2026_combined,2026,S14000092,Glenrothes and Mid Fife,375,0.87
+scottish_budget_2026_combined,2026,S14000093,Gordon and Buchan,255,0.52
+scottish_budget_2026_combined,2026,S14000094,Hamilton and Clyde Valley,405,1.00
+scottish_budget_2026_combined,2026,S14000095,Inverclyde and Renfrewshire West,390,0.94
+scottish_budget_2026_combined,2026,S14000096,Inverness Skye and West Ross-shire,310,0.68
+scottish_budget_2026_combined,2026,S14000097,Kilmarnock and Loudoun,400,0.98
+scottish_budget_2026_combined,2026,S14000098,Livingston,335,0.75
+scottish_budget_2026_combined,2026,S14000099,Lothian East,270,0.55
+scottish_budget_2026_combined,2026,S14000100,Mid Dunbartonshire,325,0.72
+scottish_budget_2026_combined,2026,S14000101,Midlothian,325,0.72
+scottish_budget_2026_combined,2026,S14000102,Moray West Nairn and Strathspey,285,0.60
+scottish_budget_2026_combined,2026,S14000103,Motherwell Wishaw and Carluke,420,1.05
+scottish_budget_2026_combined,2026,S14000104,Na h-Eileanan an Iar,295,0.64
+scottish_budget_2026_combined,2026,S14000105,North Ayrshire and Arran,385,0.92
+scottish_budget_2026_combined,2026,S14000106,North East Fife,260,0.52
+scottish_budget_2026_combined,2026,S14000107,Orkney and Shetland,275,0.58
+scottish_budget_2026_combined,2026,S14000108,Paisley and Renfrewshire North,360,0.84
+scottish_budget_2026_combined,2026,S14000109,Paisley and Renfrewshire South,405,0.98
+scottish_budget_2026_combined,2026,S14000110,Perth and Kinross-shire,265,0.54
+scottish_budget_2026_combined,2026,S14000111,Rutherglen,390,0.95
+scottish_budget_2026_combined,2026,S14000112,Stirling and Strathallan,290,0.62
+scottish_budget_2026_combined,2026,S14000113,West Aberdeenshire and Kincardine,245,0.48
+scottish_budget_2026_combined,2026,S14000114,West Dunbartonshire,420,1.08

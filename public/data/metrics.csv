@@ -1,0 +1,13 @@
+reform_id,reform_name,year,metric,value
+two_child_limit_abolition,Two-child limit abolition,2026,poverty_rate_baseline,18.2
+two_child_limit_abolition,Two-child limit abolition,2026,poverty_rate_reform,16.8
+two_child_limit_abolition,Two-child limit abolition,2026,poverty_rate_change,-1.4
+two_child_limit_abolition,Two-child limit abolition,2026,child_poverty_rate_baseline,24.1
+two_child_limit_abolition,Two-child limit abolition,2026,child_poverty_rate_reform,21.5
+two_child_limit_abolition,Two-child limit abolition,2026,child_poverty_rate_change,-2.6
+scottish_budget_2026_combined,Scottish Budget 2026 (combined),2026,poverty_rate_baseline,18.2
+scottish_budget_2026_combined,Scottish Budget 2026 (combined),2026,poverty_rate_reform,16.8
+scottish_budget_2026_combined,Scottish Budget 2026 (combined),2026,poverty_rate_change,-1.4
+scottish_budget_2026_combined,Scottish Budget 2026 (combined),2026,child_poverty_rate_baseline,24.1
+scottish_budget_2026_combined,Scottish Budget 2026 (combined),2026,child_poverty_rate_reform,21.5
+scottish_budget_2026_combined,Scottish Budget 2026 (combined),2026,child_poverty_rate_change,-2.6
