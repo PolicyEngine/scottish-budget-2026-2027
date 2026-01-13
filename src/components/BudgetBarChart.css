@@ -1,0 +1,33 @@
+.budget-bar-chart {
+  background: var(--pe-gray-50);
+  border: 1px solid var(--pe-gray-200);
+  border-radius: var(--pe-radius-lg);
+  padding: var(--pe-space-xl);
+  margin: var(--pe-space-lg) 0;
+}
+
+.budget-bar-chart .chart-title {
+  font-family: var(--pe-font-display);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--pe-gray-900);
+  margin: 0 0 var(--pe-space-sm) 0;
+  letter-spacing: -0.01em;
+}
+
+.budget-bar-chart .chart-description {
+  font-family: var(--pe-font-body);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--pe-gray-600);
+  margin: 0 0 var(--pe-space-md) 0;
+}
+
+.budget-bar-chart .chart-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  color: var(--pe-gray-400);
+  font-size: 0.9rem;
+}

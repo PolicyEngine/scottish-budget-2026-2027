@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import D3LineChart from "./D3LineChart";
 import DecileChart from "./DecileChart";
+import BudgetBarChart from "./BudgetBarChart";
 import LocalAreaSection from "./LocalAreaSection";
 import "./Dashboard.css";
 
@@ -239,18 +240,14 @@ export default function Dashboard() {
         </li>
       </ul>
 
-      {/* Budgetary Impact Summary */}
+      {/* Budgetary Impact Bar Chart */}
       {budgetaryData && budgetaryData.scp_baby_boost && (
-        <div className="budgetary-summary">
-          <h3 className="chart-title">Estimated cost (2026)</h3>
-          <div className="cost-cards">
-            <div className="cost-card highlight">
-              <div className="cost-label">SCP baby boost</div>
-              <div className="cost-value">£{(budgetaryData.scp_baby_boost.years["2026"] || 0).toFixed(0)}m</div>
-              <div className="cost-detail">per year</div>
-            </div>
-          </div>
-        </div>
+        <BudgetBarChart
+          data={Object.entries(budgetaryData.scp_baby_boost.years)
+            .map(([year, value]) => ({ year: parseInt(year), value }))
+            .sort((a, b) => a.year - b.year)}
+          title="Estimated budgetary impact"
+        />
       )}
 
       <p className="chart-description" style={{ marginTop: "12px" }}>
