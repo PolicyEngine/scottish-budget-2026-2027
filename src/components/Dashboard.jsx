@@ -238,10 +238,11 @@ export default function Dashboard({ selectedPolicy = "scp_baby_boost" }) {
         and distributes impacts across Scotland's local areas.
       </p>
       <p className="chart-description" style={{ marginTop: "12px" }}>
-        Currently viewing:
+        Policies included:
       </p>
       <ul className="policy-list">
-        {policyInfo.explanation}
+        {POLICY_INFO.scp_baby_boost.explanation}
+        {POLICY_INFO.income_tax_threshold_uplift.explanation}
       </ul>
 
       {/* Budgetary Impact Stacked Bar Chart */}
@@ -257,7 +258,7 @@ export default function Dashboard({ selectedPolicy = "scp_baby_boost" }) {
             }));
           })()}
           title="Estimated budgetary impact"
-          description="Estimated annual cost of the Scottish Budget 2026-27 measures. The income tax threshold uplift represents revenue foregone."
+          description="Estimated annual cost of the Scottish Budget 2026-27 measures."
         />
       )}
 
