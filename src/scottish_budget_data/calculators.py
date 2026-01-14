@@ -57,17 +57,16 @@ class BudgetaryImpactCalculator:
             # Filter to Scotland
             is_scotland = get_scotland_household_mask(baseline, year)
 
-            baseline_income = np.array(baseline.calculate("household_net_income", year))
-            reformed_income = np.array(reformed.calculate("household_net_income", year))
-            household_weight = np.array(baseline.calculate("household_weight", year))
+            # Keep as MicroSeries (don't convert to numpy) so .sum() uses built-in weights
+            baseline_income = baseline.calculate("household_net_income", year)
+            reformed_income = reformed.calculate("household_net_income", year)
 
-            # Apply Scotland filter
-            baseline_income = baseline_income[is_scotland]
-            reformed_income = reformed_income[is_scotland]
-            household_weight = household_weight[is_scotland]
+            # Apply Scotland filter (preserves MicroSeries with weights)
+            baseline_income_scotland = baseline_income[is_scotland]
+            reformed_income_scotland = reformed_income[is_scotland]
 
-            # Cost = increase in household income (government spending/revenue foregone)
-            cost = ((reformed_income - baseline_income) * household_weight).sum()
+            # Use built-in weighted sum (weights handled automatically by MicroSeries)
+            cost = (reformed_income_scotland - baseline_income_scotland).sum()
 
             results.append({
                 "reform_id": reform_id,

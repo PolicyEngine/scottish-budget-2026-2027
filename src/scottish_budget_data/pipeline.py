@@ -11,14 +11,14 @@ import h5py
 from policyengine_uk import Microsimulation
 from policyengine_uk.data import UKSingleYearDataset
 
-from scottish_budget_data.calculators import (
+from .calculators import (
     BudgetaryImpactCalculator,
     ConstituencyCalculator,
     DistributionalImpactCalculator,
     MetricsCalculator,
     WinnersLosersCalculator,
 )
-from scottish_budget_data.reforms import Reform, get_scottish_budget_reforms
+from .reforms import Reform, get_scottish_budget_reforms
 
 
 # Default paths
