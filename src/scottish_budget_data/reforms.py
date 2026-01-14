@@ -58,6 +58,35 @@ class Reform:
         return None
 
 
+def _income_tax_threshold_uplift_modifier(sim):
+    """Apply Scottish income tax threshold uplift (7.4%).
+
+    From Scottish Budget 2026-27:
+    - Basic rate (20%) threshold: £15,398 → £16,537 (above PA: £3,966)
+    - Intermediate rate (21%) threshold: £27,492 → £29,527 (above PA: £16,956)
+
+    This is applied by directly modifying the parameter values in the simulation.
+    """
+    params = sim.tax_benefit_system.parameters
+    scotland_rates = params.gov.hmrc.income_tax.rates.scotland.rates
+
+    # Update brackets for years 2026-2030
+    # Bracket 1 = basic rate (20%), Bracket 2 = intermediate rate (21%)
+    for year in [2026, 2027, 2028, 2029, 2030]:
+        # Set basic rate threshold (bracket 1) to £3,966 above PA
+        scotland_rates.brackets[1].threshold.update(
+            period=f"{year}-01-01",
+            value=3_966,
+        )
+        # Set intermediate rate threshold (bracket 2) to £16,956 above PA
+        scotland_rates.brackets[2].threshold.update(
+            period=f"{year}-01-01",
+            value=16_956,
+        )
+
+    return sim
+
+
 def _scp_baby_boost_modifier(sim):
     """Apply Scottish Child Payment baby boost for children under 1.
 
@@ -73,22 +102,23 @@ def _scp_baby_boost_modifier(sim):
     for year in [2026, 2027, 2028, 2029, 2030]:
         # Get current SCP values (already filters for Scotland + qualifying benefits)
         current_scp = sim.calculate("scottish_child_payment", year)
+        n_benunits = len(current_scp)
 
         # Get person-level age to count babies
         age = sim.calculate("age", year, map_to="person")
         is_baby = np.array(age) < 1
+        n_persons = len(age)
 
-        # Map babies to benefit units
-        person_benunit_id = sim.calculate("benunit_id", year, map_to="person")
-        benunit_id = sim.calculate("benunit_id", year, map_to="benunit")
+        # Calculate persons per benunit (for axes simulations this maps correctly)
+        persons_per_benunit = n_persons // n_benunits
 
-        # Count babies per benefit unit
-        babies_per_benunit = np.zeros(len(benunit_id))
-        bu_id_to_idx = {bu_id: idx for idx, bu_id in enumerate(benunit_id)}
-
-        for person_bu_id, baby in zip(person_benunit_id, is_baby):
-            if baby and person_bu_id in bu_id_to_idx:
-                babies_per_benunit[bu_id_to_idx[person_bu_id]] += 1
+        # Count babies per benefit unit using index-based mapping
+        # With axes, persons are ordered: [bu0_p0, bu0_p1, bu1_p0, bu1_p1, ...]
+        babies_per_benunit = np.zeros(n_benunits)
+        for person_idx, baby in enumerate(is_baby):
+            if baby:
+                benunit_idx = person_idx // persons_per_benunit
+                babies_per_benunit[benunit_idx] += 1
 
         # Calculate baby boost (£12.85/week extra × 52 weeks per baby)
         annual_boost = babies_per_benunit * SCP_BABY_BOOST * WEEKS_IN_YEAR
@@ -126,28 +156,20 @@ def get_scottish_budget_reforms() -> list[Reform]:
         )
     )
 
+    # Scottish income tax threshold uplift (7.4%)
+    # Raises basic and intermediate rate thresholds per Scottish Budget 2026-27
+    # Basic (20%): £15,398 → £16,537 absolute = £3,966 above PA
+    # Intermediate (21%): £27,492 → £29,527 absolute = £16,956 above PA
+    reforms.append(
+        Reform(
+            id="income_tax_threshold_uplift",
+            name="Income tax threshold uplift (7.4%)",
+            description=(
+                "Scottish basic and intermediate rate thresholds increased by 7.4%. "
+                "Basic rate starts at £16,537, intermediate at £29,527."
+            ),
+simulation_modifier=_income_tax_threshold_uplift_modifier,
+        )
+    )
+
     return reforms
-
-
-# Policy metadata for dashboard
-POLICIES = [
-    {
-        "id": "scp_baby_boost",
-        "name": "SCP baby boost (£40/week)",
-        "description": "Scottish Child Payment boosted to £40/week for babies under 1",
-        "explanation": """
-            The Scottish Child Payment is boosted to £40/week for families with babies
-            under 1 year old, up from the standard rate of £27.15/week. This delivers
-            the strongest package of support for families with young children anywhere
-            in the UK, as announced by Finance Secretary Shona Robison on 13 January 2026.
-        """,
-    },
-]
-
-PRESETS = [
-    {
-        "id": "scottish-budget-2026",
-        "name": "Scottish Budget 2026",
-        "policies": ["scp_baby_boost"],
-    },
-]
