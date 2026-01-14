@@ -419,8 +419,9 @@ export default function Dashboard({ selectedPolicies = [] }) {
       {/* Poverty Section */}
       <h2 className="section-title" id="poverty" ref={(el) => (sectionRefs.current["poverty"] = el)}>Poverty rate</h2>
       <p className="chart-description">
-        This section shows how poverty rates are projected to change under the budget measures.
-        The Scottish Government has set ambitious targets to reduce child poverty.
+        This section shows how poverty rates are projected to change under the budget measures,
+        using the Before Housing Costs (BHC) definition where a household is in poverty if its
+        equivalised income is below 60% of UK median income.
         {effectivePolicy === "income_tax_threshold_uplift" && (
           <strong> Note: Income tax threshold increases have minimal direct impact on poverty rates
           because people in poverty typically pay little or no income tax.</strong>
