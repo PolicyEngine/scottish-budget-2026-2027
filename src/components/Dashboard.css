@@ -32,12 +32,8 @@
   overflow: visible;
 }
 
-/* Main section titles - sticky headers (below main header) */
+/* Main section titles */
 .section-title {
-  position: sticky;
-  top: 72px; /* Account for sticky header height */
-  z-index: 50;
-  background: var(--pe-surface);
   font-family: var(--pe-font-display);
   font-size: clamp(1.25rem, 2.5vw, 1.5rem);
   font-weight: 700;
@@ -304,7 +300,6 @@
 /* Responsive design */
 @media (max-width: 768px) {
   .section-title {
-    top: 120px; /* Account for taller stacked mobile header */
     padding: var(--pe-space-md) 0;
     font-size: 1.25rem;
   }
