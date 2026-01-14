@@ -74,6 +74,7 @@ export default function LocalAreaSection({ selectedPolicy = "scp_baby_boost" }) 
   const [selectedConstituency, setSelectedConstituency] = useState(null);
   const [selectedRegion, setSelectedRegion] = useState("All regions");
   const [loading, setLoading] = useState(true);
+  const [showTop, setShowTop] = useState(true); // Toggle for Top 10 vs Lowest 10
 
   // Load constituency data from CSV
   useEffect(() => {
@@ -150,21 +151,15 @@ export default function LocalAreaSection({ selectedPolicy = "scp_baby_boost" }) 
     return filtered.sort((a, b) => b.avgGain - a.avgGain);
   }, [constituencyData, selectedRegion]);
 
-  // Prepare chart data for regional comparison
-  const regionalData = useMemo(() => {
-    const regionStats = {};
-    constituencyData.forEach(c => {
-      if (!regionStats[c.region]) {
-        regionStats[c.region] = { region: c.region, totalGain: 0, count: 0 };
-      }
-      regionStats[c.region].totalGain += c.avgGain;
-      regionStats[c.region].count += 1;
-    });
-    return Object.values(regionStats).map(r => ({
-      region: r.region.replace("and ", "& "),
-      avgGain: parseFloat((r.totalGain / r.count).toFixed(2)),
-    })).sort((a, b) => b.avgGain - a.avgGain);
-  }, [constituencyData]);
+  // Prepare chart data - Top 10 or Lowest 10 constituencies
+  const chartData = useMemo(() => {
+    const sorted = [...constituencyData].sort((a, b) => b.avgGain - a.avgGain);
+    if (showTop) {
+      return sorted.slice(0, 10);
+    } else {
+      return sorted.slice(-10).reverse();
+    }
+  }, [constituencyData, showTop]);
 
   if (loading) {
     return <div className="local-area-section"><p>Loading constituency data...</p></div>;
@@ -221,20 +216,41 @@ export default function LocalAreaSection({ selectedPolicy = "scp_baby_boost" }) 
         </div>
       )}
 
-      {/* All Constituencies Comparison */}
+      {/* Constituency Comparison - Top/Lowest 10 */}
       <div className="section-box">
-        <h3 className="chart-title">Constituency comparison</h3>
+        <div className="chart-header">
+          <h3 className="chart-title">Constituency comparison</h3>
+          <div className="chart-toggle">
+            <button
+              className={`toggle-btn ${showTop ? "active" : ""}`}
+              onClick={() => setShowTop(true)}
+            >
+              Top 10
+            </button>
+            <button
+              className={`toggle-btn ${!showTop ? "active" : ""}`}
+              onClick={() => setShowTop(false)}
+            >
+              Lowest 10
+            </button>
+          </div>
+        </div>
         <p className="chart-description">
-          Average household gain by constituency from the {policyName} policy. All {filteredConstituencies.length} Scottish constituencies sorted by impact.
+          {showTop ? "Highest" : "Lowest"} average household gain by constituency from the {policyName} policy.
         </p>
         <div className="constituency-chart-container">
-          <ResponsiveContainer width="100%" height={filteredConstituencies.length * 22 + 40}>
-            <BarChart data={filteredConstituencies} layout="vertical" margin={{ top: 10, right: 30, left: 200, bottom: 10 }}>
+          <ResponsiveContainer width="100%" height={350}>
+            <BarChart data={chartData} margin={{ top: 20, right: 20, left: 20, bottom: 80 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
-              <XAxis type="number" tickFormatter={(v) => `£${v.toFixed(0)}`} />
-              <YAxis type="category" dataKey="name" width={190} tick={{ fontSize: 10 }} interval={0} />
+              <XAxis
+                dataKey="name"
+                tick={{ fontSize: 10, angle: -45, textAnchor: "end" }}
+                height={80}
+                interval={0}
+              />
+              <YAxis tickFormatter={(v) => `£${v.toFixed(0)}`} />
               <Tooltip formatter={(value) => [`£${value.toFixed(2)}`, "Avg. gain"]} />
-              <Bar dataKey="avgGain" fill="#319795" name="Avg. gain" radius={[0, 4, 4, 0]} />
+              <Bar dataKey="avgGain" fill={showTop ? "#319795" : "#e53e3e"} name="Avg. gain" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>

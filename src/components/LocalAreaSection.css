@@ -192,7 +192,50 @@
   }
 }
 
-/* Constituency chart - all constituencies */
+/* Chart header with toggle */
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--pe-space-sm);
+  margin-bottom: var(--pe-space-xs);
+}
+
+.chart-header .chart-title {
+  margin: 0;
+}
+
+.chart-toggle {
+  display: flex;
+  background: var(--pe-gray-100);
+  border-radius: var(--pe-radius-md);
+  padding: 3px;
+}
+
+.toggle-btn {
+  padding: var(--pe-space-xs) var(--pe-space-md);
+  border: none;
+  background: transparent;
+  border-radius: var(--pe-radius-sm);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--pe-gray-600);
+  cursor: pointer;
+  transition: all var(--pe-transition-fast);
+}
+
+.toggle-btn:hover {
+  color: var(--pe-gray-900);
+}
+
+.toggle-btn.active {
+  background: var(--pe-surface);
+  color: var(--pe-teal-700);
+  box-shadow: var(--pe-shadow-sm);
+}
+
+/* Constituency chart container */
 .constituency-chart-container {
   margin-top: var(--pe-space-md);
   overflow-x: auto;
