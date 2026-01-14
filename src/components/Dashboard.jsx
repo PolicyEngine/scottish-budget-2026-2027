@@ -310,7 +310,16 @@ export default function Dashboard({ selectedPolicies = [] }) {
         and distributes impacts across Scotland's local areas.
       </p>
       <p className="chart-description" style={{ marginTop: "12px" }}>
-        Currently viewing:
+        PolicyEngine is an open-source microsimulation model that{" "}
+        <a href="https://github.com/PolicyEngine/policyengine-uk-data" target="_blank" rel="noopener noreferrer">reweights</a>{" "}
+        the Family Resources Survey to match Scottish demographics and calibrates to official statistics.
+        See also: PolicyEngine's{" "}
+        <a href="https://policyengine.org/uk/scottish-budget-2026" target="_blank" rel="noopener noreferrer">pre-budget dashboard</a>{" "}
+        and our poverty{" "}
+        <a href="https://policyengine.org/uk/research/uk-poverty-analysis" target="_blank" rel="noopener noreferrer">methodology</a>.
+      </p>
+      <p className="chart-description" style={{ marginTop: "12px" }}>
+        This analysis examines the following policies:
       </p>
       <ul className="policy-list">
         {isStacked ? (
@@ -343,16 +352,6 @@ export default function Dashboard({ selectedPolicies = [] }) {
           tooltipLabel="Cost"
         />
       )}
-
-      <p className="chart-description" style={{ marginTop: "12px" }}>
-        PolicyEngine is an open-source microsimulation model that{" "}
-        <a href="https://github.com/PolicyEngine/policyengine-uk-data" target="_blank" rel="noopener noreferrer">reweights</a>{" "}
-        the Family Resources Survey to match Scottish demographics and calibrates to official statistics.
-        See also: PolicyEngine's{" "}
-        <a href="https://policyengine.org/uk/scottish-budget-2026" target="_blank" rel="noopener noreferrer">pre-budget dashboard</a>{" "}
-        and our poverty{" "}
-        <a href="https://policyengine.org/uk/research/uk-poverty-analysis" target="_blank" rel="noopener noreferrer">methodology</a>.
-      </p>
 
       {/* Living Standards Section */}
       <h2 className="section-title" id="living-standards" ref={(el) => (sectionRefs.current["living-standards"] = el)}>Living standards</h2>
