@@ -32,8 +32,45 @@
 
 .decile-chart .chart-controls {
   display: flex;
+  align-items: center;
   gap: var(--pe-space-md);
   margin-bottom: var(--pe-space-md);
+  flex-wrap: wrap;
+}
+
+.decile-chart .year-selector {
+  display: flex;
+  align-items: center;
+  gap: var(--pe-space-xs);
+  margin-left: auto;
+}
+
+.decile-chart .year-selector label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--pe-gray-600);
+}
+
+.decile-chart .year-selector select {
+  padding: 6px 12px;
+  border: 1px solid var(--pe-gray-300);
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--pe-gray-700);
+  background: white;
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+
+.decile-chart .year-selector select:hover {
+  border-color: var(--pe-teal-400);
+}
+
+.decile-chart .year-selector select:focus {
+  outline: none;
+  border-color: var(--pe-teal-500);
+  box-shadow: 0 0 0 2px rgba(20, 184, 166, 0.1);
 }
 
 .decile-chart .view-toggle {

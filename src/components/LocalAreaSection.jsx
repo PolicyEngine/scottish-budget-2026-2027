@@ -68,8 +68,14 @@ const POLICY_DISPLAY_NAMES = {
   income_tax_threshold_uplift: "income tax threshold uplift",
 };
 
-export default function LocalAreaSection({ selectedPolicy = "scp_baby_boost" }) {
+export default function LocalAreaSection({
+  selectedPolicy = "scp_baby_boost",
+  selectedYear = 2026,
+  onYearChange = null,
+  availableYears = [2026, 2027, 2028, 2029, 2030],
+}) {
   const policyName = POLICY_DISPLAY_NAMES[selectedPolicy] || "the selected policy";
+  const formatYearRange = (year) => `${year}-${(year + 1).toString().slice(-2)}`;
 
   const [constituencyData, setConstituencyData] = useState([]);
   const [selectedConstituency, setSelectedConstituency] = useState(null);
@@ -86,11 +92,11 @@ export default function LocalAreaSection({ selectedPolicy = "scp_baby_boost" }) 
           const csvText = await res.text();
           const data = parseCSV(csvText);
 
-          // Transform to expected format and add region (filter to 2026 data and selected policy)
+          // Transform to expected format and add region (filter by year and selected policy)
           const transformed = data
             .filter(row =>
               row.constituency_code?.startsWith("S") &&
-              row.year === "2026" &&
+              row.year === String(selectedYear) &&
               row.reform_id === selectedPolicy
             )
             .map(row => ({
@@ -113,7 +119,7 @@ export default function LocalAreaSection({ selectedPolicy = "scp_baby_boost" }) 
       }
     }
     loadData();
-  }, [selectedPolicy]);
+  }, [selectedPolicy, selectedYear]);
 
   // Convert constituency data for the map component
   const mapConstituencyData = useMemo(() => {
@@ -185,11 +191,29 @@ export default function LocalAreaSection({ selectedPolicy = "scp_baby_boost" }) 
 
   return (
     <div className="local-area-section">
+      {/* Year Selector */}
+      {onYearChange && (
+        <div className="year-selector-container">
+          <label>Select year:</label>
+          <select
+            value={selectedYear}
+            onChange={(e) => onYearChange(parseInt(e.target.value))}
+            className="year-select"
+          >
+            {availableYears.map((year) => (
+              <option key={year} value={year}>
+                {formatYearRange(year)}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
+
       {/* Interactive Map */}
       <div className="section-box map-section">
         <ScotlandMap
           constituencyData={mapConstituencyData}
-          selectedYear={2026}
+          selectedYear={selectedYear}
           selectedConstituency={selectedConstituency ? { code: selectedConstituency.code, name: selectedConstituency.name } : null}
           onConstituencySelect={handleConstituencySelect}
           policyName={policyName}

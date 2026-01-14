@@ -61,6 +61,9 @@ export default function Dashboard({ selectedPolicies = [] }) {
   const [rawBudgetaryData, setRawBudgetaryData] = useState([]);
   const [rawDistributionalData, setRawDistributionalData] = useState([]);
   const [activeSection, setActiveSection] = useState("introduction");
+  const [selectedYear, setSelectedYear] = useState(2026);
+
+  const AVAILABLE_YEARS = [2026, 2027, 2028, 2029, 2030];
 
   // Refs for section elements
   const sectionRefs = useRef({});
@@ -97,17 +100,8 @@ export default function Dashboard({ selectedPolicies = [] }) {
           const csvText = await distRes.text();
           const data = parseCSV(csvText);
 
-          // Store raw data for stacked charts
+          // Store raw data for year selection and stacked charts
           setRawDistributionalData(data);
-
-          // Transform to decile format for chart (2026 data) - use effective policy, exclude "All" row
-          const decileData = data
-            .filter(row => row.year === "2026" && row.reform_id === effectivePolicy && row.decile !== "All")
-            .map(row => ({
-              decile: row.decile,
-              relativeChange: parseFloat(row.value) || 0,
-              absoluteChange: parseFloat(row.absolute_change) || 0,
-            }));
 
           // Get average income change per year from the "All" row (true weighted average)
           const avgChangeByYear = {};
@@ -118,7 +112,7 @@ export default function Dashboard({ selectedPolicies = [] }) {
               avgChangeByYear[year] = parseFloat(row.absolute_change) || 0;
             });
 
-          setLivingStandardsData({ byDecile: decileData, avgChangeByYear });
+          setLivingStandardsData({ avgChangeByYear });
         }
 
         if (metricsRes.ok) {
@@ -234,7 +228,7 @@ export default function Dashboard({ selectedPolicies = [] }) {
       selectedPolicies.forEach(policyId => {
         const policyName = POLICY_NAMES[policyId];
         const row = rawDistributionalData.find(
-          r => r.reform_id === policyId && r.year === "2026" && r.decile === decile
+          r => r.reform_id === policyId && r.year === String(selectedYear) && r.decile === decile
         );
         const relValue = row ? parseFloat(row.value) || 0 : 0;
         const absValue = row ? parseFloat(row.absolute_change) || 0 : 0;
@@ -248,7 +242,7 @@ export default function Dashboard({ selectedPolicies = [] }) {
       dataPoint.netAbsolute = netAbsolute;
       return dataPoint;
     });
-  }, [isStacked, rawDistributionalData, selectedPolicies]);
+  }, [isStacked, rawDistributionalData, selectedPolicies, selectedYear]);
 
   // Transform average income change data for stacked chart
   const stackedAvgIncomeData = useMemo(() => {
@@ -273,6 +267,23 @@ export default function Dashboard({ selectedPolicies = [] }) {
       return dataPoint;
     }).filter(d => Object.keys(d).length > 1); // Only include years with data
   }, [isStacked, rawDistributionalData, selectedPolicies]);
+
+  // Get decile data filtered by selected year
+  const decileDataForYear = useMemo(() => {
+    if (rawDistributionalData.length === 0) return [];
+
+    return rawDistributionalData
+      .filter(row =>
+        row.year === String(selectedYear) &&
+        row.reform_id === effectivePolicy &&
+        row.decile !== "All"
+      )
+      .map(row => ({
+        decile: row.decile,
+        relativeChange: parseFloat(row.value) || 0,
+        absoluteChange: parseFloat(row.absolute_change) || 0,
+      }));
+  }, [rawDistributionalData, selectedYear, effectivePolicy]);
 
   const policyInfo = POLICY_INFO[effectivePolicy] || POLICY_INFO.scp_baby_boost;
 
@@ -379,9 +390,9 @@ export default function Dashboard({ selectedPolicies = [] }) {
       </div>
 
       {/* Decile Impact Chart */}
-      {(isStacked && stackedDecileData) || (livingStandardsData?.byDecile && livingStandardsData.byDecile.length > 0) ? (
+      {(isStacked && stackedDecileData) || decileDataForYear.length > 0 ? (
         <DecileChart
-          data={livingStandardsData?.byDecile || []}
+          data={decileDataForYear}
           title="Impact by income decile"
           description={
             effectivePolicy === "scp_baby_boost"
@@ -392,6 +403,9 @@ export default function Dashboard({ selectedPolicies = [] }) {
           }
           stacked={isStacked}
           stackedData={stackedDecileData}
+          selectedYear={selectedYear}
+          onYearChange={setSelectedYear}
+          availableYears={AVAILABLE_YEARS}
         />
       ) : null}
 
@@ -422,7 +436,12 @@ export default function Dashboard({ selectedPolicies = [] }) {
         to see the estimated impact on households in that area.
       </p>
 
-      <LocalAreaSection selectedPolicy={effectivePolicy} />
+      <LocalAreaSection
+        selectedPolicy={effectivePolicy}
+        selectedYear={selectedYear}
+        onYearChange={setSelectedYear}
+        availableYears={AVAILABLE_YEARS}
+      />
     </div>
   );
 }

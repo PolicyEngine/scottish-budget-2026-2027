@@ -18,8 +18,18 @@ import { POLICY_COLORS, ALL_POLICY_NAMES } from "../utils/policyConfig";
  * Decile impact chart showing relative or absolute change by income decile.
  * Supports stacked bars when multiple policies are selected.
  */
-export default function DecileChart({ data, title, description, stacked = false, stackedData = null }) {
+export default function DecileChart({
+  data,
+  title,
+  description,
+  stacked = false,
+  stackedData = null,
+  selectedYear = 2026,
+  onYearChange = null,
+  availableYears = [2026, 2027, 2028, 2029, 2030],
+}) {
   const [viewMode, setViewMode] = useState("relative"); // "relative" or "absolute"
+  const formatYearRange = (year) => `${year}-${(year + 1).toString().slice(-2)}`;
 
   const effectiveData = stacked && stackedData ? stackedData : data;
 
@@ -111,6 +121,21 @@ export default function DecileChart({ data, title, description, stacked = false,
             Absolute (£)
           </button>
         </div>
+        {onYearChange && (
+          <div className="year-selector">
+            <label>Year:</label>
+            <select
+              value={selectedYear}
+              onChange={(e) => onYearChange(parseInt(e.target.value))}
+            >
+              {availableYears.map((year) => (
+                <option key={year} value={year}>
+                  {formatYearRange(year)}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
       </div>
 
       <ResponsiveContainer width="100%" height={350}>

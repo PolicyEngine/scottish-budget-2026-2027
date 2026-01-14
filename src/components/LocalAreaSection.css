@@ -4,6 +4,42 @@
   margin-top: var(--pe-space-lg);
 }
 
+/* Year selector */
+.year-selector-container {
+  display: flex;
+  align-items: center;
+  gap: var(--pe-space-sm);
+  margin-bottom: var(--pe-space-md);
+}
+
+.year-selector-container label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--pe-gray-600);
+}
+
+.year-select {
+  padding: 8px 16px;
+  border: 1px solid var(--pe-gray-300);
+  border-radius: var(--pe-radius-md);
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--pe-gray-700);
+  background: white;
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+
+.year-select:hover {
+  border-color: var(--pe-teal-400);
+}
+
+.year-select:focus {
+  outline: none;
+  border-color: var(--pe-teal-500);
+  box-shadow: 0 0 0 2px rgba(20, 184, 166, 0.1);
+}
+
 /* Constituency controls */
 .constituency-controls {
   display: flex;
