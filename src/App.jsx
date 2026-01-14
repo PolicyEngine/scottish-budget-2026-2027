@@ -4,16 +4,30 @@ import HouseholdCalculator from "./components/HouseholdCalculator";
 import "./App.css";
 
 const POLICIES = [
-  { id: "combined", name: "Both policies combined" },
   { id: "scp_baby_boost", name: "SCP baby boost" },
   { id: "income_tax_threshold_uplift", name: "Income tax threshold uplift" },
 ];
 
 function App() {
   const [activeTab, setActiveTab] = useState("dashboard");
-  const [selectedPolicy, setSelectedPolicy] = useState(null);
+  const [selectedPolicies, setSelectedPolicies] = useState([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
+
+  // Determine which data to show based on selection
+  const getEffectivePolicy = () => {
+    if (selectedPolicies.length === 2) return "combined";
+    if (selectedPolicies.length === 1) return selectedPolicies[0];
+    return null;
+  };
+
+  const togglePolicy = (policyId) => {
+    setSelectedPolicies(prev =>
+      prev.includes(policyId)
+        ? prev.filter(id => id !== policyId)
+        : [...prev, policyId]
+    );
+  };
 
   // Initialize from URL
   useEffect(() => {
@@ -49,7 +63,13 @@ function App() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const selectedPolicyName = POLICIES.find(p => p.id === selectedPolicy)?.name || "Choose policy";
+  const getDropdownLabel = () => {
+    if (selectedPolicies.length === 0) return "Select policies";
+    if (selectedPolicies.length === 2) return "2 policies selected";
+    return POLICIES.find(p => p.id === selectedPolicies[0])?.name || "Select policies";
+  };
+
+  const effectivePolicy = getEffectivePolicy();
 
   return (
     <div className="app">
@@ -61,7 +81,7 @@ function App() {
               className="policy-dropdown-trigger"
               onClick={() => setDropdownOpen(!dropdownOpen)}
             >
-              <span>{selectedPolicyName}</span>
+              <span>{getDropdownLabel()}</span>
               <svg
                 width="16"
                 height="16"
@@ -77,21 +97,24 @@ function App() {
             {dropdownOpen && (
               <div className="policy-dropdown-menu">
                 {POLICIES.map((policy) => (
-                  <button
+                  <label
                     key={policy.id}
-                    className={`policy-dropdown-item ${selectedPolicy === policy.id ? "selected" : ""}`}
-                    onClick={() => {
-                      setSelectedPolicy(policy.id);
-                      setDropdownOpen(false);
-                    }}
+                    className={`policy-dropdown-item checkbox ${selectedPolicies.includes(policy.id) ? "selected" : ""}`}
                   >
-                    {policy.name}
-                    {selectedPolicy === policy.id && (
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <polyline points="20 6 9 17 4 12" />
-                      </svg>
-                    )}
-                  </button>
+                    <input
+                      type="checkbox"
+                      checked={selectedPolicies.includes(policy.id)}
+                      onChange={() => togglePolicy(policy.id)}
+                    />
+                    <span className="checkmark">
+                      {selectedPolicies.includes(policy.id) && (
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+                          <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                      )}
+                    </span>
+                    <span className="policy-name">{policy.name}</span>
+                  </label>
                 ))}
               </div>
             )}
@@ -143,11 +166,11 @@ function App() {
           <div className="personal-impact-container">
             <HouseholdCalculator />
           </div>
-        ) : selectedPolicy ? (
-          <Dashboard selectedPolicy={selectedPolicy} />
+        ) : effectivePolicy ? (
+          <Dashboard selectedPolicy={effectivePolicy} />
         ) : (
           <div className="select-policy-prompt">
-            <p>Please select a policy from the dropdown above to view the analysis.</p>
+            <p>Please select one or more policies from the dropdown above to view the analysis.</p>
           </div>
         )}
       </main>
