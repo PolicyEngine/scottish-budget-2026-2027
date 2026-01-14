@@ -422,7 +422,7 @@ export default function Dashboard({ selectedPolicies = [] }) {
         to see the estimated impact on households in that area.
       </p>
 
-      <LocalAreaSection selectedPolicy={effectivePolicy} selectedPolicies={selectedPolicies} />
+      <LocalAreaSection selectedPolicy={effectivePolicy} />
     </div>
   );
 }
