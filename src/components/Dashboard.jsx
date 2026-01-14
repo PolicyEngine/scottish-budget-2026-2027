@@ -303,7 +303,9 @@ export default function Dashboard({ selectedPolicies = [] }) {
       <p className="chart-description">
         This dashboard, powered by{" "}
         <a href="https://policyengine.org" target="_blank" rel="noopener noreferrer">PolicyEngine</a>,
-        analyses the impact of the Scottish Budget 2026–27 announced by Finance Secretary Shona Robison
+        analyses the impact of the Scottish Budget 2026–27{" "}
+        <a href="https://www.gov.scot/publications/scottish-budget-2026-2027/documents/" target="_blank" rel="noopener noreferrer">announced</a>{" "}
+        by Finance Secretary Shona Robison
         on 13 January 2026. It examines how the budget measures affect living standards, poverty rates,
         and distributes impacts across Scotland's local areas.
       </p>
