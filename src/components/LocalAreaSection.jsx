@@ -221,24 +221,43 @@ export default function LocalAreaSection({ selectedPolicy = "scp_baby_boost" }) 
         </div>
       )}
 
-      {/* Regional Comparison Chart */}
+      {/* Regional Comparison Charts - Top 5 and Bottom 5 */}
       <div className="section-box">
         <h3 className="chart-title">Regional comparison</h3>
         <p className="chart-description">
           Average household gain by Scottish region from the {policyName} policy.
         </p>
-        <div className="chart-container">
-          <ResponsiveContainer width="100%" height={350}>
-            <BarChart data={regionalData} layout="vertical" margin={{ top: 20, right: 30, left: 150, bottom: 20 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
-              <XAxis type="number" tickFormatter={(v) => `£${v.toFixed(2)}`} />
-              <YAxis type="category" dataKey="region" width={140} tick={{ fontSize: 12 }} />
-              <Tooltip
-                formatter={(value) => [`£${value.toFixed(2)}`, "Avg. gain"]}
-              />
-              <Bar dataKey="avgGain" fill="#319795" name="Avg. gain" radius={[0, 4, 4, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
+        <div className="regional-comparison-grid">
+          {/* Top 5 Regions */}
+          <div className="regional-chart-column">
+            <h4 className="regional-chart-label">Top 5 regions</h4>
+            <div className="chart-container">
+              <ResponsiveContainer width="100%" height={250}>
+                <BarChart data={regionalData.slice(0, 5)} layout="vertical" margin={{ top: 10, right: 30, left: 120, bottom: 10 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
+                  <XAxis type="number" tickFormatter={(v) => `£${v.toFixed(0)}`} />
+                  <YAxis type="category" dataKey="region" width={110} tick={{ fontSize: 11 }} />
+                  <Tooltip formatter={(value) => [`£${value.toFixed(2)}`, "Avg. gain"]} />
+                  <Bar dataKey="avgGain" fill="#319795" name="Avg. gain" radius={[0, 4, 4, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+          {/* Bottom 5 Regions */}
+          <div className="regional-chart-column">
+            <h4 className="regional-chart-label">Bottom 5 regions</h4>
+            <div className="chart-container">
+              <ResponsiveContainer width="100%" height={250}>
+                <BarChart data={regionalData.slice(-5).reverse()} layout="vertical" margin={{ top: 10, right: 30, left: 120, bottom: 10 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
+                  <XAxis type="number" tickFormatter={(v) => `£${v.toFixed(0)}`} />
+                  <YAxis type="category" dataKey="region" width={110} tick={{ fontSize: 11 }} />
+                  <Tooltip formatter={(value) => [`£${value.toFixed(2)}`, "Avg. gain"]} />
+                  <Bar dataKey="avgGain" fill="#e53e3e" name="Avg. gain" radius={[0, 4, 4, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
         </div>
       </div>
     </div>

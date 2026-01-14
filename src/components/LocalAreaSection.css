@@ -192,6 +192,33 @@
   }
 }
 
+/* Regional comparison grid - Top 5 / Bottom 5 side by side */
+.regional-comparison-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--pe-space-lg);
+  margin-top: var(--pe-space-md);
+}
+
+@media (min-width: 768px) {
+  .regional-comparison-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.regional-chart-column {
+  min-width: 0;
+}
+
+.regional-chart-label {
+  font-family: var(--pe-font-sans);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--pe-gray-600);
+  margin: 0 0 var(--pe-space-sm) 0;
+  text-align: center;
+}
+
 /* Responsive */
 @media (max-width: 600px) {
   .constituency-controls {
