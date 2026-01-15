@@ -1,361 +1,361 @@
 reform_id,reform_name,year,metric,value
-combined,Both policies combined,2026,bhc_poverty_rate_baseline,12.176846
-combined,Both policies combined,2026,bhc_poverty_rate_reform,12.128641
-combined,Both policies combined,2026,bhc_poverty_rate_change,-0.048204422
-combined,Both policies combined,2026,bhc_child_poverty_rate_baseline,17.956335
-combined,Both policies combined,2026,bhc_child_poverty_rate_reform,17.834778
-combined,Both policies combined,2026,bhc_child_poverty_rate_change,-0.121557236
-combined,Both policies combined,2026,bhc_deep_poverty_rate_baseline,2.532165
-combined,Both policies combined,2026,bhc_deep_poverty_rate_reform,2.532165
+combined,Both policies combined,2026,bhc_poverty_rate_baseline,12.176844591070623
+combined,Both policies combined,2026,bhc_poverty_rate_reform,12.128641007816274
+combined,Both policies combined,2026,bhc_poverty_rate_change,-0.048203583254348814
+combined,Both policies combined,2026,bhc_child_poverty_rate_baseline,17.95633587043683
+combined,Both policies combined,2026,bhc_child_poverty_rate_reform,17.83477744408896
+combined,Both policies combined,2026,bhc_child_poverty_rate_change,-0.12155842634787106
+combined,Both policies combined,2026,bhc_deep_poverty_rate_baseline,2.532165117476777
+combined,Both policies combined,2026,bhc_deep_poverty_rate_reform,2.532165117476777
 combined,Both policies combined,2026,bhc_deep_poverty_rate_change,0.0
-combined,Both policies combined,2026,bhc_child_deep_poverty_rate_baseline,3.4764805
-combined,Both policies combined,2026,bhc_child_deep_poverty_rate_reform,3.4764805
+combined,Both policies combined,2026,bhc_child_deep_poverty_rate_baseline,3.4764808377525527
+combined,Both policies combined,2026,bhc_child_deep_poverty_rate_reform,3.4764808377525527
 combined,Both policies combined,2026,bhc_child_deep_poverty_rate_change,0.0
-combined,Both policies combined,2026,ahc_poverty_rate_baseline,12.860661
-combined,Both policies combined,2026,ahc_poverty_rate_reform,12.860661
+combined,Both policies combined,2026,ahc_poverty_rate_baseline,12.860661236729506
+combined,Both policies combined,2026,ahc_poverty_rate_reform,12.860661236729506
 combined,Both policies combined,2026,ahc_poverty_rate_change,0.0
-combined,Both policies combined,2026,ahc_child_poverty_rate_baseline,19.220957
-combined,Both policies combined,2026,ahc_child_poverty_rate_reform,19.220957
+combined,Both policies combined,2026,ahc_child_poverty_rate_baseline,19.22095968043528
+combined,Both policies combined,2026,ahc_child_poverty_rate_reform,19.22095968043528
 combined,Both policies combined,2026,ahc_child_poverty_rate_change,0.0
-combined,Both policies combined,2026,ahc_deep_poverty_rate_baseline,6.18449
-combined,Both policies combined,2026,ahc_deep_poverty_rate_reform,6.18449
+combined,Both policies combined,2026,ahc_deep_poverty_rate_baseline,6.184490182224919
+combined,Both policies combined,2026,ahc_deep_poverty_rate_reform,6.184490182224919
 combined,Both policies combined,2026,ahc_deep_poverty_rate_change,0.0
-combined,Both policies combined,2026,ahc_child_deep_poverty_rate_baseline,7.587
-combined,Both policies combined,2026,ahc_child_deep_poverty_rate_reform,7.587
+combined,Both policies combined,2026,ahc_child_deep_poverty_rate_baseline,7.5869996333129
+combined,Both policies combined,2026,ahc_child_deep_poverty_rate_reform,7.5869996333129
 combined,Both policies combined,2026,ahc_child_deep_poverty_rate_change,0.0
-combined,Both policies combined,2027,bhc_poverty_rate_baseline,12.068624
-combined,Both policies combined,2027,bhc_poverty_rate_reform,12.020435
-combined,Both policies combined,2027,bhc_poverty_rate_change,-0.04818821
-combined,Both policies combined,2027,bhc_child_poverty_rate_baseline,17.952534
-combined,Both policies combined,2027,bhc_child_poverty_rate_reform,17.830978
-combined,Both policies combined,2027,bhc_child_poverty_rate_change,-0.12155533
-combined,Both policies combined,2027,bhc_deep_poverty_rate_baseline,2.407547
-combined,Both policies combined,2027,bhc_deep_poverty_rate_reform,2.407547
+combined,Both policies combined,2027,bhc_poverty_rate_baseline,12.06862332037622
+combined,Both policies combined,2027,bhc_poverty_rate_reform,12.020435307154184
+combined,Both policies combined,2027,bhc_poverty_rate_change,-0.048188013222036474
+combined,Both policies combined,2027,bhc_child_poverty_rate_baseline,17.952535945852784
+combined,Both policies combined,2027,bhc_child_poverty_rate_reform,17.830977515932535
+combined,Both policies combined,2027,bhc_child_poverty_rate_change,-0.12155842992024901
+combined,Both policies combined,2027,bhc_deep_poverty_rate_baseline,2.4075465252761648
+combined,Both policies combined,2027,bhc_deep_poverty_rate_reform,2.4075465252761648
 combined,Both policies combined,2027,bhc_deep_poverty_rate_change,0.0
-combined,Both policies combined,2027,bhc_child_deep_poverty_rate_baseline,3.4764805
-combined,Both policies combined,2027,bhc_child_deep_poverty_rate_reform,3.4764805
+combined,Both policies combined,2027,bhc_child_deep_poverty_rate_baseline,3.4764808064939015
+combined,Both policies combined,2027,bhc_child_deep_poverty_rate_reform,3.4764808064939015
 combined,Both policies combined,2027,bhc_child_deep_poverty_rate_change,0.0
-combined,Both policies combined,2027,ahc_poverty_rate_baseline,13.088876
-combined,Both policies combined,2027,ahc_poverty_rate_reform,13.088876
+combined,Both policies combined,2027,ahc_poverty_rate_baseline,13.088876231656698
+combined,Both policies combined,2027,ahc_poverty_rate_reform,13.088876231656698
 combined,Both policies combined,2027,ahc_poverty_rate_change,0.0
-combined,Both policies combined,2027,ahc_child_poverty_rate_baseline,20.14967
-combined,Both policies combined,2027,ahc_child_poverty_rate_reform,20.14967
+combined,Both policies combined,2027,ahc_child_poverty_rate_baseline,20.149671947449402
+combined,Both policies combined,2027,ahc_child_poverty_rate_reform,20.149671947449402
 combined,Both policies combined,2027,ahc_child_poverty_rate_change,0.0
-combined,Both policies combined,2027,ahc_deep_poverty_rate_baseline,6.3522673
-combined,Both policies combined,2027,ahc_deep_poverty_rate_reform,6.3522673
+combined,Both policies combined,2027,ahc_deep_poverty_rate_baseline,6.352267238752388
+combined,Both policies combined,2027,ahc_deep_poverty_rate_reform,6.352267238752388
 combined,Both policies combined,2027,ahc_deep_poverty_rate_change,0.0
-combined,Both policies combined,2027,ahc_child_deep_poverty_rate_baseline,8.061302
-combined,Both policies combined,2027,ahc_child_deep_poverty_rate_reform,8.061302
+combined,Both policies combined,2027,ahc_child_deep_poverty_rate_baseline,8.061301543652243
+combined,Both policies combined,2027,ahc_child_deep_poverty_rate_reform,8.061301543652243
 combined,Both policies combined,2027,ahc_child_deep_poverty_rate_change,0.0
-combined,Both policies combined,2028,bhc_poverty_rate_baseline,11.900338
-combined,Both policies combined,2028,bhc_poverty_rate_reform,11.846523
-combined,Both policies combined,2028,bhc_poverty_rate_change,-0.053814888
-combined,Both policies combined,2028,bhc_child_poverty_rate_baseline,17.386473
-combined,Both policies combined,2028,bhc_child_poverty_rate_reform,17.264915
-combined,Both policies combined,2028,bhc_child_poverty_rate_change,-0.121557236
-combined,Both policies combined,2028,bhc_deep_poverty_rate_baseline,2.4075463
-combined,Both policies combined,2028,bhc_deep_poverty_rate_reform,2.4075463
+combined,Both policies combined,2028,bhc_poverty_rate_baseline,11.900337490653376
+combined,Both policies combined,2028,bhc_poverty_rate_reform,11.846522223357436
+combined,Both policies combined,2028,bhc_poverty_rate_change,-0.05381526729594022
+combined,Both policies combined,2028,bhc_child_poverty_rate_baseline,17.386471466961616
+combined,Both policies combined,2028,bhc_child_poverty_rate_reform,17.264913037036088
+combined,Both policies combined,2028,bhc_child_poverty_rate_change,-0.12155842992552834
+combined,Both policies combined,2028,bhc_deep_poverty_rate_baseline,2.4075465070370337
+combined,Both policies combined,2028,bhc_deep_poverty_rate_reform,2.4075465070370337
 combined,Both policies combined,2028,bhc_deep_poverty_rate_change,0.0
-combined,Both policies combined,2028,bhc_child_deep_poverty_rate_baseline,3.4764805
-combined,Both policies combined,2028,bhc_child_deep_poverty_rate_reform,3.4764805
+combined,Both policies combined,2028,bhc_child_deep_poverty_rate_baseline,3.476480797051048
+combined,Both policies combined,2028,bhc_child_deep_poverty_rate_reform,3.476480797051048
 combined,Both policies combined,2028,bhc_child_deep_poverty_rate_change,0.0
-combined,Both policies combined,2028,ahc_poverty_rate_baseline,12.798013
-combined,Both policies combined,2028,ahc_poverty_rate_reform,12.798013
+combined,Both policies combined,2028,ahc_poverty_rate_baseline,12.798012640950738
+combined,Both policies combined,2028,ahc_poverty_rate_reform,12.798012640950738
 combined,Both policies combined,2028,ahc_poverty_rate_change,0.0
-combined,Both policies combined,2028,ahc_child_poverty_rate_baseline,18.92141
-combined,Both policies combined,2028,ahc_child_poverty_rate_reform,18.92141
+combined,Both policies combined,2028,ahc_child_poverty_rate_baseline,18.921410184321903
+combined,Both policies combined,2028,ahc_child_poverty_rate_reform,18.921410184321903
 combined,Both policies combined,2028,ahc_child_poverty_rate_change,0.0
-combined,Both policies combined,2028,ahc_deep_poverty_rate_baseline,6.351858
-combined,Both policies combined,2028,ahc_deep_poverty_rate_reform,6.351858
+combined,Both policies combined,2028,ahc_deep_poverty_rate_baseline,6.351858880623995
+combined,Both policies combined,2028,ahc_deep_poverty_rate_reform,6.351858880623995
 combined,Both policies combined,2028,ahc_deep_poverty_rate_change,0.0
-combined,Both policies combined,2028,ahc_child_deep_poverty_rate_baseline,7.587184
-combined,Both policies combined,2028,ahc_child_deep_poverty_rate_reform,7.587184
+combined,Both policies combined,2028,ahc_child_deep_poverty_rate_baseline,7.587183940676673
+combined,Both policies combined,2028,ahc_child_deep_poverty_rate_reform,7.587183940676673
 combined,Both policies combined,2028,ahc_child_deep_poverty_rate_change,0.0
-combined,Both policies combined,2029,bhc_poverty_rate_baseline,11.877266
-combined,Both policies combined,2029,bhc_poverty_rate_reform,11.829079
-combined,Both policies combined,2029,bhc_poverty_rate_change,-0.048187256
-combined,Both policies combined,2029,bhc_child_poverty_rate_baseline,17.386473
-combined,Both policies combined,2029,bhc_child_poverty_rate_reform,17.264915
-combined,Both policies combined,2029,bhc_child_poverty_rate_change,-0.121557236
-combined,Both policies combined,2029,bhc_deep_poverty_rate_baseline,2.413748
-combined,Both policies combined,2029,bhc_deep_poverty_rate_reform,2.413748
+combined,Both policies combined,2029,bhc_poverty_rate_baseline,11.877266764375412
+combined,Both policies combined,2029,bhc_poverty_rate_reform,11.82907875192455
+combined,Both policies combined,2029,bhc_poverty_rate_change,-0.04818801245086135
+combined,Both policies combined,2029,bhc_child_poverty_rate_baseline,17.386471596186258
+combined,Both policies combined,2029,bhc_child_poverty_rate_reform,17.264913168527123
+combined,Both policies combined,2029,bhc_child_poverty_rate_change,-0.12155842765913505
+combined,Both policies combined,2029,bhc_deep_poverty_rate_baseline,2.4137479991550093
+combined,Both policies combined,2029,bhc_deep_poverty_rate_reform,2.4137479991550093
 combined,Both policies combined,2029,bhc_deep_poverty_rate_change,0.0
-combined,Both policies combined,2029,bhc_child_deep_poverty_rate_baseline,3.4764807
-combined,Both policies combined,2029,bhc_child_deep_poverty_rate_reform,3.4764807
+combined,Both policies combined,2029,bhc_child_deep_poverty_rate_baseline,3.4764808033156265
+combined,Both policies combined,2029,bhc_child_deep_poverty_rate_reform,3.4764808033156265
 combined,Both policies combined,2029,bhc_child_deep_poverty_rate_change,0.0
-combined,Both policies combined,2029,ahc_poverty_rate_baseline,13.180322
-combined,Both policies combined,2029,ahc_poverty_rate_reform,13.180322
+combined,Both policies combined,2029,ahc_poverty_rate_baseline,13.180321631829617
+combined,Both policies combined,2029,ahc_poverty_rate_reform,13.180321631829617
 combined,Both policies combined,2029,ahc_poverty_rate_change,0.0
-combined,Both policies combined,2029,ahc_child_poverty_rate_baseline,19.917227
-combined,Both policies combined,2029,ahc_child_poverty_rate_reform,19.917227
+combined,Both policies combined,2029,ahc_child_poverty_rate_baseline,19.91722605292506
+combined,Both policies combined,2029,ahc_child_poverty_rate_reform,19.91722605292506
 combined,Both policies combined,2029,ahc_child_poverty_rate_change,0.0
-combined,Both policies combined,2029,ahc_deep_poverty_rate_baseline,6.380685
-combined,Both policies combined,2029,ahc_deep_poverty_rate_reform,6.380685
+combined,Both policies combined,2029,ahc_deep_poverty_rate_baseline,6.380685845185117
+combined,Both policies combined,2029,ahc_deep_poverty_rate_reform,6.380685845185117
 combined,Both policies combined,2029,ahc_deep_poverty_rate_change,0.0
-combined,Both policies combined,2029,ahc_child_deep_poverty_rate_baseline,7.587184
-combined,Both policies combined,2029,ahc_child_deep_poverty_rate_reform,7.587184
+combined,Both policies combined,2029,ahc_child_deep_poverty_rate_baseline,7.5871840303558455
+combined,Both policies combined,2029,ahc_child_deep_poverty_rate_reform,7.5871840303558455
 combined,Both policies combined,2029,ahc_child_deep_poverty_rate_change,0.0
-combined,Both policies combined,2030,bhc_poverty_rate_baseline,12.282539
-combined,Both policies combined,2030,bhc_poverty_rate_reform,12.234351
-combined,Both policies combined,2030,bhc_poverty_rate_change,-0.04818821
-combined,Both policies combined,2030,bhc_child_poverty_rate_baseline,18.844362
-combined,Both policies combined,2030,bhc_child_poverty_rate_reform,18.722803
-combined,Both policies combined,2030,bhc_child_poverty_rate_change,-0.12155914
-combined,Both policies combined,2030,bhc_deep_poverty_rate_baseline,2.4426656
-combined,Both policies combined,2030,bhc_deep_poverty_rate_reform,2.4426656
+combined,Both policies combined,2030,bhc_poverty_rate_baseline,12.282539688045823
+combined,Both policies combined,2030,bhc_poverty_rate_reform,12.234351676019758
+combined,Both policies combined,2030,bhc_poverty_rate_change,-0.04818801202606515
+combined,Both policies combined,2030,bhc_child_poverty_rate_baseline,18.844363556092976
+combined,Both policies combined,2030,bhc_child_poverty_rate_reform,18.722805129604975
+combined,Both policies combined,2030,bhc_child_poverty_rate_change,-0.12155842648800075
+combined,Both policies combined,2030,bhc_deep_poverty_rate_baseline,2.4426654477793566
+combined,Both policies combined,2030,bhc_deep_poverty_rate_reform,2.4426654477793566
 combined,Both policies combined,2030,bhc_deep_poverty_rate_change,0.0
-combined,Both policies combined,2030,bhc_child_deep_poverty_rate_baseline,3.4764812
-combined,Both policies combined,2030,bhc_child_deep_poverty_rate_reform,3.4764812
+combined,Both policies combined,2030,bhc_child_deep_poverty_rate_baseline,3.4764808099397007
+combined,Both policies combined,2030,bhc_child_deep_poverty_rate_reform,3.4764808099397007
 combined,Both policies combined,2030,bhc_child_deep_poverty_rate_change,0.0
-combined,Both policies combined,2030,ahc_poverty_rate_baseline,13.310411
-combined,Both policies combined,2030,ahc_poverty_rate_reform,13.310411
+combined,Both policies combined,2030,ahc_poverty_rate_baseline,13.310411772111463
+combined,Both policies combined,2030,ahc_poverty_rate_reform,13.310411772111463
 combined,Both policies combined,2030,ahc_poverty_rate_change,0.0
-combined,Both policies combined,2030,ahc_child_poverty_rate_baseline,20.705471
-combined,Both policies combined,2030,ahc_child_poverty_rate_reform,20.705471
+combined,Both policies combined,2030,ahc_child_poverty_rate_baseline,20.70546971634509
+combined,Both policies combined,2030,ahc_child_poverty_rate_reform,20.70546971634509
 combined,Both policies combined,2030,ahc_child_poverty_rate_change,0.0
-combined,Both policies combined,2030,ahc_deep_poverty_rate_baseline,6.5834217
-combined,Both policies combined,2030,ahc_deep_poverty_rate_reform,6.5834217
+combined,Both policies combined,2030,ahc_deep_poverty_rate_baseline,6.583420886342813
+combined,Both policies combined,2030,ahc_deep_poverty_rate_reform,6.583420886342813
 combined,Both policies combined,2030,ahc_deep_poverty_rate_change,0.0
-combined,Both policies combined,2030,ahc_child_deep_poverty_rate_baseline,8.061408
-combined,Both policies combined,2030,ahc_child_deep_poverty_rate_reform,8.061408
+combined,Both policies combined,2030,ahc_child_deep_poverty_rate_baseline,8.06140771783721
+combined,Both policies combined,2030,ahc_child_deep_poverty_rate_reform,8.06140771783721
 combined,Both policies combined,2030,ahc_child_deep_poverty_rate_change,0.0
-scp_baby_boost,SCP Premium for under-ones (£40/week),2026,bhc_poverty_rate_baseline,12.176846
-scp_baby_boost,SCP Premium for under-ones (£40/week),2026,bhc_poverty_rate_reform,12.128658
-scp_baby_boost,SCP Premium for under-ones (£40/week),2026,bhc_poverty_rate_change,-0.048187256
-scp_baby_boost,SCP Premium for under-ones (£40/week),2026,bhc_child_poverty_rate_baseline,17.956335
-scp_baby_boost,SCP Premium for under-ones (£40/week),2026,bhc_child_poverty_rate_reform,17.834778
-scp_baby_boost,SCP Premium for under-ones (£40/week),2026,bhc_child_poverty_rate_change,-0.121557236
-scp_baby_boost,SCP Premium for under-ones (£40/week),2026,bhc_deep_poverty_rate_baseline,2.532165
-scp_baby_boost,SCP Premium for under-ones (£40/week),2026,bhc_deep_poverty_rate_reform,2.532165
+scp_baby_boost,SCP Premium for under-ones (£40/week),2026,bhc_poverty_rate_baseline,12.176844591070623
+scp_baby_boost,SCP Premium for under-ones (£40/week),2026,bhc_poverty_rate_reform,12.128656579202504
+scp_baby_boost,SCP Premium for under-ones (£40/week),2026,bhc_poverty_rate_change,-0.04818801186811861
+scp_baby_boost,SCP Premium for under-ones (£40/week),2026,bhc_child_poverty_rate_baseline,17.95633587043683
+scp_baby_boost,SCP Premium for under-ones (£40/week),2026,bhc_child_poverty_rate_reform,17.83477744408896
+scp_baby_boost,SCP Premium for under-ones (£40/week),2026,bhc_child_poverty_rate_change,-0.12155842634787106
+scp_baby_boost,SCP Premium for under-ones (£40/week),2026,bhc_deep_poverty_rate_baseline,2.532165117476777
+scp_baby_boost,SCP Premium for under-ones (£40/week),2026,bhc_deep_poverty_rate_reform,2.532165117476777
 scp_baby_boost,SCP Premium for under-ones (£40/week),2026,bhc_deep_poverty_rate_change,0.0
-scp_baby_boost,SCP Premium for under-ones (£40/week),2026,bhc_child_deep_poverty_rate_baseline,3.4764805
-scp_baby_boost,SCP Premium for under-ones (£40/week),2026,bhc_child_deep_poverty_rate_reform,3.4764805
+scp_baby_boost,SCP Premium for under-ones (£40/week),2026,bhc_child_deep_poverty_rate_baseline,3.4764808377525527
+scp_baby_boost,SCP Premium for under-ones (£40/week),2026,bhc_child_deep_poverty_rate_reform,3.4764808377525527
 scp_baby_boost,SCP Premium for under-ones (£40/week),2026,bhc_child_deep_poverty_rate_change,0.0
-scp_baby_boost,SCP Premium for under-ones (£40/week),2026,ahc_poverty_rate_baseline,12.860661
-scp_baby_boost,SCP Premium for under-ones (£40/week),2026,ahc_poverty_rate_reform,12.860661
+scp_baby_boost,SCP Premium for under-ones (£40/week),2026,ahc_poverty_rate_baseline,12.860661236729506
+scp_baby_boost,SCP Premium for under-ones (£40/week),2026,ahc_poverty_rate_reform,12.860661236729506
 scp_baby_boost,SCP Premium for under-ones (£40/week),2026,ahc_poverty_rate_change,0.0
-scp_baby_boost,SCP Premium for under-ones (£40/week),2026,ahc_child_poverty_rate_baseline,19.220957
-scp_baby_boost,SCP Premium for under-ones (£40/week),2026,ahc_child_poverty_rate_reform,19.220957
+scp_baby_boost,SCP Premium for under-ones (£40/week),2026,ahc_child_poverty_rate_baseline,19.22095968043528
+scp_baby_boost,SCP Premium for under-ones (£40/week),2026,ahc_child_poverty_rate_reform,19.22095968043528
 scp_baby_boost,SCP Premium for under-ones (£40/week),2026,ahc_child_poverty_rate_change,0.0
-scp_baby_boost,SCP Premium for under-ones (£40/week),2026,ahc_deep_poverty_rate_baseline,6.18449
-scp_baby_boost,SCP Premium for under-ones (£40/week),2026,ahc_deep_poverty_rate_reform,6.18449
+scp_baby_boost,SCP Premium for under-ones (£40/week),2026,ahc_deep_poverty_rate_baseline,6.184490182224919
+scp_baby_boost,SCP Premium for under-ones (£40/week),2026,ahc_deep_poverty_rate_reform,6.184490182224919
 scp_baby_boost,SCP Premium for under-ones (£40/week),2026,ahc_deep_poverty_rate_change,0.0
-scp_baby_boost,SCP Premium for under-ones (£40/week),2026,ahc_child_deep_poverty_rate_baseline,7.587
-scp_baby_boost,SCP Premium for under-ones (£40/week),2026,ahc_child_deep_poverty_rate_reform,7.587
+scp_baby_boost,SCP Premium for under-ones (£40/week),2026,ahc_child_deep_poverty_rate_baseline,7.5869996333129
+scp_baby_boost,SCP Premium for under-ones (£40/week),2026,ahc_child_deep_poverty_rate_reform,7.5869996333129
 scp_baby_boost,SCP Premium for under-ones (£40/week),2026,ahc_child_deep_poverty_rate_change,0.0
-scp_baby_boost,SCP Premium for under-ones (£40/week),2027,bhc_poverty_rate_baseline,12.068624
-scp_baby_boost,SCP Premium for under-ones (£40/week),2027,bhc_poverty_rate_reform,12.020435
-scp_baby_boost,SCP Premium for under-ones (£40/week),2027,bhc_poverty_rate_change,-0.04818821
-scp_baby_boost,SCP Premium for under-ones (£40/week),2027,bhc_child_poverty_rate_baseline,17.952534
-scp_baby_boost,SCP Premium for under-ones (£40/week),2027,bhc_child_poverty_rate_reform,17.830978
-scp_baby_boost,SCP Premium for under-ones (£40/week),2027,bhc_child_poverty_rate_change,-0.12155533
-scp_baby_boost,SCP Premium for under-ones (£40/week),2027,bhc_deep_poverty_rate_baseline,2.407547
-scp_baby_boost,SCP Premium for under-ones (£40/week),2027,bhc_deep_poverty_rate_reform,2.407547
+scp_baby_boost,SCP Premium for under-ones (£40/week),2027,bhc_poverty_rate_baseline,12.06862332037622
+scp_baby_boost,SCP Premium for under-ones (£40/week),2027,bhc_poverty_rate_reform,12.020435307154184
+scp_baby_boost,SCP Premium for under-ones (£40/week),2027,bhc_poverty_rate_change,-0.048188013222036474
+scp_baby_boost,SCP Premium for under-ones (£40/week),2027,bhc_child_poverty_rate_baseline,17.952535945852784
+scp_baby_boost,SCP Premium for under-ones (£40/week),2027,bhc_child_poverty_rate_reform,17.830977515932535
+scp_baby_boost,SCP Premium for under-ones (£40/week),2027,bhc_child_poverty_rate_change,-0.12155842992024901
+scp_baby_boost,SCP Premium for under-ones (£40/week),2027,bhc_deep_poverty_rate_baseline,2.4075465252761648
+scp_baby_boost,SCP Premium for under-ones (£40/week),2027,bhc_deep_poverty_rate_reform,2.4075465252761648
 scp_baby_boost,SCP Premium for under-ones (£40/week),2027,bhc_deep_poverty_rate_change,0.0
-scp_baby_boost,SCP Premium for under-ones (£40/week),2027,bhc_child_deep_poverty_rate_baseline,3.4764805
-scp_baby_boost,SCP Premium for under-ones (£40/week),2027,bhc_child_deep_poverty_rate_reform,3.4764805
+scp_baby_boost,SCP Premium for under-ones (£40/week),2027,bhc_child_deep_poverty_rate_baseline,3.4764808064939015
+scp_baby_boost,SCP Premium for under-ones (£40/week),2027,bhc_child_deep_poverty_rate_reform,3.4764808064939015
 scp_baby_boost,SCP Premium for under-ones (£40/week),2027,bhc_child_deep_poverty_rate_change,0.0
-scp_baby_boost,SCP Premium for under-ones (£40/week),2027,ahc_poverty_rate_baseline,13.088876
-scp_baby_boost,SCP Premium for under-ones (£40/week),2027,ahc_poverty_rate_reform,13.088876
+scp_baby_boost,SCP Premium for under-ones (£40/week),2027,ahc_poverty_rate_baseline,13.088876231656698
+scp_baby_boost,SCP Premium for under-ones (£40/week),2027,ahc_poverty_rate_reform,13.088876231656698
 scp_baby_boost,SCP Premium for under-ones (£40/week),2027,ahc_poverty_rate_change,0.0
-scp_baby_boost,SCP Premium for under-ones (£40/week),2027,ahc_child_poverty_rate_baseline,20.14967
-scp_baby_boost,SCP Premium for under-ones (£40/week),2027,ahc_child_poverty_rate_reform,20.14967
+scp_baby_boost,SCP Premium for under-ones (£40/week),2027,ahc_child_poverty_rate_baseline,20.149671947449402
+scp_baby_boost,SCP Premium for under-ones (£40/week),2027,ahc_child_poverty_rate_reform,20.149671947449402
 scp_baby_boost,SCP Premium for under-ones (£40/week),2027,ahc_child_poverty_rate_change,0.0
-scp_baby_boost,SCP Premium for under-ones (£40/week),2027,ahc_deep_poverty_rate_baseline,6.3522673
-scp_baby_boost,SCP Premium for under-ones (£40/week),2027,ahc_deep_poverty_rate_reform,6.3522673
+scp_baby_boost,SCP Premium for under-ones (£40/week),2027,ahc_deep_poverty_rate_baseline,6.352267238752388
+scp_baby_boost,SCP Premium for under-ones (£40/week),2027,ahc_deep_poverty_rate_reform,6.352267238752388
 scp_baby_boost,SCP Premium for under-ones (£40/week),2027,ahc_deep_poverty_rate_change,0.0
-scp_baby_boost,SCP Premium for under-ones (£40/week),2027,ahc_child_deep_poverty_rate_baseline,8.061302
-scp_baby_boost,SCP Premium for under-ones (£40/week),2027,ahc_child_deep_poverty_rate_reform,8.061302
+scp_baby_boost,SCP Premium for under-ones (£40/week),2027,ahc_child_deep_poverty_rate_baseline,8.061301543652243
+scp_baby_boost,SCP Premium for under-ones (£40/week),2027,ahc_child_deep_poverty_rate_reform,8.061301543652243
 scp_baby_boost,SCP Premium for under-ones (£40/week),2027,ahc_child_deep_poverty_rate_change,0.0
-scp_baby_boost,SCP Premium for under-ones (£40/week),2028,bhc_poverty_rate_baseline,11.900338
-scp_baby_boost,SCP Premium for under-ones (£40/week),2028,bhc_poverty_rate_reform,11.85215
-scp_baby_boost,SCP Premium for under-ones (£40/week),2028,bhc_poverty_rate_change,-0.04818821
-scp_baby_boost,SCP Premium for under-ones (£40/week),2028,bhc_child_poverty_rate_baseline,17.386473
-scp_baby_boost,SCP Premium for under-ones (£40/week),2028,bhc_child_poverty_rate_reform,17.264915
-scp_baby_boost,SCP Premium for under-ones (£40/week),2028,bhc_child_poverty_rate_change,-0.121557236
-scp_baby_boost,SCP Premium for under-ones (£40/week),2028,bhc_deep_poverty_rate_baseline,2.4075463
-scp_baby_boost,SCP Premium for under-ones (£40/week),2028,bhc_deep_poverty_rate_reform,2.4075463
+scp_baby_boost,SCP Premium for under-ones (£40/week),2028,bhc_poverty_rate_baseline,11.900337490653376
+scp_baby_boost,SCP Premium for under-ones (£40/week),2028,bhc_poverty_rate_reform,11.852149477372603
+scp_baby_boost,SCP Premium for under-ones (£40/week),2028,bhc_poverty_rate_change,-0.04818801328077349
+scp_baby_boost,SCP Premium for under-ones (£40/week),2028,bhc_child_poverty_rate_baseline,17.386471466961616
+scp_baby_boost,SCP Premium for under-ones (£40/week),2028,bhc_child_poverty_rate_reform,17.264913037036088
+scp_baby_boost,SCP Premium for under-ones (£40/week),2028,bhc_child_poverty_rate_change,-0.12155842992552834
+scp_baby_boost,SCP Premium for under-ones (£40/week),2028,bhc_deep_poverty_rate_baseline,2.4075465070370337
+scp_baby_boost,SCP Premium for under-ones (£40/week),2028,bhc_deep_poverty_rate_reform,2.4075465070370337
 scp_baby_boost,SCP Premium for under-ones (£40/week),2028,bhc_deep_poverty_rate_change,0.0
-scp_baby_boost,SCP Premium for under-ones (£40/week),2028,bhc_child_deep_poverty_rate_baseline,3.4764805
-scp_baby_boost,SCP Premium for under-ones (£40/week),2028,bhc_child_deep_poverty_rate_reform,3.4764805
+scp_baby_boost,SCP Premium for under-ones (£40/week),2028,bhc_child_deep_poverty_rate_baseline,3.476480797051048
+scp_baby_boost,SCP Premium for under-ones (£40/week),2028,bhc_child_deep_poverty_rate_reform,3.476480797051048
 scp_baby_boost,SCP Premium for under-ones (£40/week),2028,bhc_child_deep_poverty_rate_change,0.0
-scp_baby_boost,SCP Premium for under-ones (£40/week),2028,ahc_poverty_rate_baseline,12.798013
-scp_baby_boost,SCP Premium for under-ones (£40/week),2028,ahc_poverty_rate_reform,12.798013
+scp_baby_boost,SCP Premium for under-ones (£40/week),2028,ahc_poverty_rate_baseline,12.798012640950738
+scp_baby_boost,SCP Premium for under-ones (£40/week),2028,ahc_poverty_rate_reform,12.798012640950738
 scp_baby_boost,SCP Premium for under-ones (£40/week),2028,ahc_poverty_rate_change,0.0
-scp_baby_boost,SCP Premium for under-ones (£40/week),2028,ahc_child_poverty_rate_baseline,18.92141
-scp_baby_boost,SCP Premium for under-ones (£40/week),2028,ahc_child_poverty_rate_reform,18.92141
+scp_baby_boost,SCP Premium for under-ones (£40/week),2028,ahc_child_poverty_rate_baseline,18.921410184321903
+scp_baby_boost,SCP Premium for under-ones (£40/week),2028,ahc_child_poverty_rate_reform,18.921410184321903
 scp_baby_boost,SCP Premium for under-ones (£40/week),2028,ahc_child_poverty_rate_change,0.0
-scp_baby_boost,SCP Premium for under-ones (£40/week),2028,ahc_deep_poverty_rate_baseline,6.351858
-scp_baby_boost,SCP Premium for under-ones (£40/week),2028,ahc_deep_poverty_rate_reform,6.351858
+scp_baby_boost,SCP Premium for under-ones (£40/week),2028,ahc_deep_poverty_rate_baseline,6.351858880623995
+scp_baby_boost,SCP Premium for under-ones (£40/week),2028,ahc_deep_poverty_rate_reform,6.351858880623995
 scp_baby_boost,SCP Premium for under-ones (£40/week),2028,ahc_deep_poverty_rate_change,0.0
-scp_baby_boost,SCP Premium for under-ones (£40/week),2028,ahc_child_deep_poverty_rate_baseline,7.587184
-scp_baby_boost,SCP Premium for under-ones (£40/week),2028,ahc_child_deep_poverty_rate_reform,7.587184
+scp_baby_boost,SCP Premium for under-ones (£40/week),2028,ahc_child_deep_poverty_rate_baseline,7.587183940676673
+scp_baby_boost,SCP Premium for under-ones (£40/week),2028,ahc_child_deep_poverty_rate_reform,7.587183940676673
 scp_baby_boost,SCP Premium for under-ones (£40/week),2028,ahc_child_deep_poverty_rate_change,0.0
-scp_baby_boost,SCP Premium for under-ones (£40/week),2029,bhc_poverty_rate_baseline,11.877266
-scp_baby_boost,SCP Premium for under-ones (£40/week),2029,bhc_poverty_rate_reform,11.829079
-scp_baby_boost,SCP Premium for under-ones (£40/week),2029,bhc_poverty_rate_change,-0.048187256
-scp_baby_boost,SCP Premium for under-ones (£40/week),2029,bhc_child_poverty_rate_baseline,17.386473
-scp_baby_boost,SCP Premium for under-ones (£40/week),2029,bhc_child_poverty_rate_reform,17.264915
-scp_baby_boost,SCP Premium for under-ones (£40/week),2029,bhc_child_poverty_rate_change,-0.121557236
-scp_baby_boost,SCP Premium for under-ones (£40/week),2029,bhc_deep_poverty_rate_baseline,2.413748
-scp_baby_boost,SCP Premium for under-ones (£40/week),2029,bhc_deep_poverty_rate_reform,2.413748
+scp_baby_boost,SCP Premium for under-ones (£40/week),2029,bhc_poverty_rate_baseline,11.877266764375412
+scp_baby_boost,SCP Premium for under-ones (£40/week),2029,bhc_poverty_rate_reform,11.82907875192455
+scp_baby_boost,SCP Premium for under-ones (£40/week),2029,bhc_poverty_rate_change,-0.04818801245086135
+scp_baby_boost,SCP Premium for under-ones (£40/week),2029,bhc_child_poverty_rate_baseline,17.386471596186258
+scp_baby_boost,SCP Premium for under-ones (£40/week),2029,bhc_child_poverty_rate_reform,17.264913168527123
+scp_baby_boost,SCP Premium for under-ones (£40/week),2029,bhc_child_poverty_rate_change,-0.12155842765913505
+scp_baby_boost,SCP Premium for under-ones (£40/week),2029,bhc_deep_poverty_rate_baseline,2.4137479991550093
+scp_baby_boost,SCP Premium for under-ones (£40/week),2029,bhc_deep_poverty_rate_reform,2.4137479991550093
 scp_baby_boost,SCP Premium for under-ones (£40/week),2029,bhc_deep_poverty_rate_change,0.0
-scp_baby_boost,SCP Premium for under-ones (£40/week),2029,bhc_child_deep_poverty_rate_baseline,3.4764807
-scp_baby_boost,SCP Premium for under-ones (£40/week),2029,bhc_child_deep_poverty_rate_reform,3.4764807
+scp_baby_boost,SCP Premium for under-ones (£40/week),2029,bhc_child_deep_poverty_rate_baseline,3.4764808033156265
+scp_baby_boost,SCP Premium for under-ones (£40/week),2029,bhc_child_deep_poverty_rate_reform,3.4764808033156265
 scp_baby_boost,SCP Premium for under-ones (£40/week),2029,bhc_child_deep_poverty_rate_change,0.0
-scp_baby_boost,SCP Premium for under-ones (£40/week),2029,ahc_poverty_rate_baseline,13.180322
-scp_baby_boost,SCP Premium for under-ones (£40/week),2029,ahc_poverty_rate_reform,13.180322
+scp_baby_boost,SCP Premium for under-ones (£40/week),2029,ahc_poverty_rate_baseline,13.180321631829617
+scp_baby_boost,SCP Premium for under-ones (£40/week),2029,ahc_poverty_rate_reform,13.180321631829617
 scp_baby_boost,SCP Premium for under-ones (£40/week),2029,ahc_poverty_rate_change,0.0
-scp_baby_boost,SCP Premium for under-ones (£40/week),2029,ahc_child_poverty_rate_baseline,19.917227
-scp_baby_boost,SCP Premium for under-ones (£40/week),2029,ahc_child_poverty_rate_reform,19.917227
+scp_baby_boost,SCP Premium for under-ones (£40/week),2029,ahc_child_poverty_rate_baseline,19.91722605292506
+scp_baby_boost,SCP Premium for under-ones (£40/week),2029,ahc_child_poverty_rate_reform,19.91722605292506
 scp_baby_boost,SCP Premium for under-ones (£40/week),2029,ahc_child_poverty_rate_change,0.0
-scp_baby_boost,SCP Premium for under-ones (£40/week),2029,ahc_deep_poverty_rate_baseline,6.380685
-scp_baby_boost,SCP Premium for under-ones (£40/week),2029,ahc_deep_poverty_rate_reform,6.380685
+scp_baby_boost,SCP Premium for under-ones (£40/week),2029,ahc_deep_poverty_rate_baseline,6.380685845185117
+scp_baby_boost,SCP Premium for under-ones (£40/week),2029,ahc_deep_poverty_rate_reform,6.380685845185117
 scp_baby_boost,SCP Premium for under-ones (£40/week),2029,ahc_deep_poverty_rate_change,0.0
-scp_baby_boost,SCP Premium for under-ones (£40/week),2029,ahc_child_deep_poverty_rate_baseline,7.587184
-scp_baby_boost,SCP Premium for under-ones (£40/week),2029,ahc_child_deep_poverty_rate_reform,7.587184
+scp_baby_boost,SCP Premium for under-ones (£40/week),2029,ahc_child_deep_poverty_rate_baseline,7.5871840303558455
+scp_baby_boost,SCP Premium for under-ones (£40/week),2029,ahc_child_deep_poverty_rate_reform,7.5871840303558455
 scp_baby_boost,SCP Premium for under-ones (£40/week),2029,ahc_child_deep_poverty_rate_change,0.0
-scp_baby_boost,SCP Premium for under-ones (£40/week),2030,bhc_poverty_rate_baseline,12.282539
-scp_baby_boost,SCP Premium for under-ones (£40/week),2030,bhc_poverty_rate_reform,12.234351
-scp_baby_boost,SCP Premium for under-ones (£40/week),2030,bhc_poverty_rate_change,-0.04818821
-scp_baby_boost,SCP Premium for under-ones (£40/week),2030,bhc_child_poverty_rate_baseline,18.844362
-scp_baby_boost,SCP Premium for under-ones (£40/week),2030,bhc_child_poverty_rate_reform,18.722803
-scp_baby_boost,SCP Premium for under-ones (£40/week),2030,bhc_child_poverty_rate_change,-0.12155914
-scp_baby_boost,SCP Premium for under-ones (£40/week),2030,bhc_deep_poverty_rate_baseline,2.4426656
-scp_baby_boost,SCP Premium for under-ones (£40/week),2030,bhc_deep_poverty_rate_reform,2.4426656
+scp_baby_boost,SCP Premium for under-ones (£40/week),2030,bhc_poverty_rate_baseline,12.282539688045823
+scp_baby_boost,SCP Premium for under-ones (£40/week),2030,bhc_poverty_rate_reform,12.234351676019758
+scp_baby_boost,SCP Premium for under-ones (£40/week),2030,bhc_poverty_rate_change,-0.04818801202606515
+scp_baby_boost,SCP Premium for under-ones (£40/week),2030,bhc_child_poverty_rate_baseline,18.844363556092976
+scp_baby_boost,SCP Premium for under-ones (£40/week),2030,bhc_child_poverty_rate_reform,18.722805129604975
+scp_baby_boost,SCP Premium for under-ones (£40/week),2030,bhc_child_poverty_rate_change,-0.12155842648800075
+scp_baby_boost,SCP Premium for under-ones (£40/week),2030,bhc_deep_poverty_rate_baseline,2.4426654477793566
+scp_baby_boost,SCP Premium for under-ones (£40/week),2030,bhc_deep_poverty_rate_reform,2.4426654477793566
 scp_baby_boost,SCP Premium for under-ones (£40/week),2030,bhc_deep_poverty_rate_change,0.0
-scp_baby_boost,SCP Premium for under-ones (£40/week),2030,bhc_child_deep_poverty_rate_baseline,3.4764812
-scp_baby_boost,SCP Premium for under-ones (£40/week),2030,bhc_child_deep_poverty_rate_reform,3.4764812
+scp_baby_boost,SCP Premium for under-ones (£40/week),2030,bhc_child_deep_poverty_rate_baseline,3.4764808099397007
+scp_baby_boost,SCP Premium for under-ones (£40/week),2030,bhc_child_deep_poverty_rate_reform,3.4764808099397007
 scp_baby_boost,SCP Premium for under-ones (£40/week),2030,bhc_child_deep_poverty_rate_change,0.0
-scp_baby_boost,SCP Premium for under-ones (£40/week),2030,ahc_poverty_rate_baseline,13.310411
-scp_baby_boost,SCP Premium for under-ones (£40/week),2030,ahc_poverty_rate_reform,13.310411
+scp_baby_boost,SCP Premium for under-ones (£40/week),2030,ahc_poverty_rate_baseline,13.310411772111463
+scp_baby_boost,SCP Premium for under-ones (£40/week),2030,ahc_poverty_rate_reform,13.310411772111463
 scp_baby_boost,SCP Premium for under-ones (£40/week),2030,ahc_poverty_rate_change,0.0
-scp_baby_boost,SCP Premium for under-ones (£40/week),2030,ahc_child_poverty_rate_baseline,20.705471
-scp_baby_boost,SCP Premium for under-ones (£40/week),2030,ahc_child_poverty_rate_reform,20.705471
+scp_baby_boost,SCP Premium for under-ones (£40/week),2030,ahc_child_poverty_rate_baseline,20.70546971634509
+scp_baby_boost,SCP Premium for under-ones (£40/week),2030,ahc_child_poverty_rate_reform,20.70546971634509
 scp_baby_boost,SCP Premium for under-ones (£40/week),2030,ahc_child_poverty_rate_change,0.0
-scp_baby_boost,SCP Premium for under-ones (£40/week),2030,ahc_deep_poverty_rate_baseline,6.5834217
-scp_baby_boost,SCP Premium for under-ones (£40/week),2030,ahc_deep_poverty_rate_reform,6.5834217
+scp_baby_boost,SCP Premium for under-ones (£40/week),2030,ahc_deep_poverty_rate_baseline,6.583420886342813
+scp_baby_boost,SCP Premium for under-ones (£40/week),2030,ahc_deep_poverty_rate_reform,6.583420886342813
 scp_baby_boost,SCP Premium for under-ones (£40/week),2030,ahc_deep_poverty_rate_change,0.0
-scp_baby_boost,SCP Premium for under-ones (£40/week),2030,ahc_child_deep_poverty_rate_baseline,8.061408
-scp_baby_boost,SCP Premium for under-ones (£40/week),2030,ahc_child_deep_poverty_rate_reform,8.061408
+scp_baby_boost,SCP Premium for under-ones (£40/week),2030,ahc_child_deep_poverty_rate_baseline,8.06140771783721
+scp_baby_boost,SCP Premium for under-ones (£40/week),2030,ahc_child_deep_poverty_rate_reform,8.06140771783721
 scp_baby_boost,SCP Premium for under-ones (£40/week),2030,ahc_child_deep_poverty_rate_change,0.0
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,bhc_poverty_rate_baseline,12.176846
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,bhc_poverty_rate_reform,12.176828
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,bhc_poverty_rate_change,-1.7166138e-05
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,bhc_child_poverty_rate_baseline,17.956335
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,bhc_child_poverty_rate_reform,17.956335
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,bhc_poverty_rate_baseline,12.176844591070623
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,bhc_poverty_rate_reform,12.176829019684392
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,bhc_poverty_rate_change,-1.5571386230206485e-05
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,bhc_child_poverty_rate_baseline,17.95633587043683
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,bhc_child_poverty_rate_reform,17.95633587043683
 income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,bhc_child_poverty_rate_change,0.0
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,bhc_deep_poverty_rate_baseline,2.532165
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,bhc_deep_poverty_rate_reform,2.532165
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,bhc_deep_poverty_rate_baseline,2.532165117476777
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,bhc_deep_poverty_rate_reform,2.532165117476777
 income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,bhc_deep_poverty_rate_change,0.0
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,bhc_child_deep_poverty_rate_baseline,3.4764805
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,bhc_child_deep_poverty_rate_reform,3.4764805
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,bhc_child_deep_poverty_rate_baseline,3.4764808377525527
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,bhc_child_deep_poverty_rate_reform,3.4764808377525527
 income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,bhc_child_deep_poverty_rate_change,0.0
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,ahc_poverty_rate_baseline,12.860661
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,ahc_poverty_rate_reform,12.860661
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,ahc_poverty_rate_baseline,12.860661236729506
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,ahc_poverty_rate_reform,12.860661236729506
 income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,ahc_poverty_rate_change,0.0
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,ahc_child_poverty_rate_baseline,19.220957
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,ahc_child_poverty_rate_reform,19.220957
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,ahc_child_poverty_rate_baseline,19.22095968043528
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,ahc_child_poverty_rate_reform,19.22095968043528
 income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,ahc_child_poverty_rate_change,0.0
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,ahc_deep_poverty_rate_baseline,6.18449
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,ahc_deep_poverty_rate_reform,6.18449
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,ahc_deep_poverty_rate_baseline,6.184490182224919
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,ahc_deep_poverty_rate_reform,6.184490182224919
 income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,ahc_deep_poverty_rate_change,0.0
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,ahc_child_deep_poverty_rate_baseline,7.587
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,ahc_child_deep_poverty_rate_reform,7.587
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,ahc_child_deep_poverty_rate_baseline,7.5869996333129
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,ahc_child_deep_poverty_rate_reform,7.5869996333129
 income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,ahc_child_deep_poverty_rate_change,0.0
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,bhc_poverty_rate_baseline,12.068624
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,bhc_poverty_rate_reform,12.068624
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,bhc_poverty_rate_baseline,12.06862332037622
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,bhc_poverty_rate_reform,12.06862332037622
 income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,bhc_poverty_rate_change,0.0
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,bhc_child_poverty_rate_baseline,17.952534
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,bhc_child_poverty_rate_reform,17.952534
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,bhc_child_poverty_rate_baseline,17.952535945852784
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,bhc_child_poverty_rate_reform,17.952535945852784
 income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,bhc_child_poverty_rate_change,0.0
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,bhc_deep_poverty_rate_baseline,2.407547
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,bhc_deep_poverty_rate_reform,2.407547
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,bhc_deep_poverty_rate_baseline,2.4075465252761648
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,bhc_deep_poverty_rate_reform,2.4075465252761648
 income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,bhc_deep_poverty_rate_change,0.0
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,bhc_child_deep_poverty_rate_baseline,3.4764805
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,bhc_child_deep_poverty_rate_reform,3.4764805
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,bhc_child_deep_poverty_rate_baseline,3.4764808064939015
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,bhc_child_deep_poverty_rate_reform,3.4764808064939015
 income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,bhc_child_deep_poverty_rate_change,0.0
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,ahc_poverty_rate_baseline,13.088876
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,ahc_poverty_rate_reform,13.088876
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,ahc_poverty_rate_baseline,13.088876231656698
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,ahc_poverty_rate_reform,13.088876231656698
 income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,ahc_poverty_rate_change,0.0
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,ahc_child_poverty_rate_baseline,20.14967
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,ahc_child_poverty_rate_reform,20.14967
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,ahc_child_poverty_rate_baseline,20.149671947449402
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,ahc_child_poverty_rate_reform,20.149671947449402
 income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,ahc_child_poverty_rate_change,0.0
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,ahc_deep_poverty_rate_baseline,6.3522673
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,ahc_deep_poverty_rate_reform,6.3522673
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,ahc_deep_poverty_rate_baseline,6.352267238752388
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,ahc_deep_poverty_rate_reform,6.352267238752388
 income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,ahc_deep_poverty_rate_change,0.0
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,ahc_child_deep_poverty_rate_baseline,8.061302
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,ahc_child_deep_poverty_rate_reform,8.061302
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,ahc_child_deep_poverty_rate_baseline,8.061301543652243
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,ahc_child_deep_poverty_rate_reform,8.061301543652243
 income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,ahc_child_deep_poverty_rate_change,0.0
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,bhc_poverty_rate_baseline,11.900338
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,bhc_poverty_rate_reform,11.894711
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,bhc_poverty_rate_change,-0.005627632
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,bhc_child_poverty_rate_baseline,17.386473
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,bhc_child_poverty_rate_reform,17.386473
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,bhc_poverty_rate_baseline,11.900337490653376
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,bhc_poverty_rate_reform,11.89471023663821
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,bhc_poverty_rate_change,-0.005627254015166727
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,bhc_child_poverty_rate_baseline,17.386471466961616
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,bhc_child_poverty_rate_reform,17.386471466961616
 income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,bhc_child_poverty_rate_change,0.0
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,bhc_deep_poverty_rate_baseline,2.4075463
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,bhc_deep_poverty_rate_reform,2.4075463
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,bhc_deep_poverty_rate_baseline,2.4075465070370337
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,bhc_deep_poverty_rate_reform,2.4075465070370337
 income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,bhc_deep_poverty_rate_change,0.0
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,bhc_child_deep_poverty_rate_baseline,3.4764805
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,bhc_child_deep_poverty_rate_reform,3.4764805
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,bhc_child_deep_poverty_rate_baseline,3.476480797051048
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,bhc_child_deep_poverty_rate_reform,3.476480797051048
 income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,bhc_child_deep_poverty_rate_change,0.0
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,ahc_poverty_rate_baseline,12.798013
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,ahc_poverty_rate_reform,12.798013
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,ahc_poverty_rate_baseline,12.798012640950738
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,ahc_poverty_rate_reform,12.798012640950738
 income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,ahc_poverty_rate_change,0.0
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,ahc_child_poverty_rate_baseline,18.92141
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,ahc_child_poverty_rate_reform,18.92141
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,ahc_child_poverty_rate_baseline,18.921410184321903
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,ahc_child_poverty_rate_reform,18.921410184321903
 income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,ahc_child_poverty_rate_change,0.0
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,ahc_deep_poverty_rate_baseline,6.351858
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,ahc_deep_poverty_rate_reform,6.351858
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,ahc_deep_poverty_rate_baseline,6.351858880623995
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,ahc_deep_poverty_rate_reform,6.351858880623995
 income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,ahc_deep_poverty_rate_change,0.0
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,ahc_child_deep_poverty_rate_baseline,7.587184
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,ahc_child_deep_poverty_rate_reform,7.587184
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,ahc_child_deep_poverty_rate_baseline,7.587183940676673
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,ahc_child_deep_poverty_rate_reform,7.587183940676673
 income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,ahc_child_deep_poverty_rate_change,0.0
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,bhc_poverty_rate_baseline,11.877266
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,bhc_poverty_rate_reform,11.877266
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,bhc_poverty_rate_baseline,11.877266764375412
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,bhc_poverty_rate_reform,11.877266764375412
 income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,bhc_poverty_rate_change,0.0
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,bhc_child_poverty_rate_baseline,17.386473
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,bhc_child_poverty_rate_reform,17.386473
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,bhc_child_poverty_rate_baseline,17.386471596186258
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,bhc_child_poverty_rate_reform,17.386471596186258
 income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,bhc_child_poverty_rate_change,0.0
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,bhc_deep_poverty_rate_baseline,2.413748
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,bhc_deep_poverty_rate_reform,2.413748
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,bhc_deep_poverty_rate_baseline,2.4137479991550093
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,bhc_deep_poverty_rate_reform,2.4137479991550093
 income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,bhc_deep_poverty_rate_change,0.0
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,bhc_child_deep_poverty_rate_baseline,3.4764807
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,bhc_child_deep_poverty_rate_reform,3.4764807
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,bhc_child_deep_poverty_rate_baseline,3.4764808033156265
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,bhc_child_deep_poverty_rate_reform,3.4764808033156265
 income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,bhc_child_deep_poverty_rate_change,0.0
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,ahc_poverty_rate_baseline,13.180322
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,ahc_poverty_rate_reform,13.180322
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,ahc_poverty_rate_baseline,13.180321631829617
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,ahc_poverty_rate_reform,13.180321631829617
 income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,ahc_poverty_rate_change,0.0
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,ahc_child_poverty_rate_baseline,19.917227
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,ahc_child_poverty_rate_reform,19.917227
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,ahc_child_poverty_rate_baseline,19.91722605292506
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,ahc_child_poverty_rate_reform,19.91722605292506
 income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,ahc_child_poverty_rate_change,0.0
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,ahc_deep_poverty_rate_baseline,6.380685
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,ahc_deep_poverty_rate_reform,6.380685
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,ahc_deep_poverty_rate_baseline,6.380685845185117
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,ahc_deep_poverty_rate_reform,6.380685845185117
 income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,ahc_deep_poverty_rate_change,0.0
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,ahc_child_deep_poverty_rate_baseline,7.587184
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,ahc_child_deep_poverty_rate_reform,7.587184
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,ahc_child_deep_poverty_rate_baseline,7.5871840303558455
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,ahc_child_deep_poverty_rate_reform,7.5871840303558455
 income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,ahc_child_deep_poverty_rate_change,0.0
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,bhc_poverty_rate_baseline,12.282539
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,bhc_poverty_rate_reform,12.282539
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,bhc_poverty_rate_baseline,12.282539688045823
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,bhc_poverty_rate_reform,12.282539688045823
 income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,bhc_poverty_rate_change,0.0
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,bhc_child_poverty_rate_baseline,18.844362
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,bhc_child_poverty_rate_reform,18.844362
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,bhc_child_poverty_rate_baseline,18.844363556092976
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,bhc_child_poverty_rate_reform,18.844363556092976
 income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,bhc_child_poverty_rate_change,0.0
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,bhc_deep_poverty_rate_baseline,2.4426656
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,bhc_deep_poverty_rate_reform,2.4426656
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,bhc_deep_poverty_rate_baseline,2.4426654477793566
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,bhc_deep_poverty_rate_reform,2.4426654477793566
 income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,bhc_deep_poverty_rate_change,0.0
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,bhc_child_deep_poverty_rate_baseline,3.4764812
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,bhc_child_deep_poverty_rate_reform,3.4764812
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,bhc_child_deep_poverty_rate_baseline,3.4764808099397007
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,bhc_child_deep_poverty_rate_reform,3.4764808099397007
 income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,bhc_child_deep_poverty_rate_change,0.0
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,ahc_poverty_rate_baseline,13.310411
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,ahc_poverty_rate_reform,13.310411
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,ahc_poverty_rate_baseline,13.310411772111463
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,ahc_poverty_rate_reform,13.310411772111463
 income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,ahc_poverty_rate_change,0.0
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,ahc_child_poverty_rate_baseline,20.705471
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,ahc_child_poverty_rate_reform,20.705471
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,ahc_child_poverty_rate_baseline,20.70546971634509
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,ahc_child_poverty_rate_reform,20.70546971634509
 income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,ahc_child_poverty_rate_change,0.0
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,ahc_deep_poverty_rate_baseline,6.5834217
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,ahc_deep_poverty_rate_reform,6.5834217
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,ahc_deep_poverty_rate_baseline,6.583420886342813
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,ahc_deep_poverty_rate_reform,6.583420886342813
 income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,ahc_deep_poverty_rate_change,0.0
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,ahc_child_deep_poverty_rate_baseline,8.061408
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,ahc_child_deep_poverty_rate_reform,8.061408
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,ahc_child_deep_poverty_rate_baseline,8.06140771783721
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,ahc_child_deep_poverty_rate_reform,8.06140771783721
 income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,ahc_child_deep_poverty_rate_change,0.0

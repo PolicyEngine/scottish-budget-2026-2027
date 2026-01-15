@@ -202,6 +202,8 @@ class MetricsCalculator:
         year: int,
     ) -> list[dict]:
         """Calculate poverty and other summary metrics (Scotland only)."""
+        from microdf import MicroSeries
+
         results = []
 
         # Filter to Scotland
@@ -217,9 +219,11 @@ class MetricsCalculator:
             baseline_poverty = baseline.calculate(poverty_var, year, map_to="person").values[is_scotland]
             reformed_poverty = reformed.calculate(poverty_var, year, map_to="person").values[is_scotland]
 
-            # Overall poverty
-            baseline_rate = (baseline_poverty * person_weight).sum() / person_weight.sum() * 100
-            reformed_rate = (reformed_poverty * person_weight).sum() / person_weight.sum() * 100
+            # Overall poverty - use MicroSeries.mean() for proper weighted average
+            baseline_ms = MicroSeries(baseline_poverty, weights=person_weight)
+            reformed_ms = MicroSeries(reformed_poverty, weights=person_weight)
+            baseline_rate = baseline_ms.mean() * 100
+            reformed_rate = reformed_ms.mean() * 100
 
             results.append({
                 "reform_id": reform_id,
@@ -243,9 +247,12 @@ class MetricsCalculator:
                 "value": reformed_rate - baseline_rate,
             })
 
-            # Child poverty
-            child_baseline_rate = (baseline_poverty * person_weight * is_child).sum() / (person_weight * is_child).sum() * 100
-            child_reformed_rate = (reformed_poverty * person_weight * is_child).sum() / (person_weight * is_child).sum() * 100
+            # Child poverty - use MicroSeries.mean() with child weights
+            child_weights = person_weight * is_child
+            child_baseline_ms = MicroSeries(baseline_poverty, weights=child_weights)
+            child_reformed_ms = MicroSeries(reformed_poverty, weights=child_weights)
+            child_baseline_rate = child_baseline_ms.mean() * 100
+            child_reformed_rate = child_reformed_ms.mean() * 100
 
             results.append({
                 "reform_id": reform_id,
@@ -274,9 +281,11 @@ class MetricsCalculator:
             baseline_deep = baseline.calculate(deep_poverty_var, year, map_to="person").values[is_scotland]
             reformed_deep = reformed.calculate(deep_poverty_var, year, map_to="person").values[is_scotland]
 
-            # Overall deep poverty
-            deep_baseline_rate = (baseline_deep * person_weight).sum() / person_weight.sum() * 100
-            deep_reformed_rate = (reformed_deep * person_weight).sum() / person_weight.sum() * 100
+            # Overall deep poverty - use MicroSeries.mean()
+            deep_baseline_ms = MicroSeries(baseline_deep, weights=person_weight)
+            deep_reformed_ms = MicroSeries(reformed_deep, weights=person_weight)
+            deep_baseline_rate = deep_baseline_ms.mean() * 100
+            deep_reformed_rate = deep_reformed_ms.mean() * 100
 
             results.append({
                 "reform_id": reform_id,
@@ -300,9 +309,11 @@ class MetricsCalculator:
                 "value": deep_reformed_rate - deep_baseline_rate,
             })
 
-            # Child deep poverty
-            child_deep_baseline_rate = (baseline_deep * person_weight * is_child).sum() / (person_weight * is_child).sum() * 100
-            child_deep_reformed_rate = (reformed_deep * person_weight * is_child).sum() / (person_weight * is_child).sum() * 100
+            # Child deep poverty - use MicroSeries.mean() with child weights
+            child_deep_baseline_ms = MicroSeries(baseline_deep, weights=child_weights)
+            child_deep_reformed_ms = MicroSeries(reformed_deep, weights=child_weights)
+            child_deep_baseline_rate = child_deep_baseline_ms.mean() * 100
+            child_deep_reformed_rate = child_deep_reformed_ms.mean() * 100
 
             results.append({
                 "reform_id": reform_id,
@@ -375,8 +386,10 @@ class ConstituencyCalculator:
             baseline_ms = MicroSeries(baseline_income, weights=const_weights)
             reform_ms = MicroSeries(reform_income, weights=const_weights)
 
-            avg_gain = (reform_ms.sum() - baseline_ms.sum()) / baseline_ms.count()
-            avg_baseline = baseline_ms.sum() / baseline_ms.count()
+            # Use .mean() which properly calculates weighted_sum / sum_of_weights
+            avg_baseline = baseline_ms.mean()
+            avg_reform = reform_ms.mean()
+            avg_gain = avg_reform - avg_baseline
             relative_change = (avg_gain / avg_baseline) * 100 if avg_baseline > 0 else 0
 
             results.append({
