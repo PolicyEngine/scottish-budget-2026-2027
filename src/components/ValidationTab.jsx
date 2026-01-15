@@ -383,7 +383,7 @@ export default function ValidationTab() {
           rel="noopener noreferrer"
         >
           PolicyEngine
-        </a>, presents a data-driven view of Scotland's economic outlook ahead of the Scottish
+        </a>, presents a data-driven view of Scotland's economic outlook following the Scottish
         Budget 2026–27, which Finance Secretary Shona Robison{" "}
         <a
           href="https://www.gov.scot/budget/"
@@ -394,7 +394,7 @@ export default function ValidationTab() {
         </a>{" "}
         on 13 January 2026. It is organised into three sections: <strong>Economic outlook</strong>{" "}
         projects household incomes and poverty rates through 2030 under current policy;{" "}
-        <strong>Scottish Budget 2026</strong> analyses the potential impact of proposed
+        <strong>Scottish Budget 2026</strong> analyses the impact of the announced
         policy changes; and <strong>Validation</strong> compares estimates against official government statistics.
       </p>
       <p className="chart-description" style={{ marginTop: "12px" }}>
