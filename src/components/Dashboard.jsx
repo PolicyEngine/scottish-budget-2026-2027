@@ -376,10 +376,12 @@ export default function Dashboard({ selectedPolicies = [] }) {
           <BudgetBarChart
             data={stackedAvgIncomeData}
             yLabel="Average income change (£)"
-            yFormat={(v) => `£${v.toFixed(2)}`}
+            yFormat={(v) => `£${v.toFixed(0)}`}
             tooltipLabel="Income change"
             stacked={true}
             selectedPolicies={selectedPolicies}
+            yMaxValue={40}
+            yTickCount={5}
           />
         ) : (
           <BudgetBarChart
@@ -390,8 +392,10 @@ export default function Dashboard({ selectedPolicies = [] }) {
                 .map(year => ({ year, value: avgChange[year] }));
             })()}
             yLabel="Average income change (£)"
-            yFormat={(v) => `£${v.toFixed(2)}`}
+            yFormat={(v) => `£${v.toFixed(0)}`}
             tooltipLabel="Income change"
+            yMaxValue={40}
+            yTickCount={5}
           />
         )}
       </div>
@@ -419,9 +423,9 @@ export default function Dashboard({ selectedPolicies = [] }) {
       {/* Poverty Section */}
       <h2 className="section-title" id="poverty" ref={(el) => (sectionRefs.current["poverty"] = el)}>Poverty rate</h2>
       <p className="chart-description">
-        This section shows how poverty rates are projected to change under the budget measures,
-        using the Before Housing Costs (BHC) definition where a household is in poverty if its
-        equivalised income is below 60% of UK median income.
+        This section shows how poverty rates are projected to change under the budget measures.
+        Use the selectors to switch between Before Housing Costs (BHC) and After Housing Costs (AHC)
+        definitions, and between absolute (percentage point) and relative (percent) changes.
         {effectivePolicy === "income_tax_threshold_uplift" && (
           <strong> Note: Income tax threshold increases have minimal direct impact on poverty rates
           because people in poverty typically pay little or no income tax.</strong>

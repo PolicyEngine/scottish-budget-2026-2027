@@ -206,64 +206,125 @@ class MetricsCalculator:
 
         # Filter to Scotland
         is_scotland = get_scotland_person_mask(baseline, year)
-
-        # Overall poverty (Before Housing Costs - consistent with UK methodology)
-        baseline_poverty = baseline.calculate("in_poverty_bhc", year, map_to="person").values[is_scotland]
-        reformed_poverty = reformed.calculate("in_poverty_bhc", year, map_to="person").values[is_scotland]
         person_weight = baseline.calculate("person_weight", year, map_to="person").values[is_scotland]
-
-        baseline_rate = (baseline_poverty * person_weight).sum() / person_weight.sum() * 100
-        reformed_rate = (reformed_poverty * person_weight).sum() / person_weight.sum() * 100
-
-        results.append({
-            "reform_id": reform_id,
-            "reform_name": reform_name,
-            "year": year,
-            "metric": "poverty_rate_baseline",
-            "value": baseline_rate,
-        })
-        results.append({
-            "reform_id": reform_id,
-            "reform_name": reform_name,
-            "year": year,
-            "metric": "poverty_rate_reform",
-            "value": reformed_rate,
-        })
-        results.append({
-            "reform_id": reform_id,
-            "reform_name": reform_name,
-            "year": year,
-            "metric": "poverty_rate_change",
-            "value": reformed_rate - baseline_rate,
-        })
-
-        # Child poverty (already filtered to Scotland above)
         is_child = baseline.calculate("is_child", year, map_to="person").values[is_scotland]
 
-        child_baseline_rate = (baseline_poverty * person_weight * is_child).sum() / (person_weight * is_child).sum() * 100
-        child_reformed_rate = (reformed_poverty * person_weight * is_child).sum() / (person_weight * is_child).sum() * 100
+        # Calculate poverty for both BHC and AHC
+        for housing_cost in ["bhc", "ahc"]:
+            poverty_var = f"in_poverty_{housing_cost}"
+            prefix = f"{housing_cost}_"
 
-        results.append({
-            "reform_id": reform_id,
-            "reform_name": reform_name,
-            "year": year,
-            "metric": "child_poverty_rate_baseline",
-            "value": child_baseline_rate,
-        })
-        results.append({
-            "reform_id": reform_id,
-            "reform_name": reform_name,
-            "year": year,
-            "metric": "child_poverty_rate_reform",
-            "value": child_reformed_rate,
-        })
-        results.append({
-            "reform_id": reform_id,
-            "reform_name": reform_name,
-            "year": year,
-            "metric": "child_poverty_rate_change",
-            "value": child_reformed_rate - child_baseline_rate,
-        })
+            baseline_poverty = baseline.calculate(poverty_var, year, map_to="person").values[is_scotland]
+            reformed_poverty = reformed.calculate(poverty_var, year, map_to="person").values[is_scotland]
+
+            # Overall poverty
+            baseline_rate = (baseline_poverty * person_weight).sum() / person_weight.sum() * 100
+            reformed_rate = (reformed_poverty * person_weight).sum() / person_weight.sum() * 100
+
+            results.append({
+                "reform_id": reform_id,
+                "reform_name": reform_name,
+                "year": year,
+                "metric": f"{prefix}poverty_rate_baseline",
+                "value": baseline_rate,
+            })
+            results.append({
+                "reform_id": reform_id,
+                "reform_name": reform_name,
+                "year": year,
+                "metric": f"{prefix}poverty_rate_reform",
+                "value": reformed_rate,
+            })
+            results.append({
+                "reform_id": reform_id,
+                "reform_name": reform_name,
+                "year": year,
+                "metric": f"{prefix}poverty_rate_change",
+                "value": reformed_rate - baseline_rate,
+            })
+
+            # Child poverty
+            child_baseline_rate = (baseline_poverty * person_weight * is_child).sum() / (person_weight * is_child).sum() * 100
+            child_reformed_rate = (reformed_poverty * person_weight * is_child).sum() / (person_weight * is_child).sum() * 100
+
+            results.append({
+                "reform_id": reform_id,
+                "reform_name": reform_name,
+                "year": year,
+                "metric": f"{prefix}child_poverty_rate_baseline",
+                "value": child_baseline_rate,
+            })
+            results.append({
+                "reform_id": reform_id,
+                "reform_name": reform_name,
+                "year": year,
+                "metric": f"{prefix}child_poverty_rate_reform",
+                "value": child_reformed_rate,
+            })
+            results.append({
+                "reform_id": reform_id,
+                "reform_name": reform_name,
+                "year": year,
+                "metric": f"{prefix}child_poverty_rate_change",
+                "value": child_reformed_rate - child_baseline_rate,
+            })
+
+            # Deep poverty (below 50% of median income)
+            deep_poverty_var = f"in_deep_poverty_{housing_cost}"
+            baseline_deep = baseline.calculate(deep_poverty_var, year, map_to="person").values[is_scotland]
+            reformed_deep = reformed.calculate(deep_poverty_var, year, map_to="person").values[is_scotland]
+
+            # Overall deep poverty
+            deep_baseline_rate = (baseline_deep * person_weight).sum() / person_weight.sum() * 100
+            deep_reformed_rate = (reformed_deep * person_weight).sum() / person_weight.sum() * 100
+
+            results.append({
+                "reform_id": reform_id,
+                "reform_name": reform_name,
+                "year": year,
+                "metric": f"{prefix}deep_poverty_rate_baseline",
+                "value": deep_baseline_rate,
+            })
+            results.append({
+                "reform_id": reform_id,
+                "reform_name": reform_name,
+                "year": year,
+                "metric": f"{prefix}deep_poverty_rate_reform",
+                "value": deep_reformed_rate,
+            })
+            results.append({
+                "reform_id": reform_id,
+                "reform_name": reform_name,
+                "year": year,
+                "metric": f"{prefix}deep_poverty_rate_change",
+                "value": deep_reformed_rate - deep_baseline_rate,
+            })
+
+            # Child deep poverty
+            child_deep_baseline_rate = (baseline_deep * person_weight * is_child).sum() / (person_weight * is_child).sum() * 100
+            child_deep_reformed_rate = (reformed_deep * person_weight * is_child).sum() / (person_weight * is_child).sum() * 100
+
+            results.append({
+                "reform_id": reform_id,
+                "reform_name": reform_name,
+                "year": year,
+                "metric": f"{prefix}child_deep_poverty_rate_baseline",
+                "value": child_deep_baseline_rate,
+            })
+            results.append({
+                "reform_id": reform_id,
+                "reform_name": reform_name,
+                "year": year,
+                "metric": f"{prefix}child_deep_poverty_rate_reform",
+                "value": child_deep_reformed_rate,
+            })
+            results.append({
+                "reform_id": reform_id,
+                "reform_name": reform_name,
+                "year": year,
+                "metric": f"{prefix}child_deep_poverty_rate_change",
+                "value": child_deep_reformed_rate - child_deep_baseline_rate,
+            })
 
         return results
 

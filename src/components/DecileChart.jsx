@@ -2,7 +2,6 @@ import { useState } from "react";
 import {
   ComposedChart,
   Bar,
-  Line,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -82,7 +81,7 @@ export default function DecileChart({
       )
     : [];
 
-  // Calculate y-axis domain with sensible ranges
+  // Calculate y-axis domain with equal increments
   let maxValue;
   if (stacked) {
     maxValue = Math.max(...chartData.map((d) => {
@@ -93,9 +92,21 @@ export default function DecileChart({
   } else {
     maxValue = Math.max(...chartData.map((d) => Math.abs(d.value || 0)));
   }
+
+  // Calculate nice round numbers for equal increments
+  const getNiceMax = (val) => {
+    if (val <= 0) return viewMode === "relative" ? 0.5 : 10;
+    const magnitude = Math.pow(10, Math.floor(Math.log10(val)));
+    const normalized = val / magnitude;
+    if (normalized <= 1) return magnitude;
+    if (normalized <= 2) return 2 * magnitude;
+    if (normalized <= 5) return 5 * magnitude;
+    return 10 * magnitude;
+  };
+
   const yMax = viewMode === "relative"
-    ? Math.max(0.5, Math.ceil(maxValue * 1.2 * 10) / 10)
-    : Math.max(5, Math.ceil(maxValue * 1.2));
+    ? getNiceMax(Math.max(0.5, maxValue * 1.1))
+    : 40; // Fixed max for absolute mode
 
   return (
     <div className="decile-chart">
@@ -158,6 +169,7 @@ export default function DecileChart({
             domain={[0, yMax]}
             tickFormatter={formatValue}
             tick={{ fontSize: 12, fill: "#666" }}
+            tickCount={5}
             label={{
               value: viewMode === "relative"
                 ? "Change in net income (%)"
@@ -188,14 +200,11 @@ export default function DecileChart({
             <Legend
               verticalAlign="top"
               height={36}
-              payload={[
-                ...activePolicies.map(name => ({
-                  value: name,
-                  type: "rect",
-                  color: POLICY_COLORS[name],
-                })),
-                { value: "Net change", type: "line", color: "#000000" },
-              ]}
+              payload={activePolicies.map(name => ({
+                value: name,
+                type: "rect",
+                color: POLICY_COLORS[name],
+              }))}
             />
           )}
           {stacked ? (
@@ -208,25 +217,17 @@ export default function DecileChart({
                   name={policyName}
                   stackId="stack"
                   radius={[2, 2, 0, 0]}
+                  stroke="none"
                   hide={!activePolicies.includes(policyName)}
                 />
               ))}
-              {activePolicies.length > 1 && (
-                <Line
-                  type="monotone"
-                  dataKey="netChange"
-                  stroke="#000000"
-                  strokeWidth={2}
-                  dot={{ fill: "#000000", r: 4 }}
-                  name="Net change"
-                />
-              )}
             </>
           ) : (
             <Bar
               dataKey="value"
               fill="#319795"
               radius={[4, 4, 0, 0]}
+              stroke="none"
               name="Change"
             />
           )}

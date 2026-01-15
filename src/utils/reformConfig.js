@@ -2,8 +2,8 @@
  * Scottish Budget 2026-27 reform configuration.
  */
 
-// Local backend API (uses policyengine_uk directly)
-export const API_BASE_URL = "http://localhost:5001";
+// Backend API URL - Modal deployment
+export const API_BASE_URL = import.meta.env.VITE_API_URL || "https://policyengine--scottish-budget-api-flask-app.modal.run";
 
 /**
  * Reform metadata for UI display.

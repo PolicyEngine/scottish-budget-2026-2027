@@ -1,7 +1,6 @@
 import {
   ComposedChart,
   Bar,
-  Line,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -24,6 +23,8 @@ export default function BudgetBarChart({
   tooltipLabel = "Value",
   stacked = false,
   selectedPolicies = [],
+  yMaxValue = 100,
+  yTickCount = 6,
 }) {
   if (!data || data.length === 0) {
     return (
@@ -38,7 +39,7 @@ export default function BudgetBarChart({
   const formatValue = yFormat || defaultFormat;
   const formatYearRange = (year) => `${year}–${(year + 1).toString().slice(-2)}`;
 
-  // Calculate y-axis domain based on stacked or single mode
+  // Calculate y-axis domain based on stacked or single mode with equal increments
   let maxValue, minValue;
   if (stacked) {
     // For stacked, sum all policy values for max
@@ -54,8 +55,20 @@ export default function BudgetBarChart({
     maxValue = Math.max(...data.map((d) => Math.abs(d.value || 0)));
     minValue = Math.min(...data.map((d) => d.value || 0));
   }
-  const yMin = minValue < 0 ? Math.floor(minValue * 1.1) : 0;
-  const yMax = Math.ceil(maxValue * 1.2);
+
+  // Calculate nice round numbers for equal increments
+  const getNiceMax = (val) => {
+    if (val <= 0) return 10;
+    const magnitude = Math.pow(10, Math.floor(Math.log10(val)));
+    const normalized = val / magnitude;
+    if (normalized <= 1) return magnitude;
+    if (normalized <= 2) return 2 * magnitude;
+    if (normalized <= 5) return 5 * magnitude;
+    return 10 * magnitude;
+  };
+
+  const yMin = minValue < 0 ? -getNiceMax(Math.abs(minValue)) : 0;
+  const yMax = yMaxValue;
 
   // Check which policies have data
   const activePolicies = stacked
@@ -91,6 +104,7 @@ export default function BudgetBarChart({
             domain={[yMin, yMax]}
             tickFormatter={formatValue}
             tick={{ fontSize: 12, fill: "#666" }}
+            tickCount={yTickCount}
             label={{
               value: yLabel,
               angle: -90,
@@ -118,14 +132,11 @@ export default function BudgetBarChart({
             <Legend
               verticalAlign="top"
               height={36}
-              payload={[
-                ...activePolicies.map(name => ({
-                  value: name,
-                  type: "rect",
-                  color: POLICY_COLORS[name],
-                })),
-                { value: "Net impact", type: "line", color: "#000000" },
-              ]}
+              payload={activePolicies.map(name => ({
+                value: name,
+                type: "rect",
+                color: POLICY_COLORS[name],
+              }))}
             />
           )}
           {stacked ? (
@@ -138,25 +149,17 @@ export default function BudgetBarChart({
                   name={policyName}
                   stackId="stack"
                   radius={[2, 2, 0, 0]}
+                  stroke="none"
                   hide={!activePolicies.includes(policyName)}
                 />
               ))}
-              {activePolicies.length > 1 && (
-                <Line
-                  type="monotone"
-                  dataKey="netImpact"
-                  stroke="#000000"
-                  strokeWidth={2}
-                  dot={{ fill: "#000000", r: 4 }}
-                  name="Net impact"
-                />
-              )}
             </>
           ) : (
             <Bar
               dataKey="value"
               fill="#319795"
               radius={[4, 4, 0, 0]}
+              stroke="none"
               name={tooltipLabel}
             />
           )}
