@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import BaselineScotlandTab from "./components/BaselineScotlandTab";
 import Dashboard from "./components/Dashboard";
 import HouseholdCalculator from "./components/HouseholdCalculator";
 import ValidationTab from "./components/ValidationTab";
@@ -10,7 +11,7 @@ const POLICIES = [
 ];
 
 function App() {
-  const [activeTab, setActiveTab] = useState("dashboard");
+  const [activeTab, setActiveTab] = useState("baseline");
   const [selectedPolicies, setSelectedPolicies] = useState(["scp_baby_boost", "income_tax_threshold_uplift"]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -27,18 +28,24 @@ function App() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const tabParam = params.get("tab");
-    if (tabParam === "personal") {
-      setActiveTab("personal");
+    if (tabParam === "budget") {
+      setActiveTab("budget");
+    } else if (tabParam === "household") {
+      setActiveTab("household");
     } else if (tabParam === "validation") {
       setActiveTab("validation");
+    } else {
+      setActiveTab("baseline");
     }
   }, []);
 
   // Update URL when tab changes
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    if (activeTab === "personal") {
-      params.set("tab", "personal");
+    if (activeTab === "budget") {
+      params.set("tab", "budget");
+    } else if (activeTab === "household") {
+      params.set("tab", "household");
     } else if (activeTab === "validation") {
       params.set("tab", "validation");
     } else {
@@ -121,8 +128,27 @@ function App() {
         {/* Tab navigation */}
         <div className="tab-navigation">
           <button
-            className={`tab-button ${activeTab === "dashboard" ? "active" : ""}`}
-            onClick={() => setActiveTab("dashboard")}
+            className={`tab-button ${activeTab === "baseline" ? "active" : ""}`}
+            onClick={() => setActiveTab("baseline")}
+          >
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path d="M3 3v18h18" />
+              <path d="M18 17V9" />
+              <path d="M13 17V5" />
+              <path d="M8 17v-3" />
+            </svg>
+            Baseline Scotland data
+          </button>
+          <button
+            className={`tab-button ${activeTab === "budget" ? "active" : ""}`}
+            onClick={() => setActiveTab("budget")}
           >
             <svg
               width="18"
@@ -137,11 +163,11 @@ function App() {
               <rect x="14" y="12" width="7" height="9" />
               <rect x="3" y="16" width="7" height="5" />
             </svg>
-            Population impact
+            2026 Budget
           </button>
           <button
-            className={`tab-button ${activeTab === "personal" ? "active" : ""}`}
-            onClick={() => setActiveTab("personal")}
+            className={`tab-button ${activeTab === "household" ? "active" : ""}`}
+            onClick={() => setActiveTab("household")}
           >
             <svg
               width="18"
@@ -154,7 +180,7 @@ function App() {
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
               <circle cx="12" cy="7" r="4" />
             </svg>
-            Personal impact
+            Household calculator
           </button>
           <button
             className={`tab-button ${activeTab === "validation" ? "active" : ""}`}
@@ -175,7 +201,9 @@ function App() {
           </button>
         </div>
 
-        {activeTab === "personal" ? (
+        {activeTab === "baseline" ? (
+          <BaselineScotlandTab />
+        ) : activeTab === "household" ? (
           <div className="personal-impact-container">
             <HouseholdCalculator />
           </div>
