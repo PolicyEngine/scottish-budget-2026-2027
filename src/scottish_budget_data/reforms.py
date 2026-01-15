@@ -14,6 +14,17 @@ SCP_STANDARD_RATE = 27.15  # £/week (current rate from Apr 2025)
 SCP_BABY_RATE = 40.00  # £/week for babies under 1 (from Scottish Budget 2026)
 SCP_BABY_BOOST = SCP_BABY_RATE - SCP_STANDARD_RATE  # Extra £12.85/week
 
+# Constants for income tax threshold uplift
+# The announced increases for 2026-27 (absolute amounts above baseline)
+# Basic: £15,398 → £16,537 = +£1,139
+# Intermediate: £27,492 → £29,527 = +£2,035
+# These translate to threshold-above-PA increases of:
+INCOME_TAX_BASIC_INCREASE = 1_069  # £3,966 - £2,897 (2026 baseline)
+INCOME_TAX_INTERMEDIATE_INCREASE = 1_665  # £16,956 - £15,291 (2026 baseline)
+
+# Default years for microsim analysis
+DEFAULT_YEARS = [2026, 2027, 2028, 2029, 2030]
+
 
 @dataclass
 class Reform:
@@ -58,93 +69,99 @@ class Reform:
         return None
 
 
-def _income_tax_threshold_uplift_modifier(sim):
-    """Apply Scottish income tax threshold uplift (7.4%).
+def apply_income_tax_threshold_uplift_for_year(sim, year: int):
+    """Apply Scottish income tax threshold uplift for a single year.
+
+    This is the core single-year function used by both microsim and personal calculator.
 
     From Scottish Budget 2026-27:
     - Basic rate (20%) threshold: £15,398 → £16,537 (+£1,139 absolute)
     - Intermediate rate (21%) threshold: £27,492 → £29,527 (+£2,035 absolute)
 
-    Policy assumption for future years (2027-2030):
-    The same absolute £ increase is maintained, meaning the gap between
-    Scottish and baseline UK thresholds remains constant. This represents
-    a "maintained policy" scenario showing consistent ~£63-68M/year cost.
-
-    Alternative scenarios NOT modeled:
-    - One-year only: Would show impact only in 2026-27, £0 thereafter
-    - Threshold freeze: Would show decreasing impact as UK thresholds rise
-    - Percentage-based: Would show growing cost with inflation
+    Args:
+        sim: PolicyEngine simulation object
+        year: The year to apply the uplift for
     """
     params = sim.tax_benefit_system.parameters
     scotland_rates = params.gov.hmrc.income_tax.rates.scotland.rates
 
-    # The announced increases for 2026-27 (absolute amounts above baseline)
-    # Basic: £15,398 → £16,537 = +£1,139
-    # Intermediate: £27,492 → £29,527 = +£2,035
-    # These translate to threshold-above-PA increases of:
-    BASIC_INCREASE = 1_069  # £3,966 - £2,897 (2026 baseline)
-    INTERMEDIATE_INCREASE = 1_665  # £16,956 - £15,291 (2026 baseline)
+    # Get baseline thresholds
+    baseline_basic = scotland_rates.brackets[1].threshold(f"{year}-01-01")
+    baseline_intermediate = scotland_rates.brackets[2].threshold(f"{year}-01-01")
 
-    # Update brackets for years 2026-2030
-    # Apply the same absolute increase to each year's baseline
-    for year in [2026, 2027, 2028, 2029, 2030]:
-        # Get baseline thresholds
-        baseline_basic = scotland_rates.brackets[1].threshold(f"{year}-01-01")
-        baseline_intermediate = scotland_rates.brackets[2].threshold(f"{year}-01-01")
+    # Apply the announced increases
+    scotland_rates.brackets[1].threshold.update(
+        period=f"{year}-01-01",
+        value=baseline_basic + INCOME_TAX_BASIC_INCREASE,
+    )
+    scotland_rates.brackets[2].threshold.update(
+        period=f"{year}-01-01",
+        value=baseline_intermediate + INCOME_TAX_INTERMEDIATE_INCREASE,
+    )
 
-        # Apply the announced increases
-        new_basic = baseline_basic + BASIC_INCREASE
-        new_intermediate = baseline_intermediate + INTERMEDIATE_INCREASE
 
-        scotland_rates.brackets[1].threshold.update(
-            period=f"{year}-01-01",
-            value=new_basic,
-        )
-        scotland_rates.brackets[2].threshold.update(
-            period=f"{year}-01-01",
-            value=new_intermediate,
-        )
+def _income_tax_threshold_uplift_modifier(sim):
+    """Apply Scottish income tax threshold uplift (7.4%) for all years.
 
+    Microsim wrapper that applies the uplift for years 2026-2030.
+
+    Policy assumption for future years (2027-2030):
+    The same absolute £ increase is maintained, meaning the gap between
+    Scottish and baseline UK thresholds remains constant. This represents
+    a "maintained policy" scenario showing consistent ~£63-68M/year cost.
+    """
+    for year in DEFAULT_YEARS:
+        apply_income_tax_threshold_uplift_for_year(sim, year)
     return sim
 
 
-def _scp_baby_boost_modifier(sim):
-    """Apply SCP Premium for under-ones (Scottish Child Payment increase for babies).
+def apply_scp_baby_boost_for_year(sim, year: int):
+    """Apply SCP Premium for under-ones for a single year.
+
+    This is the core single-year function used by both microsim and personal calculator.
 
     The Scottish Budget 2026-27 introduced the SCP Premium for under-ones,
     increasing SCP to £40/week for babies under 1, up from the standard £27.15/week.
-    This modifier adds the extra payment directly to the scottish_child_payment
-    variable for eligible families.
 
     The premium applies to:
     - Households in Scotland (already receiving SCP)
     - With children under 1 year old
     - Receiving qualifying benefits (checked via existing SCP > 0)
+
+    Args:
+        sim: PolicyEngine simulation object
+        year: The year to apply the boost for
     """
-    for year in [2026, 2027, 2028, 2029, 2030]:
-        # Get current SCP values (already filters for Scotland + qualifying benefits)
-        current_scp = sim.calculate("scottish_child_payment", year)
-        n_benunits = len(current_scp)
+    # Get current SCP values (already filters for Scotland + qualifying benefits)
+    current_scp = sim.calculate("scottish_child_payment", year)
 
-        # Get person-level age to count babies
-        age = sim.calculate("age", year, map_to="person")
-        is_baby = np.array(age) < 1
+    # Get person-level age to count babies
+    age = sim.calculate("age", year, map_to="person")
+    is_baby = np.array(age) < 1
 
-        # Map babies to benefit units using PolicyEngine's mapping
-        # This sums is_baby (0 or 1) for each person, grouped by benunit
-        babies_per_benunit = sim.map_result(is_baby.astype(float), "person", "benunit")
+    # Map babies to benefit units using PolicyEngine's mapping
+    # This sums is_baby (0 or 1) for each person, grouped by benunit
+    babies_per_benunit = sim.map_result(is_baby.astype(float), "person", "benunit")
 
-        # Calculate baby boost (£12.85/week extra × 52 weeks per baby)
-        annual_boost = np.array(babies_per_benunit) * SCP_BABY_BOOST * WEEKS_IN_YEAR
+    # Calculate baby boost (£12.85/week extra × 52 weeks per baby)
+    annual_boost = np.array(babies_per_benunit) * SCP_BABY_BOOST * WEEKS_IN_YEAR
 
-        # Only apply boost to families already receiving SCP (i.e., in Scotland + qualifying)
-        already_receives_scp = np.array(current_scp) > 0
-        baby_boost = np.where(already_receives_scp, annual_boost, 0)
+    # Only apply boost to families already receiving SCP (i.e., in Scotland + qualifying)
+    already_receives_scp = np.array(current_scp) > 0
+    baby_boost = np.where(already_receives_scp, annual_boost, 0)
 
-        # Add boost to current SCP
-        new_scp = np.array(current_scp) + baby_boost
-        sim.set_input("scottish_child_payment", year, new_scp)
+    # Add boost to current SCP
+    new_scp = np.array(current_scp) + baby_boost
+    sim.set_input("scottish_child_payment", year, new_scp)
 
+
+def _scp_baby_boost_modifier(sim):
+    """Apply SCP Premium for under-ones for all years.
+
+    Microsim wrapper that applies the baby boost for years 2026-2030.
+    """
+    for year in DEFAULT_YEARS:
+        apply_scp_baby_boost_for_year(sim, year)
     return sim
 
 

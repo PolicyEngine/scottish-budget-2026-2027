@@ -5,7 +5,7 @@ import modal
 app = modal.App("scottish-budget-api")
 
 # Create image with all dependencies (Python 3.13 required for policyengine-uk>=2.68)
-# v2: fixed parameter paths
+# v3: uses shared reform functions from reforms.py
 image = (
     modal.Image.debian_slim(python_version="3.13")
     .pip_install(
@@ -15,6 +15,9 @@ image = (
         "policyengine-uk>=2.68.0",
     )
 )
+
+# Year for personal calculator
+YEAR = 2026
 
 
 @app.function(
@@ -28,49 +31,55 @@ def flask_app():
     from flask import Flask, request, jsonify
     from flask_cors import CORS
     from policyengine_uk import Simulation
+    import numpy as np
 
     flask_app = Flask(__name__)
     CORS(flask_app)
 
-    YEAR = 2026
+    # Import reform constants and functions
+    # Note: These are defined inline since Modal runs in isolated environment
+    # They mirror the logic in reforms.py for consistency
 
-    def _income_tax_threshold_uplift_modifier(sim: Simulation):
-        """Apply 7.4% uplift to Scottish basic and intermediate rate thresholds.
+    # Constants (must match reforms.py)
+    WEEKS_IN_YEAR = 52
+    SCP_BABY_BOOST = 40.00 - 27.15  # £12.85/week extra
+    INCOME_TAX_BASIC_INCREASE = 1_069
+    INCOME_TAX_INTERMEDIATE_INCREASE = 1_665
 
-        Brackets[1] = 20% basic rate, brackets[2] = 21% intermediate rate.
-        Using absolute increases as announced:
-        - Basic: +£1,069 above baseline
-        - Intermediate: +£1,665 above baseline
+    def apply_income_tax_threshold_uplift_for_year(sim, year: int):
+        """Apply Scottish income tax threshold uplift for a single year.
+
+        Mirrors reforms.apply_income_tax_threshold_uplift_for_year()
         """
-        BASIC_INCREASE = 1_069
-        INTERMEDIATE_INCREASE = 1_665
+        params = sim.tax_benefit_system.parameters
+        scotland_rates = params.gov.hmrc.income_tax.rates.scotland.rates
 
-        scotland_rates = sim.tax_benefit_system.parameters.gov.hmrc.income_tax.rates.scotland.rates
-
-        # Get baseline and apply increases
-        baseline_basic = scotland_rates.brackets[1].threshold(f"{YEAR}-01-01")
-        baseline_intermediate = scotland_rates.brackets[2].threshold(f"{YEAR}-01-01")
+        baseline_basic = scotland_rates.brackets[1].threshold(f"{year}-01-01")
+        baseline_intermediate = scotland_rates.brackets[2].threshold(f"{year}-01-01")
 
         scotland_rates.brackets[1].threshold.update(
-            period=f"{YEAR}-01-01",
-            value=baseline_basic + BASIC_INCREASE,
+            period=f"{year}-01-01",
+            value=baseline_basic + INCOME_TAX_BASIC_INCREASE,
         )
         scotland_rates.brackets[2].threshold.update(
-            period=f"{YEAR}-01-01",
-            value=baseline_intermediate + INTERMEDIATE_INCREASE,
+            period=f"{year}-01-01",
+            value=baseline_intermediate + INCOME_TAX_INTERMEDIATE_INCREASE,
         )
 
-    def _scp_baby_boost_modifier(sim: Simulation):
-        """Apply SCP Premium for under-ones: £40/week for babies under 1."""
-        NEW_RATE = 40 * 52  # £40/week annualized
-        scp = sim.calculate("scottish_child_payment", YEAR)
-        age = sim.calculate("age", YEAR)
-        is_baby = age < 1
-        baby_in_family = sim.map_result(is_baby, "person", "benunit", how="any")
-        current_rate = 27.15 * 52
-        boost = (NEW_RATE - current_rate) / current_rate
-        boosted_scp = scp * (1 + boost * baby_in_family)
-        sim.set_input("scottish_child_payment", YEAR, boosted_scp)
+    def apply_scp_baby_boost_for_year(sim, year: int):
+        """Apply SCP Premium for under-ones for a single year.
+
+        Mirrors reforms.apply_scp_baby_boost_for_year()
+        """
+        current_scp = sim.calculate("scottish_child_payment", year)
+        age = sim.calculate("age", year, map_to="person")
+        is_baby = np.array(age) < 1
+        babies_per_benunit = sim.map_result(is_baby.astype(float), "person", "benunit")
+        annual_boost = np.array(babies_per_benunit) * SCP_BABY_BOOST * WEEKS_IN_YEAR
+        already_receives_scp = np.array(current_scp) > 0
+        baby_boost = np.where(already_receives_scp, annual_boost, 0)
+        new_scp = np.array(current_scp) + baby_boost
+        sim.set_input("scottish_child_payment", year, new_scp)
 
     def create_situation(inputs: dict) -> dict:
         """Create a PolicyEngine situation from inputs."""
@@ -159,14 +168,14 @@ def flask_app():
             baseline_net = float(baseline_sim.calculate("household_net_income", YEAR)[0])
 
             income_tax_sim = Simulation(situation=situation)
-            _income_tax_threshold_uplift_modifier(income_tax_sim)
+            apply_income_tax_threshold_uplift_for_year(income_tax_sim, YEAR)
             income_tax_sim.calculate("scottish_child_payment", YEAR)
             income_tax_net = float(income_tax_sim.calculate("household_net_income", YEAR)[0])
             income_tax_impact = income_tax_net - baseline_net
 
             scp_sim = Simulation(situation=situation)
             scp_sim.calculate("scottish_child_payment", YEAR)
-            _scp_baby_boost_modifier(scp_sim)
+            apply_scp_baby_boost_for_year(scp_sim, YEAR)
             scp_net = float(scp_sim.calculate("household_net_income", YEAR)[0])
             scp_impact = scp_net - baseline_net
 
@@ -200,14 +209,14 @@ def flask_app():
             baseline_nets = baseline_sim.calculate("household_net_income", YEAR)
 
             income_tax_sim = Simulation(situation=situation)
-            _income_tax_threshold_uplift_modifier(income_tax_sim)
+            apply_income_tax_threshold_uplift_for_year(income_tax_sim, YEAR)
             income_tax_sim.calculate("scottish_child_payment", YEAR)
             income_tax_nets = income_tax_sim.calculate("household_net_income", YEAR)
             income_tax_impacts = income_tax_nets - baseline_nets
 
             scp_sim = Simulation(situation=situation)
             scp_sim.calculate("scottish_child_payment", YEAR)
-            _scp_baby_boost_modifier(scp_sim)
+            apply_scp_baby_boost_for_year(scp_sim, YEAR)
             scp_nets = scp_sim.calculate("household_net_income", YEAR)
             scp_impacts = scp_nets - baseline_nets
 
