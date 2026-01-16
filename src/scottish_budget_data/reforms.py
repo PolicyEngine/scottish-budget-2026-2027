@@ -21,19 +21,6 @@ SCP_BABY_RATE = 40.00  # £/week for babies under 1 (from Scottish Budget 2026)
 SCP_BABY_BOOST = SCP_BABY_RATE - SCP_STANDARD_RATE  # Extra £12.85/week
 
 
-def _scp_baby_boost_parameter_changes() -> dict:
-    """Get SCP baby boost parameter changes.
-
-    Enables the in_effect parameter which triggers PE-UK's structural
-    reform for SCP Premium for under-ones (£40/week for babies under 1).
-
-    Must be applied with `applied_before_data_load=True` so the parameter
-    is set BEFORE PE-UK's `create_structural_reforms_from_parameters` runs.
-    """
-    return {
-        "gov.contrib.scotland.scottish_child_payment.in_effect": _years_dict(True),
-    }
-
 # Constants for income tax threshold uplift
 # The announced increases for 2026-27 (absolute amounts above baseline)
 # Basic: £15,398 → £16,537 = +£1,139
@@ -221,26 +208,26 @@ def apply_scp_baby_boost_for_year(sim, year: int):
     sim.set_input("scottish_child_payment", year, new_scp)
 
 
-def _scp_baby_boost_modifier(sim):
-    """Apply SCP Premium for under-ones for all years.
-
-    Microsim wrapper that applies the baby boost for years 2026-2030.
-    This is a structural reform because it needs to:
-    1. Calculate current SCP values
-    2. Count babies per benefit unit
-    3. Apply boost only to eligible families
-
-    Cannot be done via parameter_changes alone.
-    """
-    for year in DEFAULT_YEARS:
-        apply_scp_baby_boost_for_year(sim, year)
-    return sim
-
-
 def _income_tax_modifier(sim):
     """Apply income tax threshold uplift via simulation_modifier."""
     for year in DEFAULT_YEARS:
         apply_income_tax_threshold_uplift_for_year(sim, year)
+    return sim
+
+
+def _scp_baby_boost_modifier(sim):
+    """Apply SCP baby boost reform only.
+
+    This modifier directly applies the SCP structural reform from policyengine-uk.
+    """
+    from policyengine_uk.reforms.scotland.scottish_child_payment_reform import (
+        create_scottish_child_payment_baby_bonus_reform,
+    )
+
+    # Apply SCP baby bonus reform directly
+    scp_reform = create_scottish_child_payment_baby_bonus_reform()
+    sim.apply_reform(scp_reform)
+
     return sim
 
 
@@ -269,17 +256,13 @@ def get_scottish_budget_reforms() -> list[Reform]:
     """Get list of Scottish Budget 2026-27 reforms.
 
     Returns a list of Reform objects:
-    - SCP baby boost: Uses parameter_changes with applied_before_data_load=True
-      to trigger PE-UK's structural reform
+    - SCP baby boost: Uses simulation_modifier to directly apply PE-UK's structural reform
     - Income tax: Uses simulation_modifier to directly modify thresholds
-    - Combined: Uses parameter_changes (applied_before_data_load) + simulation_modifier
+    - Combined: Uses simulation_modifier for both reforms
 
     Returns:
         List of Reform objects for analysis.
     """
-    # Get parameter changes
-    scp_params = _scp_baby_boost_parameter_changes()
-
     reforms = []
 
     # Combined reform (both policies together) - listed first
@@ -298,8 +281,7 @@ def get_scottish_budget_reforms() -> list[Reform]:
     )
 
     # SCP Premium for under-ones (£40/week for babies under 1)
-    # Uses parameter_changes to enable in_effect, which triggers PE-UK's structural reform
-    # Must use applied_before_data_load=True so param is set BEFORE structural reforms run
+    # Uses simulation_modifier to directly apply the structural reform from policyengine-uk
     reforms.append(
         Reform(
             id="scp_baby_boost",
@@ -308,8 +290,7 @@ def get_scottish_budget_reforms() -> list[Reform]:
                 "New SCP Premium for under-ones: £40/week for babies under 1 "
                 "(up from £27.15/week). Announced in Scottish Budget 2026-27."
             ),
-            parameter_changes=scp_params,
-            applied_before_data_load=True,
+            simulation_modifier=_scp_baby_boost_modifier,
         )
     )
 

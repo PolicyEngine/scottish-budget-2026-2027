@@ -41,6 +41,7 @@ def generate_all_data(
     data_inputs_dir: Optional[Path] = None,
     years: list[int] = None,
     scotland_only: bool = True,
+    dataset_path: Optional[Path] = None,
 ) -> dict[str, pd.DataFrame]:
     """Generate all dashboard data for the given reforms.
 
@@ -51,6 +52,7 @@ def generate_all_data(
         data_inputs_dir: Directory containing constituency metadata.
         years: Years to analyze.
         scotland_only: If True, filter to Scottish constituencies only.
+        dataset_path: Path to local enhanced_frs h5 file. If None, downloads from HF.
 
     Returns:
         Dict mapping output name to DataFrame.
@@ -103,12 +105,18 @@ def generate_all_data(
         baseline_scenario = reform.to_baseline_scenario()
         reform_scenario = reform.to_scenario()
 
-        if baseline_scenario:
-            baseline = Microsimulation(scenario=baseline_scenario)
+        # Use local dataset if provided, otherwise download from HF
+        if dataset_path:
+            dataset_obj = UKSingleYearDataset(str(dataset_path))
         else:
-            baseline = Microsimulation()
+            dataset_obj = None
 
-        reformed = Microsimulation(scenario=reform_scenario)
+        if baseline_scenario:
+            baseline = Microsimulation(scenario=baseline_scenario, dataset=dataset_obj)
+        else:
+            baseline = Microsimulation(dataset=dataset_obj)
+
+        reformed = Microsimulation(scenario=reform_scenario, dataset=dataset_obj)
 
         # Calculate budgetary impact
         budgetary = budgetary_calc.calculate(
@@ -167,4 +175,9 @@ def generate_all_data(
 
 
 if __name__ == "__main__":
-    generate_all_data()
+    # Use local dataset if available
+    local_dataset = DEFAULT_DATA_DIR / "enhanced_frs_2023_24.h5"
+    dataset_path = local_dataset if local_dataset.exists() else None
+    if dataset_path:
+        print(f"Using local dataset: {dataset_path}")
+    generate_all_data(dataset_path=dataset_path)

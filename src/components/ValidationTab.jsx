@@ -689,7 +689,7 @@ export default function ValidationTab() {
       </div>
 
       {/* Two-child limit Table */}
-      <h3 className="subsection-title">Two-child limit mitigation</h3>
+      <h3 className="subsection-title">Two-child limit: SFC vs PolicyEngine comparison</h3>
       <div className="section-box">
         <p className="chart-description">
           The Scottish Fiscal{" "}
