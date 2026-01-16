@@ -3,7 +3,6 @@
 Each calculator generates a specific type of output data.
 """
 
-from typing import Optional
 import pandas as pd
 import numpy as np
 from policyengine_uk import Microsimulation
@@ -204,138 +203,64 @@ class MetricsCalculator:
         """Calculate poverty and other summary metrics (Scotland only)."""
         from microdf import MicroSeries
 
-        results = []
-
-        # Filter to Scotland
         is_scotland = get_scotland_person_mask(baseline, year)
         person_weight = baseline.calculate("person_weight", year, map_to="person").values[is_scotland]
         is_child = baseline.calculate("is_child", year, map_to="person").values[is_scotland]
+        child_weights = person_weight * is_child
 
-        # Calculate poverty for both BHC and AHC
-        for housing_cost in ["bhc", "ahc"]:
-            poverty_var = f"in_poverty_{housing_cost}"
-            prefix = f"{housing_cost}_"
-
-            baseline_poverty = baseline.calculate(poverty_var, year, map_to="person").values[is_scotland]
-            reformed_poverty = reformed.calculate(poverty_var, year, map_to="person").values[is_scotland]
-
-            # Overall poverty - use MicroSeries.mean() for proper weighted average
-            baseline_ms = MicroSeries(baseline_poverty, weights=person_weight)
-            reformed_ms = MicroSeries(reformed_poverty, weights=person_weight)
-            baseline_rate = baseline_ms.mean() * 100
-            reformed_rate = reformed_ms.mean() * 100
+        def add_metric_set(
+            results: list[dict],
+            metric_prefix: str,
+            baseline_values: np.ndarray,
+            reformed_values: np.ndarray,
+            weights: np.ndarray,
+        ) -> None:
+            """Add baseline, reform, and change metrics for a given measure."""
+            baseline_rate = MicroSeries(baseline_values, weights=weights).mean() * 100
+            reformed_rate = MicroSeries(reformed_values, weights=weights).mean() * 100
 
             results.append({
                 "reform_id": reform_id,
                 "reform_name": reform_name,
                 "year": year,
-                "metric": f"{prefix}poverty_rate_baseline",
+                "metric": f"{metric_prefix}_baseline",
                 "value": baseline_rate,
             })
             results.append({
                 "reform_id": reform_id,
                 "reform_name": reform_name,
                 "year": year,
-                "metric": f"{prefix}poverty_rate_reform",
+                "metric": f"{metric_prefix}_reform",
                 "value": reformed_rate,
             })
             results.append({
                 "reform_id": reform_id,
                 "reform_name": reform_name,
                 "year": year,
-                "metric": f"{prefix}poverty_rate_change",
+                "metric": f"{metric_prefix}_change",
                 "value": reformed_rate - baseline_rate,
             })
 
-            # Child poverty - use MicroSeries.mean() with child weights
-            child_weights = person_weight * is_child
-            child_baseline_ms = MicroSeries(baseline_poverty, weights=child_weights)
-            child_reformed_ms = MicroSeries(reformed_poverty, weights=child_weights)
-            child_baseline_rate = child_baseline_ms.mean() * 100
-            child_reformed_rate = child_reformed_ms.mean() * 100
+        results = []
 
-            results.append({
-                "reform_id": reform_id,
-                "reform_name": reform_name,
-                "year": year,
-                "metric": f"{prefix}child_poverty_rate_baseline",
-                "value": child_baseline_rate,
-            })
-            results.append({
-                "reform_id": reform_id,
-                "reform_name": reform_name,
-                "year": year,
-                "metric": f"{prefix}child_poverty_rate_reform",
-                "value": child_reformed_rate,
-            })
-            results.append({
-                "reform_id": reform_id,
-                "reform_name": reform_name,
-                "year": year,
-                "metric": f"{prefix}child_poverty_rate_change",
-                "value": child_reformed_rate - child_baseline_rate,
-            })
+        for housing_cost in ["bhc", "ahc"]:
+            prefix = f"{housing_cost}_"
 
-            # Deep poverty (below 50% of median income)
+            # Regular poverty
+            poverty_var = f"in_poverty_{housing_cost}"
+            baseline_poverty = baseline.calculate(poverty_var, year, map_to="person").values[is_scotland]
+            reformed_poverty = reformed.calculate(poverty_var, year, map_to="person").values[is_scotland]
+
+            add_metric_set(results, f"{prefix}poverty_rate", baseline_poverty, reformed_poverty, person_weight)
+            add_metric_set(results, f"{prefix}child_poverty_rate", baseline_poverty, reformed_poverty, child_weights)
+
+            # Deep poverty
             deep_poverty_var = f"in_deep_poverty_{housing_cost}"
             baseline_deep = baseline.calculate(deep_poverty_var, year, map_to="person").values[is_scotland]
             reformed_deep = reformed.calculate(deep_poverty_var, year, map_to="person").values[is_scotland]
 
-            # Overall deep poverty - use MicroSeries.mean()
-            deep_baseline_ms = MicroSeries(baseline_deep, weights=person_weight)
-            deep_reformed_ms = MicroSeries(reformed_deep, weights=person_weight)
-            deep_baseline_rate = deep_baseline_ms.mean() * 100
-            deep_reformed_rate = deep_reformed_ms.mean() * 100
-
-            results.append({
-                "reform_id": reform_id,
-                "reform_name": reform_name,
-                "year": year,
-                "metric": f"{prefix}deep_poverty_rate_baseline",
-                "value": deep_baseline_rate,
-            })
-            results.append({
-                "reform_id": reform_id,
-                "reform_name": reform_name,
-                "year": year,
-                "metric": f"{prefix}deep_poverty_rate_reform",
-                "value": deep_reformed_rate,
-            })
-            results.append({
-                "reform_id": reform_id,
-                "reform_name": reform_name,
-                "year": year,
-                "metric": f"{prefix}deep_poverty_rate_change",
-                "value": deep_reformed_rate - deep_baseline_rate,
-            })
-
-            # Child deep poverty - use MicroSeries.mean() with child weights
-            child_deep_baseline_ms = MicroSeries(baseline_deep, weights=child_weights)
-            child_deep_reformed_ms = MicroSeries(reformed_deep, weights=child_weights)
-            child_deep_baseline_rate = child_deep_baseline_ms.mean() * 100
-            child_deep_reformed_rate = child_deep_reformed_ms.mean() * 100
-
-            results.append({
-                "reform_id": reform_id,
-                "reform_name": reform_name,
-                "year": year,
-                "metric": f"{prefix}child_deep_poverty_rate_baseline",
-                "value": child_deep_baseline_rate,
-            })
-            results.append({
-                "reform_id": reform_id,
-                "reform_name": reform_name,
-                "year": year,
-                "metric": f"{prefix}child_deep_poverty_rate_reform",
-                "value": child_deep_reformed_rate,
-            })
-            results.append({
-                "reform_id": reform_id,
-                "reform_name": reform_name,
-                "year": year,
-                "metric": f"{prefix}child_deep_poverty_rate_change",
-                "value": child_deep_reformed_rate - child_deep_baseline_rate,
-            })
+            add_metric_set(results, f"{prefix}deep_poverty_rate", baseline_deep, reformed_deep, person_weight)
+            add_metric_set(results, f"{prefix}child_deep_poverty_rate", baseline_deep, reformed_deep, child_weights)
 
         return results
 

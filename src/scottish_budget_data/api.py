@@ -8,7 +8,7 @@ from flask_cors import CORS
 from policyengine_uk import Simulation
 
 from .reforms import (
-    _income_tax_threshold_uplift_modifier,
+    _income_tax_modifier,
     _scp_baby_boost_modifier,
 )
 
@@ -70,7 +70,7 @@ def calculate():
 
         # Income tax threshold reform - apply modifier directly
         income_tax_sim = Simulation(situation=situation)
-        _income_tax_threshold_uplift_modifier(income_tax_sim)
+        _income_tax_modifier(income_tax_sim)
         income_tax_sim.calculate("scottish_child_payment", YEAR)
         income_tax_net = float(income_tax_sim.calculate("household_net_income", YEAR)[0])
         income_tax_impact = income_tax_net - baseline_net
@@ -157,7 +157,7 @@ def calculate_variation():
 
         # Income tax reform (vectorized) - apply modifier directly
         income_tax_sim = Simulation(situation=situation)
-        _income_tax_threshold_uplift_modifier(income_tax_sim)
+        _income_tax_modifier(income_tax_sim)
         income_tax_sim.calculate("scottish_child_payment", YEAR)
         income_tax_nets = income_tax_sim.calculate("household_net_income", YEAR)
         income_tax_impacts = income_tax_nets - baseline_nets
