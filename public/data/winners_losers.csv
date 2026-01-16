@@ -2,33 +2,33 @@ reform_id,reform_name,year,metric,value
 combined,Both policies combined,2026,winners_pct,74.11342
 combined,Both policies combined,2026,losers_pct,0.061797503
 combined,Both policies combined,2026,unchanged_pct,25.824785
-combined,Both policies combined,2027,winners_pct,75.06237
-combined,Both policies combined,2027,losers_pct,0.061797503
-combined,Both policies combined,2027,unchanged_pct,24.875835
-combined,Both policies combined,2028,winners_pct,75.116455
-combined,Both policies combined,2028,losers_pct,0.13285846
-combined,Both policies combined,2028,unchanged_pct,24.750687
-combined,Both policies combined,2029,winners_pct,75.23617
-combined,Both policies combined,2029,losers_pct,0.13278529
-combined,Both policies combined,2029,unchanged_pct,24.63104
-combined,Both policies combined,2030,winners_pct,75.31575
-combined,Both policies combined,2030,losers_pct,0.13278526
-combined,Both policies combined,2030,unchanged_pct,24.551462
+combined,Both policies combined,2027,winners_pct,74.9373
+combined,Both policies combined,2027,losers_pct,0.28668535
+combined,Both policies combined,2027,unchanged_pct,24.776012
+combined,Both policies combined,2028,winners_pct,74.57987
+combined,Both policies combined,2028,losers_pct,0.89799
+combined,Both policies combined,2028,unchanged_pct,24.522137
+combined,Both policies combined,2029,winners_pct,75.28582
+combined,Both policies combined,2029,losers_pct,0.29796934
+combined,Both policies combined,2029,unchanged_pct,24.416206
+combined,Both policies combined,2030,winners_pct,75.54606
+combined,Both policies combined,2030,losers_pct,0.48308778
+combined,Both policies combined,2030,unchanged_pct,23.970852
 scp_baby_boost,SCP Premium for under-ones (£40/week),2026,winners_pct,0.7793454
 scp_baby_boost,SCP Premium for under-ones (£40/week),2026,losers_pct,0.0
 scp_baby_boost,SCP Premium for under-ones (£40/week),2026,unchanged_pct,99.22065
-scp_baby_boost,SCP Premium for under-ones (£40/week),2027,winners_pct,0.81549007
-scp_baby_boost,SCP Premium for under-ones (£40/week),2027,losers_pct,0.0
-scp_baby_boost,SCP Premium for under-ones (£40/week),2027,unchanged_pct,99.18451
-scp_baby_boost,SCP Premium for under-ones (£40/week),2028,winners_pct,0.8828607
-scp_baby_boost,SCP Premium for under-ones (£40/week),2028,losers_pct,0.0
-scp_baby_boost,SCP Premium for under-ones (£40/week),2028,unchanged_pct,99.11714
-scp_baby_boost,SCP Premium for under-ones (£40/week),2029,winners_pct,0.883474
-scp_baby_boost,SCP Premium for under-ones (£40/week),2029,losers_pct,0.0
-scp_baby_boost,SCP Premium for under-ones (£40/week),2029,unchanged_pct,99.11653
-scp_baby_boost,SCP Premium for under-ones (£40/week),2030,winners_pct,0.8816991
-scp_baby_boost,SCP Premium for under-ones (£40/week),2030,losers_pct,0.0
-scp_baby_boost,SCP Premium for under-ones (£40/week),2030,unchanged_pct,99.1183
+scp_baby_boost,SCP Premium for under-ones (£40/week),2027,winners_pct,1.55173
+scp_baby_boost,SCP Premium for under-ones (£40/week),2027,losers_pct,0.22488783
+scp_baby_boost,SCP Premium for under-ones (£40/week),2027,unchanged_pct,98.22338
+scp_baby_boost,SCP Premium for under-ones (£40/week),2028,winners_pct,0.9553154
+scp_baby_boost,SCP Premium for under-ones (£40/week),2028,losers_pct,0.7651315
+scp_baby_boost,SCP Premium for under-ones (£40/week),2028,unchanged_pct,98.27956
+scp_baby_boost,SCP Premium for under-ones (£40/week),2029,winners_pct,1.1487205
+scp_baby_boost,SCP Premium for under-ones (£40/week),2029,losers_pct,0.16518402
+scp_baby_boost,SCP Premium for under-ones (£40/week),2029,unchanged_pct,98.6861
+scp_baby_boost,SCP Premium for under-ones (£40/week),2030,winners_pct,1.6316391
+scp_baby_boost,SCP Premium for under-ones (£40/week),2030,losers_pct,0.35030252
+scp_baby_boost,SCP Premium for under-ones (£40/week),2030,unchanged_pct,98.01806
 income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,winners_pct,73.879166
 income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,losers_pct,0.061797503
 income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,unchanged_pct,26.05904

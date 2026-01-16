@@ -32,8 +32,8 @@ class BudgetaryImpactCalculator:
     2. The change in household income equals the fiscal cost/revenue impact
     3. Using gov_balance would require apportioning UK-wide aggregates
 
-    For SCP: cost = increased benefit payments to Scottish families
-    For income tax: cost = reduced tax revenue from Scottish taxpayers
+    IMPORTANT: Creates fresh simulations for each year to avoid PolicyEngine
+    caching issues that cause cross-year contamination.
     """
 
     def __init__(self, years: list[int] = None):
@@ -48,24 +48,31 @@ class BudgetaryImpactCalculator:
     ) -> list[dict]:
         """Calculate budgetary impact for all years (Scotland only).
 
+        Note: The baseline/reformed parameters are used to get the scenario
+        configuration, but fresh simulations are created per-year to avoid
+        caching issues.
+
         Returns cost in £ millions. Positive = cost to government (income gain for households).
         """
+        from .reforms import calculate_scp_baby_boost_cost
+
         results = []
 
         for year in self.years:
-            # Filter to Scotland
-            is_scotland = get_scotland_household_mask(baseline, year)
-
-            # Keep as MicroSeries (don't convert to numpy) so .sum() uses built-in weights
-            baseline_income = baseline.calculate("household_net_income", year)
-            reformed_income = reformed.calculate("household_net_income", year)
-
-            # Apply Scotland filter (preserves MicroSeries with weights)
-            baseline_income_scotland = baseline_income[is_scotland]
-            reformed_income_scotland = reformed_income[is_scotland]
-
-            # Use built-in weighted sum (weights handled automatically by MicroSeries)
-            cost = (reformed_income_scotland - baseline_income_scotland).sum()
+            if reform_id == "scp_baby_boost":
+                # SCP baby boost: direct calculation (no simulation modification needed)
+                cost = self._calculate_scp_cost_for_year(year)
+            elif reform_id == "combined":
+                # Combined = SCP baby boost + income tax threshold uplift
+                scp_cost = self._calculate_scp_cost_for_year(year)
+                tax_cost = self._calculate_income_tax_cost_for_year(year)
+                cost = scp_cost + tax_cost
+            elif reform_id == "income_tax_threshold_uplift":
+                # Income tax: fresh simulations per year
+                cost = self._calculate_income_tax_cost_for_year(year)
+            else:
+                # Generic reform: fresh simulations per year
+                cost = self._calculate_generic_cost_for_year(reformed, year)
 
             results.append({
                 "reform_id": reform_id,
@@ -75,6 +82,50 @@ class BudgetaryImpactCalculator:
             })
 
         return results
+
+    def _calculate_scp_cost_for_year(self, year: int) -> float:
+        """Calculate SCP baby boost cost for a single year."""
+        from .reforms import calculate_scp_baby_boost_cost
+
+        # Fresh simulation for this year
+        sim = Microsimulation()
+        return calculate_scp_baby_boost_cost(sim, year)
+
+    def _calculate_income_tax_cost_for_year(self, year: int) -> float:
+        """Calculate income tax threshold uplift cost for a single year."""
+        from policyengine_uk import Microsimulation
+        from policyengine_uk.utils.scenario import Scenario
+        from .reforms import _income_tax_modifier
+
+        # Fresh simulations for this year
+        baseline = Microsimulation()
+        reformed = Microsimulation(
+            scenario=Scenario(simulation_modifier=_income_tax_modifier)
+        )
+
+        is_scotland = get_scotland_household_mask(baseline, year)
+
+        baseline_income = baseline.calculate("household_net_income", year)
+        reformed_income = reformed.calculate("household_net_income", year)
+
+        return (reformed_income[is_scotland] - baseline_income[is_scotland]).sum()
+
+    def _calculate_generic_cost_for_year(
+        self, reformed_template: Microsimulation, year: int
+    ) -> float:
+        """Calculate cost for a generic reform using fresh simulations."""
+        # Fresh baseline
+        baseline = Microsimulation()
+
+        # Fresh reformed with same scenario as template
+        reformed = Microsimulation(scenario=reformed_template.scenario)
+
+        is_scotland = get_scotland_household_mask(baseline, year)
+
+        baseline_income = baseline.calculate("household_net_income", year)
+        reformed_income = reformed.calculate("household_net_income", year)
+
+        return (reformed_income[is_scotland] - baseline_income[is_scotland]).sum()
 
 
 class DistributionalImpactCalculator:
@@ -244,23 +295,120 @@ class MetricsCalculator:
         results = []
 
         for housing_cost in ["bhc", "ahc"]:
-            prefix = f"{housing_cost}_"
+            for poverty_type in ["absolute", "relative"]:
+                # Construct metric prefix: e.g., "abs_bhc_" or "rel_ahc_"
+                prefix = f"{poverty_type[:3]}_{housing_cost}_"
 
-            # Regular poverty
-            poverty_var = f"in_poverty_{housing_cost}"
-            baseline_poverty = baseline.calculate(poverty_var, year, map_to="person").values[is_scotland]
-            reformed_poverty = reformed.calculate(poverty_var, year, map_to="person").values[is_scotland]
+                # Variable names in PolicyEngine UK (confusingly named):
+                # - in_poverty_bhc / in_poverty_ahc = absolute poverty (below 60% of 2010-11 median)
+                # - in_relative_poverty_bhc / in_relative_poverty_ahc = relative poverty (below 60% of current median)
+                # - in_deep_poverty_bhc / in_deep_poverty_ahc = deep absolute poverty
+                if poverty_type == "absolute":
+                    poverty_var = f"in_poverty_{housing_cost}"
+                    deep_poverty_var = f"in_deep_poverty_{housing_cost}"
+                else:
+                    poverty_var = f"in_relative_poverty_{housing_cost}"
+                    # No deep relative poverty variable exists, skip it
+                    deep_poverty_var = None
 
-            add_metric_set(results, f"{prefix}poverty_rate", baseline_poverty, reformed_poverty, person_weight)
-            add_metric_set(results, f"{prefix}child_poverty_rate", baseline_poverty, reformed_poverty, child_weights)
+                # Regular poverty
+                baseline_poverty = baseline.calculate(poverty_var, year, map_to="person").values[is_scotland]
+                reformed_poverty = reformed.calculate(poverty_var, year, map_to="person").values[is_scotland]
 
-            # Deep poverty
-            deep_poverty_var = f"in_deep_poverty_{housing_cost}"
-            baseline_deep = baseline.calculate(deep_poverty_var, year, map_to="person").values[is_scotland]
-            reformed_deep = reformed.calculate(deep_poverty_var, year, map_to="person").values[is_scotland]
+                add_metric_set(results, f"{prefix}poverty_rate", baseline_poverty, reformed_poverty, person_weight)
+                add_metric_set(results, f"{prefix}child_poverty_rate", baseline_poverty, reformed_poverty, child_weights)
 
-            add_metric_set(results, f"{prefix}deep_poverty_rate", baseline_deep, reformed_deep, person_weight)
-            add_metric_set(results, f"{prefix}child_deep_poverty_rate", baseline_deep, reformed_deep, child_weights)
+                # Deep poverty (only for absolute poverty measure)
+                if deep_poverty_var:
+                    baseline_deep = baseline.calculate(deep_poverty_var, year, map_to="person").values[is_scotland]
+                    reformed_deep = reformed.calculate(deep_poverty_var, year, map_to="person").values[is_scotland]
+
+                    add_metric_set(results, f"{prefix}deep_poverty_rate", baseline_deep, reformed_deep, person_weight)
+                    add_metric_set(results, f"{prefix}child_deep_poverty_rate", baseline_deep, reformed_deep, child_weights)
+
+        return results
+
+
+class TwoChildLimitCalculator:
+    """Calculate two-child limit impact for Scotland (validation comparison).
+
+    Computes cost and number of children affected by abolishing the two-child limit.
+    Used for comparison with Scottish Fiscal Commission estimates.
+
+    Based on methodology from PolicyEngine/scottish-budget-dashboard.
+    """
+
+    def __init__(self, years: list[int] = None):
+        self.years = years or [2026, 2027, 2028, 2029, 2030]
+
+    def calculate(
+        self,
+        sim_with_limit: Microsimulation,
+        sim_without_limit: Microsimulation,
+    ) -> list[dict]:
+        """Calculate two-child limit abolition impact for Scotland.
+
+        Args:
+            sim_with_limit: Simulation with two-child limit in place (child_count=2)
+            sim_without_limit: Simulation without limit (child_count=inf, current law)
+
+        Returns:
+            List of dicts with year, cost_millions, children_affected_thousands,
+            and SFC comparison figures.
+        """
+        # SFC estimates for comparison (from Scottish Fiscal Commission)
+        SFC_DATA = {
+            2026: {"children": 43000, "cost": 155},
+            2027: {"children": 46000, "cost": 170},
+            2028: {"children": 48000, "cost": 182},
+            2029: {"children": 50000, "cost": 198},
+            2030: {"children": 52000, "cost": 205},
+        }
+
+        results = []
+
+        for year in self.years:
+            # Get Scotland mask using region variable
+            region = sim_without_limit.calculate("region", year, map_to="household").values
+            scotland_mask = region == "SCOTLAND"
+
+            # Get weights
+            hh_weight = sim_without_limit.calculate("household_weight", year, map_to="household").values
+
+            # Get UC entitlement under both scenarios
+            uc_without_limit = sim_without_limit.calculate("universal_credit", year, map_to="household").values
+            uc_with_limit = sim_with_limit.calculate("universal_credit", year, map_to="household").values
+
+            # Calculate the gain from removing limit
+            uc_gain = uc_without_limit - uc_with_limit
+
+            # Affected households are Scottish households with a gain
+            affected_mask = scotland_mask & (uc_gain > 0)
+
+            # Total cost (sum of gains)
+            total_cost = (uc_gain[affected_mask] * hh_weight[affected_mask]).sum()
+            total_cost_millions = total_cost / 1e6
+
+            # Count affected benefit units
+            affected_benefit_units = hh_weight[affected_mask].sum()
+
+            # Count affected children (children beyond the first 2 in affected HHs)
+            benunit_children = sim_without_limit.calculate(
+                "benunit_count_children", year, map_to="household"
+            ).values
+            affected_children_per_hh = np.maximum(benunit_children - 2, 0)
+            total_affected_children = (
+                affected_children_per_hh[affected_mask] * hh_weight[affected_mask]
+            ).sum()
+
+            results.append({
+                "year": year,
+                "pe_affected_children": round(total_affected_children),
+                "pe_affected_benefit_units": round(affected_benefit_units),
+                "pe_cost_millions": round(total_cost_millions, 1),
+                "sfc_affected_children": SFC_DATA[year]["children"],
+                "sfc_cost_millions": SFC_DATA[year]["cost"],
+            })
 
         return results
 

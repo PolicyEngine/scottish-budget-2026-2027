@@ -10,50 +10,50 @@ combined,Both policies combined,2026,8th,0.055692986,41.189983
 combined,Both policies combined,2026,9th,0.054568764,42.691013
 combined,Both policies combined,2026,10th,0.041668244,49.150627
 combined,Both policies combined,2026,All,0.056223765,27.827303
-combined,Both policies combined,2027,1st,0.05849602,10.524027
-combined,Both policies combined,2027,2nd,0.10007676,28.803043
-combined,Both policies combined,2027,3rd,0.04989027,16.181074
-combined,Both policies combined,2027,4th,0.051153246,22.512365
-combined,Both policies combined,2027,5th,0.07816416,35.798054
-combined,Both policies combined,2027,6th,0.04762964,24.936281
+combined,Both policies combined,2027,1st,-0.016832273,-3.0282965
+combined,Both policies combined,2027,2nd,0.1483791,42.704918
+combined,Both policies combined,2027,3rd,0.1372254,44.506763
+combined,Both policies combined,2027,4th,0.027788281,12.229526
+combined,Both policies combined,2027,5th,0.10182017,46.632164
+combined,Both policies combined,2027,6th,0.16349795,85.59861
 combined,Both policies combined,2027,7th,0.05370415,28.359047
 combined,Both policies combined,2027,8th,0.05588539,41.999584
 combined,Both policies combined,2027,9th,0.054177225,43.25075
-combined,Both policies combined,2027,10th,0.041216128,49.253845
-combined,Both policies combined,2027,All,0.056584645,28.511616
-combined,Both policies combined,2028,1st,0.05769573,10.549464
-combined,Both policies combined,2028,2nd,0.11712135,34.25028
-combined,Both policies combined,2028,3rd,0.048700824,15.932338
-combined,Both policies combined,2028,4th,0.05019755,22.63114
-combined,Both policies combined,2028,5th,0.07998782,36.915527
-combined,Both policies combined,2028,6th,0.047389157,25.295712
+combined,Both policies combined,2027,10th,0.041213036,49.250153
+combined,Both policies combined,2027,All,0.07309411,36.83033
+combined,Both policies combined,2028,1st,0.1013595,18.533234
+combined,Both policies combined,2028,2nd,-0.13322805,-38.960426
+combined,Both policies combined,2028,3rd,-0.007642711,-2.5002913
+combined,Both policies combined,2028,4th,0.08998409,40.568565
+combined,Both policies combined,2028,5th,0.079996,36.919304
+combined,Both policies combined,2028,6th,-0.06412944,-34.231453
 combined,Both policies combined,2028,7th,0.05313151,28.40447
 combined,Both policies combined,2028,8th,0.05607864,42.928993
 combined,Both policies combined,2028,9th,0.053256106,43.304028
-combined,Both policies combined,2028,10th,0.04048577,49.28679
-combined,Both policies combined,2028,All,0.057034306,29.252495
-combined,Both policies combined,2029,1st,0.053498127,10.496774
-combined,Both policies combined,2029,2nd,0.12599552,36.15374
-combined,Both policies combined,2029,3rd,0.0482093,16.058508
-combined,Both policies combined,2029,4th,0.050365116,22.804247
-combined,Both policies combined,2029,5th,0.07780856,36.4698
+combined,Both policies combined,2028,10th,0.04048879,49.290466
+combined,Both policies combined,2028,All,0.032059856,16.443274
+combined,Both policies combined,2029,1st,0.38463873,75.46929
+combined,Both policies combined,2029,2nd,0.014316389,4.1080112
+combined,Both policies combined,2029,3rd,-0.1388883,-46.263664
+combined,Both policies combined,2029,4th,0.050549507,22.887733
+combined,Both policies combined,2029,5th,0.07782673,36.47832
 combined,Both policies combined,2029,6th,0.046496015,25.373278
 combined,Both policies combined,2029,7th,0.05284968,28.732925
 combined,Both policies combined,2029,8th,0.056070223,43.655514
 combined,Both policies combined,2029,9th,0.05257023,43.247707
-combined,Both policies combined,2029,10th,0.039991606,49.48668
-combined,Both policies combined,2029,All,0.05659196,29.531015
-combined,Both policies combined,2030,1st,0.054112304,10.6123495
-combined,Both policies combined,2030,2nd,0.1240197,36.344364
-combined,Both policies combined,2030,3rd,0.04635354,15.661356
-combined,Both policies combined,2030,4th,0.052449398,24.324104
+combined,Both policies combined,2029,10th,0.039994854,49.490696
+combined,Both policies combined,2029,All,0.052132916,27.204184
+combined,Both policies combined,2030,1st,0.08657951,16.979725
+combined,Both policies combined,2030,2nd,0.04431644,12.987073
+combined,Both policies combined,2030,3rd,0.31193408,105.3924
+combined,Both policies combined,2030,4th,0.05136752,23.822369
 combined,Both policies combined,2030,5th,0.07775555,37.02606
 combined,Both policies combined,2030,6th,0.04646413,25.93041
 combined,Both policies combined,2030,7th,0.052276235,28.775059
 combined,Both policies combined,2030,8th,0.05562111,44.352383
 combined,Both policies combined,2030,9th,0.05215191,43.417084
-combined,Both policies combined,2030,10th,0.0391624,49.742565
-combined,Both policies combined,2030,All,0.056222104,29.855078
+combined,Both policies combined,2030,10th,0.039159168,49.73846
+combined,Both policies combined,2030,All,0.07483599,39.73943
 scp_baby_boost,SCP Premium for under-ones (£40/week),2026,1st,0.021711309,3.965147
 scp_baby_boost,SCP Premium for under-ones (£40/week),2026,2nd,0.08770072,24.588623
 scp_baby_boost,SCP Premium for under-ones (£40/week),2026,3rd,0.014758743,4.7763104
@@ -65,50 +65,50 @@ scp_baby_boost,SCP Premium for under-ones (£40/week),2026,8th,0.0,0.0
 scp_baby_boost,SCP Premium for under-ones (£40/week),2026,9th,0.0,0.0
 scp_baby_boost,SCP Premium for under-ones (£40/week),2026,10th,0.0,0.0
 scp_baby_boost,SCP Premium for under-ones (£40/week),2026,All,0.010521691,5.2075896
-scp_baby_boost,SCP Premium for under-ones (£40/week),2027,1st,0.05241048,9.429176
-scp_baby_boost,SCP Premium for under-ones (£40/week),2027,2nd,0.07124696,20.505552
-scp_baby_boost,SCP Premium for under-ones (£40/week),2027,3rd,0.014663361,4.755816
-scp_baby_boost,SCP Premium for under-ones (£40/week),2027,4th,0.013022521,5.7311654
-scp_baby_boost,SCP Premium for under-ones (£40/week),2027,5th,0.027624462,12.651604
-scp_baby_boost,SCP Premium for under-ones (£40/week),2027,6th,0.0,0.0
+scp_baby_boost,SCP Premium for under-ones (£40/week),2027,1st,-0.022917803,-4.123145
+scp_baby_boost,SCP Premium for under-ones (£40/week),2027,2nd,0.119549096,34.407368
+scp_baby_boost,SCP Premium for under-ones (£40/week),2027,3rd,0.101998225,33.08142
+scp_baby_boost,SCP Premium for under-ones (£40/week),2027,4th,-0.010342444,-4.5516734
+scp_baby_boost,SCP Premium for under-ones (£40/week),2027,5th,0.05128049,23.48572
+scp_baby_boost,SCP Premium for under-ones (£40/week),2027,6th,0.11586831,60.66233
 scp_baby_boost,SCP Premium for under-ones (£40/week),2027,7th,0.0,0.0
 scp_baby_boost,SCP Premium for under-ones (£40/week),2027,8th,0.0,0.0
 scp_baby_boost,SCP Premium for under-ones (£40/week),2027,9th,0.0,0.0
-scp_baby_boost,SCP Premium for under-ones (£40/week),2027,10th,0.0,0.0
-scp_baby_boost,SCP Premium for under-ones (£40/week),2027,All,0.010814376,5.4490995
-scp_baby_boost,SCP Premium for under-ones (£40/week),2028,1st,0.051254872,9.371775
-scp_baby_boost,SCP Premium for under-ones (£40/week),2028,2nd,0.08703259,25.451298
-scp_baby_boost,SCP Premium for under-ones (£40/week),2028,3rd,0.014375228,4.7028155
-scp_baby_boost,SCP Premium for under-ones (£40/week),2028,4th,0.011901662,5.365763
-scp_baby_boost,SCP Premium for under-ones (£40/week),2028,5th,0.028921792,13.347823
-scp_baby_boost,SCP Premium for under-ones (£40/week),2028,6th,0.0,0.0
+scp_baby_boost,SCP Premium for under-ones (£40/week),2027,10th,-3.0858307e-06,-0.0036876106
+scp_baby_boost,SCP Premium for under-ones (£40/week),2027,All,0.0273238,13.767794
+scp_baby_boost,SCP Premium for under-ones (£40/week),2028,1st,0.09491865,17.355545
+scp_baby_boost,SCP Premium for under-ones (£40/week),2028,2nd,-0.16331682,-47.75941
+scp_baby_boost,SCP Premium for under-ones (£40/week),2028,3rd,-0.04196831,-13.729815
+scp_baby_boost,SCP Premium for under-ones (£40/week),2028,4th,0.051688094,23.303139
+scp_baby_boost,SCP Premium for under-ones (£40/week),2028,5th,0.028929973,13.351599
+scp_baby_boost,SCP Premium for under-ones (£40/week),2028,6th,-0.11151797,-59.526833
 scp_baby_boost,SCP Premium for under-ones (£40/week),2028,7th,0.0,0.0
 scp_baby_boost,SCP Premium for under-ones (£40/week),2028,8th,0.0,0.0
 scp_baby_boost,SCP Premium for under-ones (£40/week),2028,9th,0.0,0.0
-scp_baby_boost,SCP Premium for under-ones (£40/week),2028,10th,0.0,0.0
-scp_baby_boost,SCP Premium for under-ones (£40/week),2028,All,0.011501995,5.899292
-scp_baby_boost,SCP Premium for under-ones (£40/week),2029,1st,0.046866573,9.195608
-scp_baby_boost,SCP Premium for under-ones (£40/week),2029,2nd,0.09388555,26.939953
-scp_baby_boost,SCP Premium for under-ones (£40/week),2029,3rd,0.013988709,4.6596365
-scp_baby_boost,SCP Premium for under-ones (£40/week),2029,4th,0.011869528,5.374268
-scp_baby_boost,SCP Premium for under-ones (£40/week),2029,5th,0.027157744,12.729159
+scp_baby_boost,SCP Premium for under-ones (£40/week),2028,10th,3.0196052e-06,0.0036760238
+scp_baby_boost,SCP Premium for under-ones (£40/week),2028,All,-0.013472419,-6.909909
+scp_baby_boost,SCP Premium for under-ones (£40/week),2029,1st,0.37800717,74.16812
+scp_baby_boost,SCP Premium for under-ones (£40/week),2029,2nd,-0.017793607,-5.10578
+scp_baby_boost,SCP Premium for under-ones (£40/week),2029,3rd,-0.17310888,-57.662533
+scp_baby_boost,SCP Premium for under-ones (£40/week),2029,4th,0.012053911,5.4577527
+scp_baby_boost,SCP Premium for under-ones (£40/week),2029,5th,0.02717593,12.737683
 scp_baby_boost,SCP Premium for under-ones (£40/week),2029,6th,0.0,0.0
 scp_baby_boost,SCP Premium for under-ones (£40/week),2029,7th,0.0,0.0
 scp_baby_boost,SCP Premium for under-ones (£40/week),2029,8th,0.0,0.0
 scp_baby_boost,SCP Premium for under-ones (£40/week),2029,9th,0.0,0.0
-scp_baby_boost,SCP Premium for under-ones (£40/week),2029,10th,0.0,0.0
-scp_baby_boost,SCP Premium for under-ones (£40/week),2029,All,0.011312953,5.9033647
-scp_baby_boost,SCP Premium for under-ones (£40/week),2030,1st,0.047106106,9.238315
-scp_baby_boost,SCP Premium for under-ones (£40/week),2030,2nd,0.092303805,27.049923
-scp_baby_boost,SCP Premium for under-ones (£40/week),2030,3rd,0.01304233,4.40658
-scp_baby_boost,SCP Premium for under-ones (£40/week),2030,4th,0.012256353,5.6840463
+scp_baby_boost,SCP Premium for under-ones (£40/week),2029,10th,3.2460641e-06,0.0040167663
+scp_baby_boost,SCP Premium for under-ones (£40/week),2029,All,0.0068539106,3.5765316
+scp_baby_boost,SCP Premium for under-ones (£40/week),2030,1st,0.0795733,15.605688
+scp_baby_boost,SCP Premium for under-ones (£40/week),2030,2nd,0.012600743,3.6926877
+scp_baby_boost,SCP Premium for under-ones (£40/week),2030,3rd,0.27862287,94.13762
+scp_baby_boost,SCP Premium for under-ones (£40/week),2030,4th,0.011174475,5.1823106
 scp_baby_boost,SCP Premium for under-ones (£40/week),2030,5th,0.02639557,12.569185
 scp_baby_boost,SCP Premium for under-ones (£40/week),2030,6th,0.0,0.0
 scp_baby_boost,SCP Premium for under-ones (£40/week),2030,7th,0.0,0.0
 scp_baby_boost,SCP Premium for under-ones (£40/week),2030,8th,0.0,0.0
 scp_baby_boost,SCP Premium for under-ones (£40/week),2030,9th,0.0,0.0
-scp_baby_boost,SCP Premium for under-ones (£40/week),2030,10th,0.0,0.0
-scp_baby_boost,SCP Premium for under-ones (£40/week),2030,All,0.011094723,5.891523
+scp_baby_boost,SCP Premium for under-ones (£40/week),2030,10th,-3.2344908e-06,-0.0041083246
+scp_baby_boost,SCP Premium for under-ones (£40/week),2030,All,0.02970861,15.775875
 income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,1st,0.006165031,1.1259227
 income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,2nd,0.029275432,8.207944
 income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,3rd,0.034108672,11.038446
