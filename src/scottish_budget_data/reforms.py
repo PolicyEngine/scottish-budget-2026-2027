@@ -160,16 +160,11 @@ def _income_tax_modifier(sim):
 def _scp_baby_boost_modifier(sim):
     """Apply SCP baby boost reform only.
 
-    This modifier directly applies the SCP structural reform from policyengine-uk.
+    Uses apply_scp_baby_boost_for_year to add the baby premium
+    (£40/week vs £27.15/week standard) for children under 1.
     """
-    from policyengine_uk.reforms.scotland.scottish_child_payment_reform import (
-        create_scottish_child_payment_baby_bonus_reform,
-    )
-
-    # Apply SCP baby bonus reform directly
-    scp_reform = create_scottish_child_payment_baby_bonus_reform()
-    sim.apply_reform(scp_reform)
-
+    for year in DEFAULT_YEARS:
+        apply_scp_baby_boost_for_year(sim, year)
     return sim
 
 
@@ -177,6 +172,42 @@ def _combined_modifier(sim):
     """Apply both SCP baby boost and income tax threshold uplift."""
     _scp_baby_boost_modifier(sim)
     _income_tax_modifier(sim)
+    return sim
+
+
+def _abolish_two_child_limit_modifier(sim):
+    """Abolish the two-child limit on UC/Child Tax Credit child elements.
+
+    The two-child limit restricts benefit entitlement for the third+ child
+    in Universal Credit and Child Tax Credit. Abolishing it would increase
+    benefits for families with 3+ children.
+
+    Note: In PolicyEngine UK, the two-child limit is already abolished
+    from 2026 onwards in baseline. This modifier explicitly sets child_count
+    to infinity for all years to measure the full impact.
+    """
+    import numpy as np
+    params = sim.tax_benefit_system.parameters
+
+    # Abolish UC two-child limit by setting child_count to infinity
+    uc_limit = params.gov.dwp.universal_credit.elements.child.limit
+    for year in DEFAULT_YEARS:
+        uc_limit.child_count.update(period=f"{year}-01-01", value=np.inf)
+
+    return sim
+
+
+def _impose_two_child_limit_modifier(sim):
+    """Impose the two-child limit (for baseline comparison).
+
+    Sets child_count to 2 for all years to model the pre-abolition scenario.
+    """
+    params = sim.tax_benefit_system.parameters
+
+    uc_limit = params.gov.dwp.universal_credit.elements.child.limit
+    for year in DEFAULT_YEARS:
+        uc_limit.child_count.update(period=f"{year}-01-01", value=2)
+
     return sim
 
 
@@ -237,6 +268,33 @@ def get_scottish_budget_reforms() -> list[Reform]:
     )
 
     return reforms
+
+
+def get_two_child_limit_reform() -> Reform:
+    """Get the two-child limit abolition reform for validation analysis.
+
+    This is used to compare PolicyEngine estimates with Scottish Fiscal Commission
+    projections, not part of the Scottish Budget 2026-27 itself.
+
+    Comparison:
+    - Baseline: Two-child limit imposed (child_count = 2)
+    - Reform: Two-child limit abolished (child_count = inf)
+
+    This measures the cost of abolishing the two-child limit.
+
+    Returns:
+        Reform object for abolishing the two-child limit.
+    """
+    return Reform(
+        id="abolish_two_child_limit",
+        name="Abolish two-child limit",
+        description=(
+            "Remove the two-child limit on UC/CTC child elements. "
+            "For validation comparison with Scottish Fiscal Commission estimates."
+        ),
+        baseline_simulation_modifier=_impose_two_child_limit_modifier,
+        simulation_modifier=_abolish_two_child_limit_modifier,
+    )
 
 
 # Policy metadata for dashboard

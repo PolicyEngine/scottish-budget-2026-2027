@@ -3,10 +3,16 @@ import "./PovertyImpactTable.css";
 
 /**
  * Table showing poverty rate impacts by year.
+ *
+ * UK has 4 poverty measures: absolute/relative × BHC/AHC
+ * - Absolute poverty: below 60% of 2010-11 median income (adjusted for inflation)
+ * - Relative poverty: below 60% of current year median income
+ * - BHC: Before Housing Costs
+ * - AHC: After Housing Costs
  */
 export default function PovertyImpactTable({ data, title, policyName = "the selected policy" }) {
+  const [povertyType, setPovertyType] = useState("abs"); // "abs" or "rel" (absolute vs relative poverty definition)
   const [housingCost, setHousingCost] = useState("bhc"); // "bhc" or "ahc"
-  const [viewMode, setViewMode] = useState("absolute"); // "absolute" or "relative"
 
   if (!data || data.length === 0) {
     return (
@@ -29,17 +35,25 @@ export default function PovertyImpactTable({ data, title, policyName = "the sele
 
   const years = Object.keys(byYear).sort();
 
-  // Get metric keys based on housing cost selection
-  const prefix = `${housingCost}_`;
-
+  // Get metric keys based on poverty type and housing cost selection
+  // New format: abs_bhc_poverty_rate_baseline, rel_ahc_child_poverty_rate_change, etc.
+  // Fallback to old format: bhc_poverty_rate_baseline (treats as relative)
   const getMetricKey = (base) => {
-    // Check if data has prefixed metrics (new format) or unprefixed (old format)
     const firstYearData = byYear[years[0]];
-    const fullKey = `${prefix}${base}`;
-    if (firstYearData[fullKey] !== undefined) {
-      return fullKey;
+
+    // Try new format first: e.g., "abs_bhc_poverty_rate_baseline"
+    const newFormatKey = `${povertyType}_${housingCost}_${base}`;
+    if (firstYearData[newFormatKey] !== undefined) {
+      return newFormatKey;
     }
-    // Fallback to unprefixed for backward compatibility
+
+    // Fallback to old format (no poverty type prefix): e.g., "bhc_poverty_rate_baseline"
+    const oldFormatKey = `${housingCost}_${base}`;
+    if (firstYearData[oldFormatKey] !== undefined) {
+      return oldFormatKey;
+    }
+
+    // Final fallback for very old format (no prefix at all)
     return base;
   };
 
@@ -48,20 +62,16 @@ export default function PovertyImpactTable({ data, title, policyName = "the sele
     return `${value.toFixed(1)}%`;
   };
 
-  const formatChange = (value, baselineValue) => {
+  const formatChange = (value) => {
     if (value == null) return "—";
-    if (viewMode === "relative") {
-      // Relative change: percent change from baseline
-      if (baselineValue == null || baselineValue === 0) return "—";
-      const relChange = (value / baselineValue) * 100;
-      const sign = relChange >= 0 ? "+" : "";
-      return `${sign}${relChange.toFixed(2)}%`;
-    }
-    // Absolute change: percentage points
+    // Always show as percentage points
     const sign = value >= 0 ? "+" : "";
     return `${sign}${value.toFixed(2)}pp`;
   };
 
+  const povertyTypeLabel = povertyType === "abs"
+    ? "absolute poverty (below 60% of 2010-11 median, inflation-adjusted)"
+    : "relative poverty (below 60% of current median)";
   const housingCostLabel = housingCost === "bhc" ? "Before Housing Costs (BHC)" : "After Housing Costs (AHC)";
 
   return (
@@ -74,16 +84,16 @@ export default function PovertyImpactTable({ data, title, policyName = "the sele
       <div className="chart-controls">
         <div className="view-toggle">
           <button
-            className={viewMode === "absolute" ? "active" : ""}
-            onClick={() => setViewMode("absolute")}
+            className={povertyType === "abs" ? "active" : ""}
+            onClick={() => setPovertyType("abs")}
           >
-            Absolute (pp)
+            Absolute poverty
           </button>
           <button
-            className={viewMode === "relative" ? "active" : ""}
-            onClick={() => setViewMode("relative")}
+            className={povertyType === "rel" ? "active" : ""}
+            onClick={() => setPovertyType("rel")}
           >
-            Relative (%)
+            Relative poverty
           </button>
         </div>
         <div className="view-toggle">
@@ -123,18 +133,20 @@ export default function PovertyImpactTable({ data, title, policyName = "the sele
             {years.map((year) => {
               const d = byYear[year];
               const povertyBaseline = d[getMetricKey("poverty_rate_baseline")];
+              const povertyReform = d[getMetricKey("poverty_rate_reform")];
               const povertyChange = d[getMetricKey("poverty_rate_change")];
               const childPovertyBaseline = d[getMetricKey("child_poverty_rate_baseline")];
+              const childPovertyReform = d[getMetricKey("child_poverty_rate_reform")];
               const childPovertyChange = d[getMetricKey("child_poverty_rate_change")];
               return (
                 <tr key={year}>
                   <td className="year-cell">{year}–{(parseInt(year) + 1).toString().slice(-2)}</td>
                   <td>{formatRate(povertyBaseline)}</td>
-                  <td>{formatRate(d[getMetricKey("poverty_rate_reform")])}</td>
-                  <td className="change-cell">{formatChange(povertyChange, povertyBaseline)}</td>
+                  <td>{formatRate(povertyReform)}</td>
+                  <td className="change-cell">{formatChange(povertyChange)}</td>
                   <td>{formatRate(childPovertyBaseline)}</td>
-                  <td>{formatRate(d[getMetricKey("child_poverty_rate_reform")])}</td>
-                  <td className="change-cell">{formatChange(childPovertyChange, childPovertyBaseline)}</td>
+                  <td>{formatRate(childPovertyReform)}</td>
+                  <td className="change-cell">{formatChange(childPovertyChange)}</td>
                 </tr>
               );
             })}
@@ -143,7 +155,7 @@ export default function PovertyImpactTable({ data, title, policyName = "the sele
       </div>
 
       <p className="table-note">
-        Poverty is measured using the {housingCostLabel} definition: below 60% of UK median income. Change shown in {viewMode === "absolute" ? "percentage points (pp)" : "percent change from baseline"}.
+        Poverty is measured using {povertyTypeLabel}, {housingCostLabel.toLowerCase()}. Change shown in percentage points (pp).
       </p>
     </div>
   );

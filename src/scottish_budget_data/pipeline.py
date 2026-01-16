@@ -16,9 +16,10 @@ from .calculators import (
     ConstituencyCalculator,
     DistributionalImpactCalculator,
     MetricsCalculator,
+    TwoChildLimitCalculator,
     WinnersLosersCalculator,
 )
-from .reforms import Reform, get_scottish_budget_reforms
+from .reforms import Reform, get_scottish_budget_reforms, get_two_child_limit_reform
 
 
 # Default paths
@@ -174,10 +175,68 @@ def generate_all_data(
     return results
 
 
+def generate_two_child_limit_validation(
+    output_dir: Optional[Path] = None,
+    dataset_path: Optional[Path] = None,
+    years: list[int] = None,
+) -> pd.DataFrame:
+    """Generate two-child limit validation data for SFC comparison.
+
+    This creates data for comparing PolicyEngine estimates with
+    Scottish Fiscal Commission projections on the two-child limit.
+
+    Args:
+        output_dir: Directory for output CSV file.
+        dataset_path: Path to local enhanced_frs h5 file. If None, downloads from HF.
+        years: Years to analyze.
+
+    Returns:
+        DataFrame with cost and children affected by year.
+    """
+    output_dir = output_dir or DEFAULT_OUTPUT_DIR
+    years = years or [2026, 2027, 2028, 2029, 2030]
+
+    print("\nGenerating two-child limit validation data...")
+
+    # Get the two-child limit abolition reform
+    reform = get_two_child_limit_reform()
+    baseline_scenario = reform.to_baseline_scenario()  # Imposes two-child limit
+    reform_scenario = reform.to_scenario()  # Abolishes two-child limit
+
+    # Use local dataset if provided
+    if dataset_path:
+        dataset_obj = UKSingleYearDataset(str(dataset_path))
+    else:
+        dataset_obj = None
+
+    # Create baseline (with limit) and reformed (without limit) simulations
+    baseline = Microsimulation(scenario=baseline_scenario, dataset=dataset_obj)
+    reformed = Microsimulation(scenario=reform_scenario, dataset=dataset_obj)
+
+    # Calculate two-child limit impact
+    tcl_calc = TwoChildLimitCalculator(years=years)
+    results = tcl_calc.calculate(baseline, reformed)
+
+    # Convert to DataFrame
+    df = pd.DataFrame(results)
+
+    # Save to CSV
+    save_csv(df, output_dir / "two_child_limit_validation.csv")
+
+    print("Two-child limit validation data generated")
+
+    return df
+
+
 if __name__ == "__main__":
     # Use local dataset if available
     local_dataset = DEFAULT_DATA_DIR / "enhanced_frs_2023_24.h5"
     dataset_path = local_dataset if local_dataset.exists() else None
     if dataset_path:
         print(f"Using local dataset: {dataset_path}")
+
+    # Generate main dashboard data
     generate_all_data(dataset_path=dataset_path)
+
+    # Generate validation data (two-child limit comparison)
+    generate_two_child_limit_validation(dataset_path=dataset_path)

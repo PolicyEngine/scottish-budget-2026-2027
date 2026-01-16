@@ -243,6 +243,47 @@
   color: var(--pe-gray-800);
 }
 
+/* Methodology collapsible section */
+.methodology-details {
+  margin: var(--pe-space-lg) 0;
+  font-family: var(--pe-font-body);
+  font-size: 0.9rem;
+  color: var(--pe-gray-600);
+}
+
+.methodology-details summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--pe-gray-500);
+  padding: var(--pe-space-xs) 0;
+  list-style: none;
+}
+
+.methodology-details summary::-webkit-details-marker {
+  display: none;
+}
+
+.methodology-details summary::before {
+  content: "▸ ";
+  display: inline-block;
+  transition: transform var(--pe-transition-fast);
+}
+
+.methodology-details[open] summary::before {
+  transform: rotate(90deg);
+}
+
+.methodology-details p {
+  margin: var(--pe-space-sm) 0 0 var(--pe-space-md);
+  line-height: 1.6;
+}
+
+.methodology-details a {
+  color: var(--pe-teal-600);
+  text-decoration: none;
+  border-bottom: 1px solid var(--pe-teal-300);
+}
+
 /* Budgetary summary cards */
 .budgetary-summary {
   margin: var(--pe-space-xl) 0;

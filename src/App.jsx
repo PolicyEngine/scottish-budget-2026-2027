@@ -11,7 +11,7 @@ const POLICIES = [
 ];
 
 function App() {
-  const [activeTab, setActiveTab] = useState("baseline");
+  const [activeTab, setActiveTab] = useState("budget");
   const [selectedPolicies, setSelectedPolicies] = useState(["scp_baby_boost", "income_tax_threshold_uplift"]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -34,22 +34,24 @@ function App() {
       setActiveTab("household");
     } else if (tabParam === "validation") {
       setActiveTab("validation");
-    } else {
+    } else if (tabParam === "baseline") {
       setActiveTab("baseline");
+    } else {
+      setActiveTab("budget");
     }
   }, []);
 
   // Update URL when tab changes
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    if (activeTab === "budget") {
-      params.set("tab", "budget");
+    if (activeTab === "baseline") {
+      params.set("tab", "baseline");
     } else if (activeTab === "household") {
       params.set("tab", "household");
     } else if (activeTab === "validation") {
       params.set("tab", "validation");
     } else {
-      params.delete("tab");
+      params.delete("tab"); // budget is default, no param needed
     }
     const newUrl = params.toString()
       ? `?${params.toString()}`

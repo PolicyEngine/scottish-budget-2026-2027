@@ -27,7 +27,7 @@ export default function DecileChart({
   onYearChange = null,
   availableYears = [2026, 2027, 2028, 2029, 2030],
 }) {
-  const [viewMode, setViewMode] = useState("relative"); // "relative" or "absolute"
+  const [viewMode, setViewMode] = useState("absolute"); // "absolute" or "relative"
   const formatYearRange = (year) => `${year}-${(year + 1).toString().slice(-2)}`;
 
   const effectiveData = stacked && stackedData ? stackedData : data;
@@ -121,16 +121,16 @@ export default function DecileChart({
       <div className="chart-controls">
         <div className="view-toggle">
           <button
-            className={viewMode === "relative" ? "active" : ""}
-            onClick={() => setViewMode("relative")}
-          >
-            Relative (%)
-          </button>
-          <button
             className={viewMode === "absolute" ? "active" : ""}
             onClick={() => setViewMode("absolute")}
           >
             Absolute (£)
+          </button>
+          <button
+            className={viewMode === "relative" ? "active" : ""}
+            onClick={() => setViewMode("relative")}
+          >
+            Relative (%)
           </button>
         </div>
         {onYearChange && (

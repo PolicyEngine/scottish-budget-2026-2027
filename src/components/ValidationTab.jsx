@@ -467,11 +467,14 @@ export default function ValidationTab() {
       </div>
 
       {/* Poverty Rates Table */}
-      <h3 className="subsection-title">Poverty rates</h3>
+      <h3 className="subsection-title">Relative poverty rates</h3>
       <div className="section-box">
         <p className="chart-description">
-          A household is in relative poverty if its equivalised income falls below 60% of UK median
-          income. Equivalisation adjusts for household size using the modified OECD scale (1.0 for
+          These comparisons use <strong>relative poverty</strong> (below 60% of current-year UK median income),
+          which is the primary measure used in official Scottish Government statistics.
+          The UK also measures <strong>absolute poverty</strong> (below 60% of 2010-11 median, adjusted for inflation),
+          which PolicyEngine calculates but isn't compared here due to limited official breakdowns.
+          Equivalisation adjusts for household size using the modified OECD scale (1.0 for
           the first adult, 0.5 for additional adults, 0.3 for children). BHC (before housing costs)
           uses total net income; AHC (after housing costs) subtracts rent, mortgage interest, and
           other housing costs, which typically increases measured poverty rates. Official statistics

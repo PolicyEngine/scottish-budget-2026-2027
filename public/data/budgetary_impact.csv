@@ -1,14 +1,14 @@
 reform_id,reform_name,year,value
-combined,Both policies combined,2026,75.90435637210133
-combined,Both policies combined,2027,78.05870862087735
-combined,Both policies combined,2028,80.4074268278532
-combined,Both policies combined,2029,81.53016755804802
-combined,Both policies combined,2030,82.79575907551325
+combined,Both policies combined,2026,14.20470765066467
+combined,Both policies combined,2027,37.693274958230255
+combined,Both policies combined,2028,-18.99352331236346
+combined,Both policies combined,2029,9.874201101640077
+combined,Both policies combined,2030,43.750538033285764
 scp_baby_boost,SCP Premium for under-ones (£40/week),2026,14.20470765066467
-scp_baby_boost,SCP Premium for under-ones (£40/week),2027,14.918468492167205
-scp_baby_boost,SCP Premium for under-ones (£40/week),2028,16.215603549902024
-scp_baby_boost,SCP Premium for under-ones (£40/week),2029,16.298195235833226
-scp_baby_boost,SCP Premium for under-ones (£40/week),2030,16.338697738099647
+scp_baby_boost,SCP Premium for under-ones (£40/week),2027,37.693274958230255
+scp_baby_boost,SCP Premium for under-ones (£40/week),2028,-18.99352331236346
+scp_baby_boost,SCP Premium for under-ones (£40/week),2029,9.874201101640077
+scp_baby_boost,SCP Premium for under-ones (£40/week),2030,43.750538033285764
 income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,61.69966993401835
 income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,63.14019965881823
 income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,64.19183985344745

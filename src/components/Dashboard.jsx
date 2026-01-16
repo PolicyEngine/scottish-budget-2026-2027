@@ -12,30 +12,30 @@ const SECTIONS = [
   { id: "budgetary-impact", label: "Budgetary impact" },
   { id: "living-standards", label: "Living standards" },
   { id: "poverty", label: "Poverty rate" },
-  { id: "local-areas", label: "Local areas analysis" },
+  { id: "constituencies", label: "Impact by constituency" },
 ];
 
-// Policy descriptions
+// Policy descriptions (active voice, clear impacts)
 const POLICY_INFO = {
   scp_baby_boost: {
     name: "SCP Premium for under-ones",
-    description: "Scottish Child Payment boosted to £40/week for babies under 1",
+    description: "Scottish Child Payment raised to £40/week for babies under 1",
     explanation: (
       <li>
-        <strong>SCP Premium for under-ones</strong>: The Scottish Child Payment is boosted to £40/week
-        for families with babies under 1 year old (up from £27.15/week), delivering the "strongest package
-        of support for families with young children anywhere in the UK".
+        <strong>SCP Premium for under-ones</strong>: The Budget raises the Scottish Child Payment from
+        £27.15 to £40 per week for each child under one year old. This applies to families already
+        receiving SCP (a means-tested benefit for low-income households).
       </li>
     ),
   },
   income_tax_threshold_uplift: {
     name: "Income tax threshold uplift",
-    description: "Basic and intermediate rate thresholds increased by 7.4%",
+    description: "Basic and intermediate rate thresholds raised by 7.4%",
     explanation: (
       <li>
-        <strong>Income tax threshold uplift (7.4%)</strong>: The basic rate (20%) threshold rises from £15,398
-        to £16,537, and the intermediate rate (21%) threshold rises from £27,492 to £29,527. This means
-        taxpayers pay the lower 19% starter rate on more of their income.
+        <strong>Income tax threshold uplift (7.4%)</strong>: The Budget raises the basic rate (20%)
+        threshold from £15,398 to £16,537, and the intermediate rate (21%) threshold from £27,492
+        to £29,527. Scottish taxpayers pay the lower 19% starter rate on more of their income.
       </li>
     ),
   },
@@ -302,25 +302,13 @@ export default function Dashboard({ selectedPolicies = [] }) {
       {/* Introduction */}
       <h2 className="section-title" id="introduction" ref={(el) => (sectionRefs.current["introduction"] = el)}>Introduction</h2>
       <p className="chart-description">
-        This dashboard, powered by{" "}
-        <a href="https://policyengine.org" target="_blank" rel="noopener noreferrer">PolicyEngine</a>,
-        analyses the impact of the Scottish Budget 2026–27{" "}
+        Finance Secretary Shona Robison{" "}
         <a href="https://www.gov.scot/publications/scottish-budget-2026-2027/documents/" target="_blank" rel="noopener noreferrer">announced</a>{" "}
-        by Finance Secretary Shona Robison
-        on 13 January 2026. It examines how the budget measures affect living standards, poverty rates,
-        and distributes impacts across Scotland's local areas.
+        the Scottish Budget 2026–27 on 13 January 2026. This dashboard estimates how the budget
+        affects household incomes, poverty rates, and different areas across Scotland.
       </p>
       <p className="chart-description" style={{ marginTop: "12px" }}>
-        PolicyEngine is an open-source microsimulation model that{" "}
-        <a href="https://github.com/PolicyEngine/policyengine-uk-data" target="_blank" rel="noopener noreferrer">reweights</a>{" "}
-        the Family Resources Survey to match Scottish demographics and calibrates to official statistics.
-        See also: PolicyEngine's{" "}
-        <a href="https://www.policyengine.org/uk/scottish-budget-2026-27" target="_blank" rel="noopener noreferrer">pre-budget dashboard</a>{" "}
-        and our poverty{" "}
-        <a href="https://policyengine.org/uk/research/uk-poverty-analysis" target="_blank" rel="noopener noreferrer">methodology</a>.
-      </p>
-      <p className="chart-description" style={{ marginTop: "12px" }}>
-        This analysis examines the following policies:
+        The Budget includes the following measures:
       </p>
       <ul className="policy-list">
         {isStacked ? (
@@ -332,6 +320,16 @@ export default function Dashboard({ selectedPolicies = [] }) {
           policyInfo.explanation
         )}
       </ul>
+      <details className="methodology-details">
+        <summary>Methodology</summary>
+        <p>
+          This analysis uses the PolicyEngine microsimulation model, which{" "}
+          <a href="https://github.com/PolicyEngine/policyengine-uk-data" target="_blank" rel="noopener noreferrer">reweights</a>{" "}
+          the Family Resources Survey to match Scottish demographics. See also:{" "}
+          <a href="https://www.policyengine.org/uk/scottish-budget-2026-27" target="_blank" rel="noopener noreferrer">pre-budget dashboard</a>{" "}
+          | <a href="https://policyengine.org/uk/research/uk-poverty-analysis" target="_blank" rel="noopener noreferrer">poverty methodology</a>.
+        </p>
+      </details>
 
       {/* Budgetary Impact Section */}
       <h2 className="section-title" id="budgetary-impact" ref={(el) => (sectionRefs.current["budgetary-impact"] = el)}>Budgetary impact</h2>
@@ -423,9 +421,10 @@ export default function Dashboard({ selectedPolicies = [] }) {
       {/* Poverty Section */}
       <h2 className="section-title" id="poverty" ref={(el) => (sectionRefs.current["poverty"] = el)}>Poverty rate</h2>
       <p className="chart-description">
-        This section shows how poverty rates are projected to change under the budget measures.
-        Use the selectors to switch between Before Housing Costs (BHC) and After Housing Costs (AHC)
-        definitions, and between absolute (percentage point) and relative (percent) changes.
+        This section shows how poverty rates change under the budget measures.
+        The UK uses four poverty measures: absolute vs relative poverty, each measured before or after housing costs.
+        Absolute poverty uses a fixed threshold (60% of 2010-11 median income, adjusted for inflation),
+        while relative poverty uses 60% of current median income.
         {effectivePolicy === "income_tax_threshold_uplift" && (
           <strong> Note: Income tax threshold increases have minimal direct impact on poverty rates
           because people in poverty typically pay little or no income tax.</strong>
@@ -441,11 +440,11 @@ export default function Dashboard({ selectedPolicies = [] }) {
         />
       )}
 
-      {/* Local Areas Section */}
-      <h2 className="section-title" id="local-areas" ref={(el) => (sectionRefs.current["local-areas"] = el)}>Local areas analysis</h2>
+      {/* Constituency Impact Section */}
+      <h2 className="section-title" id="constituencies" ref={(el) => (sectionRefs.current["constituencies"] = el)}>Impact by constituency</h2>
       <p className="chart-description">
-        This section shows how the budget measures affect different areas of Scotland. Select a constituency
-        to see the estimated impact on households in that area.
+        This section shows how the budget measures affect different constituencies across Scotland.
+        Select a constituency to see the estimated impact on households in that area.
       </p>
 
       <LocalAreaSection

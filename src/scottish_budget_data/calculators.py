@@ -244,23 +244,94 @@ class MetricsCalculator:
         results = []
 
         for housing_cost in ["bhc", "ahc"]:
-            prefix = f"{housing_cost}_"
+            for poverty_type in ["absolute", "relative"]:
+                # Construct metric prefix: e.g., "abs_bhc_" or "rel_ahc_"
+                prefix = f"{poverty_type[:3]}_{housing_cost}_"
 
-            # Regular poverty
-            poverty_var = f"in_poverty_{housing_cost}"
-            baseline_poverty = baseline.calculate(poverty_var, year, map_to="person").values[is_scotland]
-            reformed_poverty = reformed.calculate(poverty_var, year, map_to="person").values[is_scotland]
+                # Variable names in PolicyEngine UK (confusingly named):
+                # - in_poverty_bhc / in_poverty_ahc = absolute poverty (below 60% of 2010-11 median)
+                # - in_relative_poverty_bhc / in_relative_poverty_ahc = relative poverty (below 60% of current median)
+                # - in_deep_poverty_bhc / in_deep_poverty_ahc = deep absolute poverty
+                if poverty_type == "absolute":
+                    poverty_var = f"in_poverty_{housing_cost}"
+                    deep_poverty_var = f"in_deep_poverty_{housing_cost}"
+                else:
+                    poverty_var = f"in_relative_poverty_{housing_cost}"
+                    # No deep relative poverty variable exists, skip it
+                    deep_poverty_var = None
 
-            add_metric_set(results, f"{prefix}poverty_rate", baseline_poverty, reformed_poverty, person_weight)
-            add_metric_set(results, f"{prefix}child_poverty_rate", baseline_poverty, reformed_poverty, child_weights)
+                # Regular poverty
+                baseline_poverty = baseline.calculate(poverty_var, year, map_to="person").values[is_scotland]
+                reformed_poverty = reformed.calculate(poverty_var, year, map_to="person").values[is_scotland]
 
-            # Deep poverty
-            deep_poverty_var = f"in_deep_poverty_{housing_cost}"
-            baseline_deep = baseline.calculate(deep_poverty_var, year, map_to="person").values[is_scotland]
-            reformed_deep = reformed.calculate(deep_poverty_var, year, map_to="person").values[is_scotland]
+                add_metric_set(results, f"{prefix}poverty_rate", baseline_poverty, reformed_poverty, person_weight)
+                add_metric_set(results, f"{prefix}child_poverty_rate", baseline_poverty, reformed_poverty, child_weights)
 
-            add_metric_set(results, f"{prefix}deep_poverty_rate", baseline_deep, reformed_deep, person_weight)
-            add_metric_set(results, f"{prefix}child_deep_poverty_rate", baseline_deep, reformed_deep, child_weights)
+                # Deep poverty (only for absolute poverty measure)
+                if deep_poverty_var:
+                    baseline_deep = baseline.calculate(deep_poverty_var, year, map_to="person").values[is_scotland]
+                    reformed_deep = reformed.calculate(deep_poverty_var, year, map_to="person").values[is_scotland]
+
+                    add_metric_set(results, f"{prefix}deep_poverty_rate", baseline_deep, reformed_deep, person_weight)
+                    add_metric_set(results, f"{prefix}child_deep_poverty_rate", baseline_deep, reformed_deep, child_weights)
+
+        return results
+
+
+class TwoChildLimitCalculator:
+    """Calculate two-child limit impact for Scotland (validation comparison).
+
+    Computes cost and number of children affected by abolishing the two-child limit.
+    Used for comparison with Scottish Fiscal Commission estimates.
+    """
+
+    def __init__(self, years: list[int] = None):
+        self.years = years or [2026, 2027, 2028, 2029, 2030]
+
+    def calculate(
+        self,
+        baseline: Microsimulation,
+        reformed: Microsimulation,
+    ) -> list[dict]:
+        """Calculate two-child limit abolition impact for Scotland.
+
+        Returns cost in £ millions and number of children affected in thousands.
+        """
+        results = []
+
+        for year in self.years:
+            # Filter to Scotland
+            is_scotland_hh = get_scotland_household_mask(baseline, year)
+            is_scotland_person = get_scotland_person_mask(baseline, year)
+
+            # Calculate cost (change in household income = benefit increase)
+            baseline_income = baseline.calculate("household_net_income", year)
+            reformed_income = reformed.calculate("household_net_income", year)
+
+            baseline_scotland = baseline_income[is_scotland_hh]
+            reformed_scotland = reformed_income[is_scotland_hh]
+
+            cost = (reformed_scotland - baseline_scotland).sum()
+
+            # Count children affected (children in households that gain income)
+            # A child is affected if they're in a household with 3+ children
+            # that receives qualifying benefits
+            is_child = baseline.calculate("is_child", year, map_to="person").values[is_scotland_person]
+            person_weights = baseline.calculate("person_weight", year, map_to="person").values[is_scotland_person]
+
+            # Map household income gain to persons
+            hh_gain = np.array(reformed_income) - np.array(baseline_income)
+            person_gain = baseline.map_result(hh_gain, "household", "person")[is_scotland_person]
+
+            # Children affected are those with household income gain > £1
+            children_affected_mask = (is_child > 0) & (person_gain > 1)
+            children_affected = np.sum(person_weights * children_affected_mask)
+
+            results.append({
+                "year": year,
+                "cost_millions": cost / 1e6,
+                "children_affected_thousands": children_affected / 1e3,
+            })
 
         return results
 
