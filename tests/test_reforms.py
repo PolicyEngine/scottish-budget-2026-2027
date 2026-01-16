@@ -22,32 +22,36 @@ def test_reform_ids():
     assert reform_ids == expected_ids
 
 
-def test_all_reforms_have_simulation_modifier():
-    """Test that all reforms use simulation_modifier approach."""
+def test_all_reforms_have_reform_class():
+    """Test that all reforms use proper PolicyEngine Reform classes."""
     from scottish_budget_data.reforms import get_scottish_budget_reforms
+    from policyengine_core.reforms import Reform as PEReform
 
     reforms = get_scottish_budget_reforms()
     for reform in reforms:
-        assert reform.simulation_modifier is not None, (
-            f"Reform {reform.id} should have a simulation_modifier"
+        assert reform.reform_class is not None, (
+            f"Reform {reform.id} should have a reform_class"
+        )
+        assert issubclass(reform.reform_class, PEReform), (
+            f"Reform {reform.id} should use a PolicyEngine Reform class"
         )
 
 
-def test_reform_class_has_required_fields():
-    """Test that Reform dataclass has all required fields."""
-    from scottish_budget_data.reforms import Reform
+def test_reform_definition_has_required_fields():
+    """Test that ReformDefinition dataclass has all required fields."""
+    from scottish_budget_data.reforms import ReformDefinition, SCPBabyBoostReform
 
-    reform = Reform(
+    reform = ReformDefinition(
         id="test",
         name="Test Reform",
         description="A test reform",
+        reform_class=SCPBabyBoostReform,
     )
 
     assert reform.id == "test"
     assert reform.name == "Test Reform"
     assert reform.description == "A test reform"
-    assert reform.parameter_changes == {}
-    assert reform.simulation_modifier is None
+    assert reform.reform_class == SCPBabyBoostReform
 
 
 def test_income_tax_constants_are_reasonable():
