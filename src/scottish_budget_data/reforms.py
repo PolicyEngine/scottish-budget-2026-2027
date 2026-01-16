@@ -169,9 +169,14 @@ def _scp_baby_boost_modifier(sim):
 
 
 def _combined_modifier(sim):
-    """Apply both SCP baby boost and income tax threshold uplift."""
-    _scp_baby_boost_modifier(sim)
-    _income_tax_modifier(sim)
+    """Apply both SCP baby boost and income tax threshold uplift.
+
+    Order matters: income tax params must be set BEFORE SCP calculations,
+    because SCP modifier calls sim.calculate() which triggers the full
+    simulation with whatever parameters are currently set.
+    """
+    _income_tax_modifier(sim)  # Set params first (no calculations)
+    _scp_baby_boost_modifier(sim)  # Then calculate with new params
     return sim
 
 
