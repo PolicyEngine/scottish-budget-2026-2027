@@ -26,8 +26,8 @@ jobs:
         run: |
           uv venv
           uv pip install -e ".[dev]"
-          # Also install microdf for weight test
-          uv pip install microdf
+          # Also install microdf for weight test (PyPI name is microdf-python)
+          uv pip install microdf-python
 
       - name: Run tests
         env:
