@@ -19,7 +19,7 @@ from .calculators import (
     TwoChildLimitCalculator,
     WinnersLosersCalculator,
 )
-from .reforms import Reform, get_scottish_budget_reforms, get_two_child_limit_reform
+from .reforms import ReformDefinition, get_scottish_budget_reforms
 
 
 # Default paths
@@ -36,7 +36,7 @@ def save_csv(df: pd.DataFrame, csv_path: Path) -> None:
 
 
 def generate_all_data(
-    reforms: Optional[list[Reform]] = None,
+    reforms: Optional[list[ReformDefinition]] = None,
     output_dir: Optional[Path] = None,
     data_dir: Optional[Path] = None,
     data_inputs_dir: Optional[Path] = None,
@@ -47,7 +47,7 @@ def generate_all_data(
     """Generate all dashboard data for the given reforms.
 
     Args:
-        reforms: List of reforms to process. Defaults to Scottish Budget 2026.
+        reforms: List of ReformDefinitions to process. Defaults to Scottish Budget 2026.
         output_dir: Directory for output CSV files.
         data_dir: Directory containing constituency weights.
         data_inputs_dir: Directory containing constituency metadata.
@@ -87,7 +87,6 @@ def generate_all_data(
         if scotland_only:
             scottish_mask = constituency_df["code"].str.startswith("S")
             scottish_indices = scottish_mask.values
-            # Filter both weights and constituency_df to Scottish only
             weights = weights[scottish_indices, :]
             constituency_df = constituency_df[scottish_mask].reset_index(drop=True)
             print(f"Filtering to {len(constituency_df)} Scottish constituencies")
@@ -99,30 +98,22 @@ def generate_all_data(
     all_metrics = []
     all_constituency = []
 
+    # Use local dataset if provided
+    if dataset_path:
+        dataset_obj = UKSingleYearDataset(str(dataset_path))
+    else:
+        dataset_obj = None
+
     for reform in reforms:
         print(f"\nProcessing: {reform.name}")
 
-        # Create simulations
-        baseline_scenario = reform.to_baseline_scenario()
-        reform_scenario = reform.to_scenario()
-
-        # Use local dataset if provided, otherwise download from HF
-        if dataset_path:
-            dataset_obj = UKSingleYearDataset(str(dataset_path))
-        else:
-            dataset_obj = None
-
-        if baseline_scenario:
-            baseline = Microsimulation(scenario=baseline_scenario, dataset=dataset_obj)
-        else:
-            baseline = Microsimulation(dataset=dataset_obj)
-
-        reformed = Microsimulation(scenario=reform_scenario, dataset=dataset_obj)
+        # Create simulations and apply reform
+        baseline = Microsimulation(dataset=dataset_obj)
+        reformed = Microsimulation(dataset=dataset_obj)
+        reform.apply_fn(reformed)
 
         # Calculate budgetary impact
-        budgetary = budgetary_calc.calculate(
-            baseline, reformed, reform.id, reform.name
-        )
+        budgetary = budgetary_calc.calculate(reform.id, reform.name)
         all_budgetary.extend(budgetary)
 
         # Calculate per-year metrics
@@ -131,7 +122,7 @@ def generate_all_data(
 
             # Distributional
             distributional, decile_df = distributional_calc.calculate(
-                baseline, reformed, reform.id, reform.name, year
+                reform.id, reform.name, year
             )
             all_distributional.extend(distributional)
 
@@ -185,19 +176,7 @@ def generate_two_child_limit_validation(
     This creates data for comparing PolicyEngine estimates with
     Scottish Fiscal Commission projections on the two-child limit.
 
-    Comparison methodology:
-    - sim_without_limit: Current law (two-child limit removed from 2026+)
-    - sim_with_limit: Counterfactual with limit enforced (child_count=2)
-
     The cost is calculated as the UC gain from removing the limit.
-
-    Args:
-        output_dir: Directory for output CSV file.
-        dataset_path: Path to local enhanced_frs h5 file. If None, downloads from HF.
-        years: Years to analyze.
-
-    Returns:
-        DataFrame with cost and children affected by year.
     """
     output_dir = output_dir or DEFAULT_OUTPUT_DIR
     years = years or [2026, 2027, 2028, 2029, 2030]
@@ -217,9 +196,7 @@ def generate_two_child_limit_validation(
     else:
         dataset_obj = None
 
-    # Create simulations:
-    # - sim_without_limit: Current law (limit removed in PolicyEngine UK)
-    # - sim_with_limit: Counterfactual with limit enforced
+    # Create simulations
     sim_without_limit = Microsimulation(dataset=dataset_obj)
     sim_with_limit = Microsimulation(dataset=dataset_obj, reform=two_child_limit_reform)
 
@@ -234,7 +211,7 @@ def generate_two_child_limit_validation(
     save_csv(df, output_dir / "two_child_limit_validation.csv")
 
     print("Two-child limit validation data generated")
-    print(f"\n=== Summary ===")
+    print("\n=== Summary ===")
     r2026 = results[0]
     r2029 = results[3]
     print(f"2026-27: PE estimates {r2026['pe_affected_children']:,} children, £{r2026['pe_cost_millions']}m")
@@ -246,14 +223,10 @@ def generate_two_child_limit_validation(
 
 
 if __name__ == "__main__":
-    # Use local dataset if available
     local_dataset = DEFAULT_DATA_DIR / "enhanced_frs_2023_24.h5"
     dataset_path = local_dataset if local_dataset.exists() else None
     if dataset_path:
         print(f"Using local dataset: {dataset_path}")
 
-    # Generate main dashboard data
     generate_all_data(dataset_path=dataset_path)
-
-    # Generate validation data (two-child limit comparison)
     generate_two_child_limit_validation(dataset_path=dataset_path)

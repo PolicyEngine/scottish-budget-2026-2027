@@ -22,51 +22,66 @@ def test_reform_ids():
     assert reform_ids == expected_ids
 
 
-def test_all_reforms_have_simulation_modifier():
-    """Test that all reforms use simulation_modifier approach."""
+def test_all_reforms_have_apply_fn():
+    """Test that all reforms have an apply function."""
     from scottish_budget_data.reforms import get_scottish_budget_reforms
 
     reforms = get_scottish_budget_reforms()
     for reform in reforms:
-        assert reform.simulation_modifier is not None, (
-            f"Reform {reform.id} should have a simulation_modifier"
+        assert reform.apply_fn is not None, (
+            f"Reform {reform.id} should have an apply_fn"
+        )
+        assert callable(reform.apply_fn), (
+            f"Reform {reform.id} apply_fn should be callable"
         )
 
 
-def test_reform_class_has_required_fields():
-    """Test that Reform dataclass has all required fields."""
-    from scottish_budget_data.reforms import Reform
+def test_reform_definition_has_required_fields():
+    """Test that ReformDefinition dataclass has all required fields."""
+    from scottish_budget_data.reforms import ReformDefinition
 
-    reform = Reform(
+    def dummy_apply(sim):
+        pass
+
+    reform = ReformDefinition(
         id="test",
         name="Test Reform",
         description="A test reform",
+        apply_fn=dummy_apply,
     )
 
     assert reform.id == "test"
     assert reform.name == "Test Reform"
     assert reform.description == "A test reform"
-    assert reform.parameter_changes == {}
-    assert reform.simulation_modifier is None
+    assert reform.apply_fn == dummy_apply
 
 
-def test_constants_are_reasonable():
-    """Test that SCP and income tax constants have reasonable values."""
+def test_income_tax_thresholds_match_budget():
+    """Test that income tax thresholds match Scottish Budget 2026-27 values.
+
+    Source: Scottish Income Tax 2026-27 Technical Factsheet, Table 1
+    https://www.gov.scot/publications/scottish-income-tax-technical-factsheet/
+    """
     from scottish_budget_data.reforms import (
-        SCP_STANDARD_RATE,
-        SCP_BABY_RATE,
-        SCP_BABY_BOOST,
-        WEEKS_IN_YEAR,
-        INCOME_TAX_BASIC_INCREASE,
-        INCOME_TAX_INTERMEDIATE_INCREASE,
+        INCOME_TAX_BASIC_THRESHOLD,
+        INCOME_TAX_INTERMEDIATE_THRESHOLD,
     )
 
-    # SCP rates in £/week
-    assert 20 < SCP_STANDARD_RATE < 50  # ~£27.15
-    assert 30 < SCP_BABY_RATE < 60  # ~£40
-    assert SCP_BABY_BOOST == SCP_BABY_RATE - SCP_STANDARD_RATE
-    assert WEEKS_IN_YEAR == 52
+    # Thresholds are stored as amounts above personal allowance (£12,570)
+    # Basic rate starts at £16,537 total → £3,967 above PA
+    # Intermediate rate starts at £29,526 total → £16,956 above PA
+    PERSONAL_ALLOWANCE = 12_570
 
-    # Income tax threshold increases in £
-    assert 500 < INCOME_TAX_BASIC_INCREASE < 2000  # ~£1,069
-    assert 1000 < INCOME_TAX_INTERMEDIATE_INCREASE < 3000  # ~£1,665
+    assert INCOME_TAX_BASIC_THRESHOLD == 3_967
+    assert INCOME_TAX_BASIC_THRESHOLD + PERSONAL_ALLOWANCE == 16_537
+
+    assert INCOME_TAX_INTERMEDIATE_THRESHOLD == 16_956
+    assert INCOME_TAX_INTERMEDIATE_THRESHOLD + PERSONAL_ALLOWANCE == 29_526
+
+
+def test_scp_premium_amount():
+    """Test that SCP premium amount matches Scottish Budget 2026-27."""
+    from scottish_budget_data.reforms import SCP_PREMIUM_UNDER_ONE_AMOUNT
+
+    # £40/week for children under 1
+    assert SCP_PREMIUM_UNDER_ONE_AMOUNT == 40

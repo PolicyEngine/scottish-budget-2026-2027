@@ -1,166 +1,166 @@
 reform_id,reform_name,year,decile,value,absolute_change
-combined,Both policies combined,2026,1st,0.027876265,5.0910563
-combined,Both policies combined,2026,2nd,0.116975956,32.796513
-combined,Both policies combined,2026,3rd,0.048867416,15.814757
-combined,Both policies combined,2026,4th,0.05327182,22.895054
-combined,Both policies combined,2026,5th,0.08033494,35.92121
-combined,Both policies combined,2026,6th,0.047268894,24.209993
-combined,Both policies combined,2026,7th,0.053263985,27.796745
-combined,Both policies combined,2026,8th,0.055692986,41.189983
-combined,Both policies combined,2026,9th,0.054568764,42.691013
-combined,Both policies combined,2026,10th,0.041668244,49.150627
-combined,Both policies combined,2026,All,0.056223765,27.827303
-combined,Both policies combined,2027,1st,-0.016832273,-3.0282965
-combined,Both policies combined,2027,2nd,0.1483791,42.704918
-combined,Both policies combined,2027,3rd,0.1372254,44.506763
-combined,Both policies combined,2027,4th,0.027788281,12.229526
-combined,Both policies combined,2027,5th,0.10182017,46.632164
-combined,Both policies combined,2027,6th,0.16349795,85.59861
-combined,Both policies combined,2027,7th,0.05370415,28.359047
-combined,Both policies combined,2027,8th,0.05588539,41.999584
-combined,Both policies combined,2027,9th,0.054177225,43.25075
-combined,Both policies combined,2027,10th,0.041213036,49.250153
-combined,Both policies combined,2027,All,0.07309411,36.83033
-combined,Both policies combined,2028,1st,0.1013595,18.533234
-combined,Both policies combined,2028,2nd,-0.13322805,-38.960426
-combined,Both policies combined,2028,3rd,-0.007642711,-2.5002913
-combined,Both policies combined,2028,4th,0.08998409,40.568565
-combined,Both policies combined,2028,5th,0.079996,36.919304
-combined,Both policies combined,2028,6th,-0.06412944,-34.231453
-combined,Both policies combined,2028,7th,0.05313151,28.40447
-combined,Both policies combined,2028,8th,0.05607864,42.928993
-combined,Both policies combined,2028,9th,0.053256106,43.304028
-combined,Both policies combined,2028,10th,0.04048879,49.290466
-combined,Both policies combined,2028,All,0.032059856,16.443274
-combined,Both policies combined,2029,1st,0.38463873,75.46929
-combined,Both policies combined,2029,2nd,0.014316389,4.1080112
-combined,Both policies combined,2029,3rd,-0.1388883,-46.263664
-combined,Both policies combined,2029,4th,0.050549507,22.887733
-combined,Both policies combined,2029,5th,0.07782673,36.47832
-combined,Both policies combined,2029,6th,0.046496015,25.373278
-combined,Both policies combined,2029,7th,0.05284968,28.732925
-combined,Both policies combined,2029,8th,0.056070223,43.655514
-combined,Both policies combined,2029,9th,0.05257023,43.247707
-combined,Both policies combined,2029,10th,0.039994854,49.490696
-combined,Both policies combined,2029,All,0.052132916,27.204184
-combined,Both policies combined,2030,1st,0.08657951,16.979725
-combined,Both policies combined,2030,2nd,0.04431644,12.987073
-combined,Both policies combined,2030,3rd,0.31193408,105.3924
-combined,Both policies combined,2030,4th,0.05136752,23.822369
-combined,Both policies combined,2030,5th,0.07775555,37.02606
-combined,Both policies combined,2030,6th,0.04646413,25.93041
-combined,Both policies combined,2030,7th,0.052276235,28.775059
-combined,Both policies combined,2030,8th,0.05562111,44.352383
-combined,Both policies combined,2030,9th,0.05215191,43.417084
-combined,Both policies combined,2030,10th,0.039159168,49.73846
-combined,Both policies combined,2030,All,0.07483599,39.73943
-scp_baby_boost,SCP Premium for under-ones (£40/week),2026,1st,0.021711309,3.965147
-scp_baby_boost,SCP Premium for under-ones (£40/week),2026,2nd,0.08770072,24.588623
-scp_baby_boost,SCP Premium for under-ones (£40/week),2026,3rd,0.014758743,4.7763104
-scp_baby_boost,SCP Premium for under-ones (£40/week),2026,4th,0.013585466,5.838734
-scp_baby_boost,SCP Premium for under-ones (£40/week),2026,5th,0.029642155,13.254285
+combined,Both policies combined,2026,1st,0.02788172799984689,5.092053741446921
+combined,Both policies combined,2026,2nd,0.11699648939135818,32.80226765486355
+combined,Both policies combined,2026,3rd,0.048889229410372596,15.82181723375847
+combined,Both policies combined,2026,4th,0.05329187887171042,22.903678864656868
+combined,Both policies combined,2026,5th,0.08035860804052677,35.93179446086443
+combined,Both policies combined,2026,6th,0.04728877373706325,24.220175504412868
+combined,Both policies combined,2026,7th,0.05328620000347637,27.80833964332352
+combined,Both policies combined,2026,8th,0.055716846769074437,41.20762990733766
+combined,Both policies combined,2026,9th,0.05458837997148168,42.70636473206536
+combined,Both policies combined,2026,10th,0.04168218193250587,49.167065651411285
+combined,Both policies combined,2026,All,0.05624378177242041,27.837211323855232
+combined,Both policies combined,2027,1st,0.027589241048520747,5.1063686919043265
+combined,Both policies combined,2027,2nd,0.11476052635520195,32.532429202686586
+combined,Both policies combined,2027,3rd,0.04662113591629484,15.22233211588789
+combined,Both policies combined,2027,4th,0.048497523865023026,21.28217953002208
+combined,Both policies combined,2027,5th,0.07255158279927394,33.23543115840847
+combined,Both policies combined,2027,6th,0.04231947418874229,22.156394896308765
+combined,Both policies combined,2027,7th,0.04719989334089802,24.924406866015044
+combined,Both policies combined,2027,8th,0.049584115486308776,37.26398139274596
+combined,Both policies combined,2027,9th,0.0471434747346532,37.63557345757594
+combined,Both policies combined,2027,10th,0.03576040210513456,42.73417783974662
+combined,Both policies combined,2027,All,0.05088684017853335,25.631813330456325
+combined,Both policies combined,2028,1st,0.0269866803111944,5.089952396267383
+combined,Both policies combined,2028,2nd,0.11644407273405835,33.38743397306578
+combined,Both policies combined,2028,3rd,0.042590777682596025,14.084080877542284
+combined,Both policies combined,2028,4th,0.043655805359147544,19.571315965414254
+combined,Both policies combined,2028,5th,0.06773622852913125,31.255343250717367
+combined,Both policies combined,2028,6th,0.036486385396454254,19.454242277771602
+combined,Both policies combined,2028,7th,0.039954075721362434,21.359723495736443
+combined,Both policies combined,2028,8th,0.04313866157610131,33.02325328479301
+combined,Both policies combined,2028,9th,0.03918022426118143,31.85853799090365
+combined,Both policies combined,2028,10th,0.02958180479591616,36.01246393658387
+combined,Both policies combined,2028,All,0.04505844630205844,23.09911672002166
+combined,Both policies combined,2029,1st,0.025257733907926513,5.036348109099813
+combined,Both policies combined,2029,2nd,0.11960080005520557,33.91448941811194
+combined,Both policies combined,2029,3rd,0.03850124645847837,12.984748158317842
+combined,Both policies combined,2029,4th,0.039712155194599134,17.850870303488378
+combined,Both policies combined,2029,5th,0.06011546132371341,28.176804371478333
+combined,Both policies combined,2029,6th,0.030109487286042392,16.412464830883295
+combined,Both policies combined,2029,7th,0.03294875913660589,17.913338681892167
+combined,Both policies combined,2029,8th,0.035865545201613905,27.924424793832156
+combined,Both policies combined,2029,9th,0.031464406115823976,25.8846763582374
+combined,Both policies combined,2029,10th,0.02363127166341729,29.24196328565652
+combined,Both policies combined,2029,All,0.03901746299394348,20.35047812211749
+combined,Both policies combined,2030,1st,0.025096852588544757,5.029152998322976
+combined,Both policies combined,2030,2nd,0.11613251448019382,33.4909488408769
+combined,Both policies combined,2030,3rd,0.03445990749883021,11.71331745718044
+combined,Both policies combined,2030,4th,0.035036648266953595,16.16156498375445
+combined,Both policies combined,2030,5th,0.053504445996340716,25.478012927739428
+combined,Both policies combined,2030,6th,0.02430998680253483,13.551525123609272
+combined,Both policies combined,2030,7th,0.02561001775319715,14.096840198061768
+combined,Both policies combined,2030,8th,0.02792731426907255,22.26929489576604
+combined,Both policies combined,2030,9th,0.024003975020180018,19.983595459915033
+combined,Both policies combined,2030,10th,0.01772285360767298,22.51088155418238
+combined,Both policies combined,2030,All,0.03289572423043779,17.463325353065386
+scp_baby_boost,SCP Premium for under-ones (£40/week),2026,1st,0.021711309092712523,3.965147091954432
+scp_baby_boost,SCP Premium for under-ones (£40/week),2026,2nd,0.08770071884523072,24.588622000975047
+scp_baby_boost,SCP Premium for under-ones (£40/week),2026,3rd,0.014758743378513661,4.776310511559084
+scp_baby_boost,SCP Premium for under-ones (£40/week),2026,4th,0.01358546404118573,5.838734010030126
+scp_baby_boost,SCP Premium for under-ones (£40/week),2026,5th,0.029642157147211794,13.254285059954055
 scp_baby_boost,SCP Premium for under-ones (£40/week),2026,6th,0.0,0.0
 scp_baby_boost,SCP Premium for under-ones (£40/week),2026,7th,0.0,0.0
 scp_baby_boost,SCP Premium for under-ones (£40/week),2026,8th,0.0,0.0
 scp_baby_boost,SCP Premium for under-ones (£40/week),2026,9th,0.0,0.0
 scp_baby_boost,SCP Premium for under-ones (£40/week),2026,10th,0.0,0.0
-scp_baby_boost,SCP Premium for under-ones (£40/week),2026,All,0.010521691,5.2075896
-scp_baby_boost,SCP Premium for under-ones (£40/week),2027,1st,-0.022917803,-4.123145
-scp_baby_boost,SCP Premium for under-ones (£40/week),2027,2nd,0.119549096,34.407368
-scp_baby_boost,SCP Premium for under-ones (£40/week),2027,3rd,0.101998225,33.08142
-scp_baby_boost,SCP Premium for under-ones (£40/week),2027,4th,-0.010342444,-4.5516734
-scp_baby_boost,SCP Premium for under-ones (£40/week),2027,5th,0.05128049,23.48572
-scp_baby_boost,SCP Premium for under-ones (£40/week),2027,6th,0.11586831,60.66233
+scp_baby_boost,SCP Premium for under-ones (£40/week),2026,All,0.010521690372723923,5.207589339828356
+scp_baby_boost,SCP Premium for under-ones (£40/week),2027,1st,0.021527088144826456,3.984352042786638
+scp_baby_boost,SCP Premium for under-ones (£40/week),2027,2nd,0.0877237575370041,24.868018839797415
+scp_baby_boost,SCP Premium for under-ones (£40/week),2027,3rd,0.014663270734470855,4.787724980061661
+scp_baby_boost,SCP Premium for under-ones (£40/week),2027,4th,0.013225864060268858,5.803908961490543
+scp_baby_boost,SCP Premium for under-ones (£40/week),2027,5th,0.027617930567599105,12.65160310363802
+scp_baby_boost,SCP Premium for under-ones (£40/week),2027,6th,0.0,0.0
 scp_baby_boost,SCP Premium for under-ones (£40/week),2027,7th,0.0,0.0
 scp_baby_boost,SCP Premium for under-ones (£40/week),2027,8th,0.0,0.0
 scp_baby_boost,SCP Premium for under-ones (£40/week),2027,9th,0.0,0.0
-scp_baby_boost,SCP Premium for under-ones (£40/week),2027,10th,-3.0858307e-06,-0.0036876106
-scp_baby_boost,SCP Premium for under-ones (£40/week),2027,All,0.0273238,13.767794
-scp_baby_boost,SCP Premium for under-ones (£40/week),2028,1st,0.09491865,17.355545
-scp_baby_boost,SCP Premium for under-ones (£40/week),2028,2nd,-0.16331682,-47.75941
-scp_baby_boost,SCP Premium for under-ones (£40/week),2028,3rd,-0.04196831,-13.729815
-scp_baby_boost,SCP Premium for under-ones (£40/week),2028,4th,0.051688094,23.303139
-scp_baby_boost,SCP Premium for under-ones (£40/week),2028,5th,0.028929973,13.351599
-scp_baby_boost,SCP Premium for under-ones (£40/week),2028,6th,-0.11151797,-59.526833
+scp_baby_boost,SCP Premium for under-ones (£40/week),2027,10th,0.0,0.0
+scp_baby_boost,SCP Premium for under-ones (£40/week),2027,All,0.010338605877017218,5.20757852142396
+scp_baby_boost,SCP Premium for under-ones (£40/week),2028,1st,0.021037728569863145,3.967921793692394
+scp_baby_boost,SCP Premium for under-ones (£40/week),2028,2nd,0.09063001800217517,25.985897529847822
+scp_baby_boost,SCP Premium for under-ones (£40/week),2028,3rd,0.01422471184653462,4.703881990588627
+scp_baby_boost,SCP Premium for under-ones (£40/week),2028,4th,0.012237905307349459,5.486370244565181
+scp_baby_boost,SCP Premium for under-ones (£40/week),2028,5th,0.028666845579752707,13.227664397127487
+scp_baby_boost,SCP Premium for under-ones (£40/week),2028,6th,0.0,0.0
 scp_baby_boost,SCP Premium for under-ones (£40/week),2028,7th,0.0,0.0
 scp_baby_boost,SCP Premium for under-ones (£40/week),2028,8th,0.0,0.0
 scp_baby_boost,SCP Premium for under-ones (£40/week),2028,9th,0.0,0.0
-scp_baby_boost,SCP Premium for under-ones (£40/week),2028,10th,3.0196052e-06,0.0036760238
-scp_baby_boost,SCP Premium for under-ones (£40/week),2028,All,-0.013472419,-6.909909
-scp_baby_boost,SCP Premium for under-ones (£40/week),2029,1st,0.37800717,74.16812
-scp_baby_boost,SCP Premium for under-ones (£40/week),2029,2nd,-0.017793607,-5.10578
-scp_baby_boost,SCP Premium for under-ones (£40/week),2029,3rd,-0.17310888,-57.662533
-scp_baby_boost,SCP Premium for under-ones (£40/week),2029,4th,0.012053911,5.4577527
-scp_baby_boost,SCP Premium for under-ones (£40/week),2029,5th,0.02717593,12.737683
+scp_baby_boost,SCP Premium for under-ones (£40/week),2028,10th,0.0,0.0
+scp_baby_boost,SCP Premium for under-ones (£40/week),2028,All,0.010158244791253972,5.207602599759593
+scp_baby_boost,SCP Premium for under-ones (£40/week),2029,1st,0.019664633466376914,3.92109363158061
+scp_baby_boost,SCP Premium for under-ones (£40/week),2029,2nd,0.09537358486355009,27.044521718326823
+scp_baby_boost,SCP Premium for under-ones (£40/week),2029,3rd,0.013776051182693953,4.64604582130319
+scp_baby_boost,SCP Premium for under-ones (£40/week),2029,4th,0.012271179022344867,5.5159742432855055
+scp_baby_boost,SCP Premium for under-ones (£40/week),2029,5th,0.02715785779949766,12.729198604070595
 scp_baby_boost,SCP Premium for under-ones (£40/week),2029,6th,0.0,0.0
 scp_baby_boost,SCP Premium for under-ones (£40/week),2029,7th,0.0,0.0
 scp_baby_boost,SCP Premium for under-ones (£40/week),2029,8th,0.0,0.0
 scp_baby_boost,SCP Premium for under-ones (£40/week),2029,9th,0.0,0.0
-scp_baby_boost,SCP Premium for under-ones (£40/week),2029,10th,3.2460641e-06,0.0040167663
-scp_baby_boost,SCP Premium for under-ones (£40/week),2029,All,0.0068539106,3.5765316
-scp_baby_boost,SCP Premium for under-ones (£40/week),2030,1st,0.0795733,15.605688
-scp_baby_boost,SCP Premium for under-ones (£40/week),2030,2nd,0.012600743,3.6926877
-scp_baby_boost,SCP Premium for under-ones (£40/week),2030,3rd,0.27862287,94.13762
-scp_baby_boost,SCP Premium for under-ones (£40/week),2030,4th,0.011174475,5.1823106
-scp_baby_boost,SCP Premium for under-ones (£40/week),2030,5th,0.02639557,12.569185
+scp_baby_boost,SCP Premium for under-ones (£40/week),2029,10th,0.0,0.0
+scp_baby_boost,SCP Premium for under-ones (£40/week),2029,All,0.00998435923752605,5.207578059551831
+scp_baby_boost,SCP Premium for under-ones (£40/week),2030,1st,0.019632713581473355,3.9341953348584475
+scp_baby_boost,SCP Premium for under-ones (£40/week),2030,2nd,0.0949235653259194,27.374592588074798
+scp_baby_boost,SCP Premium for under-ones (£40/week),2030,3rd,0.013361167282246624,4.541613873477758
+scp_baby_boost,SCP Premium for under-ones (£40/week),2030,4th,0.012308920016052221,5.677809395566387
+scp_baby_boost,SCP Premium for under-ones (£40/week),2030,5th,0.026395676054693916,12.569224168845858
 scp_baby_boost,SCP Premium for under-ones (£40/week),2030,6th,0.0,0.0
 scp_baby_boost,SCP Premium for under-ones (£40/week),2030,7th,0.0,0.0
 scp_baby_boost,SCP Premium for under-ones (£40/week),2030,8th,0.0,0.0
 scp_baby_boost,SCP Premium for under-ones (£40/week),2030,9th,0.0,0.0
-scp_baby_boost,SCP Premium for under-ones (£40/week),2030,10th,-3.2344908e-06,-0.0041083246
-scp_baby_boost,SCP Premium for under-ones (£40/week),2030,All,0.02970861,15.775875
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,1st,0.006165031,1.1259227
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,2nd,0.029275432,8.207944
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,3rd,0.034108672,11.038446
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,4th,0.03968635,17.056318
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,5th,0.050692774,22.666924
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,6th,0.047268894,24.209993
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,7th,0.053263985,27.796745
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,8th,0.055692986,41.189983
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,9th,0.054568764,42.691013
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,10th,0.041668244,49.150627
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,All,0.04570209,22.619722
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,1st,0.006085431,1.0948308
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,2nd,0.028829727,8.29747
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,3rd,0.035226896,11.425256
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,4th,0.03813073,16.7812
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,5th,0.050539378,23.146303
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,6th,0.04762964,24.936281
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,7th,0.05370415,28.359047
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,8th,0.05588539,41.999584
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,9th,0.054177225,43.25075
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,10th,0.041216128,49.253845
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,All,0.04577024,23.062504
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,1st,0.006440697,1.177659
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,2nd,0.030089071,8.799071
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,3rd,0.0343256,11.229523
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,4th,0.038295887,17.265377
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,5th,0.051066022,23.567705
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,6th,0.047389157,25.295712
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,7th,0.05313151,28.40447
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,8th,0.05607864,42.928993
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,9th,0.053256106,43.304028
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,10th,0.04048577,49.28679
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,All,0.045532327,23.35321
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,1st,0.006631495,1.3011539
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,2nd,0.032109365,9.21361
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,3rd,0.034220587,11.39887
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,4th,0.03849559,17.42998
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,5th,0.050650805,23.740639
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,6th,0.046496015,25.373278
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,7th,0.05284968,28.732925
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,8th,0.056070223,43.655514
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,9th,0.05257023,43.247707
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,10th,0.039991606,49.48668
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,All,0.045278974,23.627634
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,1st,0.007006195,1.3740349
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,2nd,0.03171591,9.294448
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,3rd,0.033311207,11.254775
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,4th,0.040193044,18.640055
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,5th,0.051359985,24.456875
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,6th,0.04646413,25.93041
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,7th,0.052276235,28.775059
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,8th,0.05562111,44.352383
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,9th,0.05215191,43.417084
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,10th,0.0391624,49.742565
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,All,0.04512738,23.963554
+scp_baby_boost,SCP Premium for under-ones (£40/week),2030,10th,0.0,0.0
+scp_baby_boost,SCP Premium for under-ones (£40/week),2030,All,0.009809561350018628,5.20759355307712
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,1st,0.006170499451726904,1.1269213593911647
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,2nd,0.029295725073319023,8.213632904691996
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,3rd,0.03413048602013209,11.045506718404276
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,4th,0.039706319329665306,17.064903810455267
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,5th,0.050716797404596704,22.677664341027644
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,6th,0.04728877373706325,24.220175504412868
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,7th,0.05328620000347637,27.80833964332352
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,8th,0.055716846769074437,41.20762990733766
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,9th,0.05458837997148168,42.70636473206536
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,10th,0.04168218193250587,49.167065651411285
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,All,0.04572210677780232,22.629629595243053
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,1st,0.006061993227053261,1.1219870952854845
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,2nd,0.02703659023725392,7.664359738583936
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,3rd,0.03195786517017314,10.434607132022096
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,4th,0.03527175270545719,15.47831133616837
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,5th,0.04493333653146955,20.583683434459843
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,6th,0.04231947418874229,22.156394896308765
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,7th,0.04719989334089802,24.924406866015044
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,8th,0.049584115486308776,37.26398139274596
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,9th,0.0471434747346532,37.63557345757594
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,10th,0.03576040210513456,42.73417783974662
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,All,0.0405482016057397,20.424218340097855
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,1st,0.005948795699597994,1.1220011715747706
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,2nd,0.02581452225605926,7.401670494116333
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,3rd,0.028366065836061393,9.380198886953655
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,4th,0.03141799607572812,14.084988769297256
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,5th,0.03906939022451909,18.027682210538146
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,6th,0.036486385396454254,19.454242277771602
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,7th,0.039954075721362434,21.359723495736443
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,8th,0.04313866157610131,33.02325328479301
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,9th,0.03918022426118143,31.85853799090365
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,10th,0.02958180479591616,36.01246393658387
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,All,0.03490022904666866,17.891528236464314
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,1st,0.005593027502923255,1.1152399336842653
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,2nd,0.024226719399188253,6.8698271108561535
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,3rd,0.024725195264838525,8.338702333323093
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,4th,0.027440900000751403,12.334861820620262
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,5th,0.03295790691021621,15.447747967896527
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,6th,0.030109487286042392,16.412464830883295
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,7th,0.03294875913660589,17.913338681892167
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,8th,0.035865545201613905,27.924424793832156
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,9th,0.031464406115823976,25.8846763582374
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,10th,0.02363127166341729,29.24196328565652
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,All,0.02903308564492335,15.14289061608873
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,1st,0.005464220515900898,1.0949739970016843
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,2nd,0.021209046506428488,6.116384327764793
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,3rd,0.021098740216583593,7.1717035837026835
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,4th,0.022727728223930186,10.483755575746905
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,5th,0.027108769805062837,12.908788693854342
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,6th,0.02430998680253483,13.551525123609272
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,7th,0.02561001775319715,14.096840198061768
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,8th,0.02792731426907255,22.26929489576604
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,9th,0.024003975020180018,19.983595459915033
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,10th,0.01772285360767298,22.51088155418238
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,All,0.02308617240735359,12.255736857543905

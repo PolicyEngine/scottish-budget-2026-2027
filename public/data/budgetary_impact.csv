@@ -1,16 +1,16 @@
 reform_id,reform_name,year,value
-combined,Both policies combined,2026,75.90436819803008
-combined,Both policies combined,2027,77.39752702866353
-combined,Both policies combined,2028,78.50610686763515
-combined,Both policies combined,2029,79.60929454654335
-combined,Both policies combined,2030,80.89886184136122
-scp_baby_boost,SCP Premium for under-ones (£40/week),2026,14.204698264011725
-scp_baby_boost,SCP Premium for under-ones (£40/week),2027,14.257256028155657
-scp_baby_boost,SCP Premium for under-ones (£40/week),2028,14.31428431652708
-scp_baby_boost,SCP Premium for under-ones (£40/week),2029,14.377267258111075
-scp_baby_boost,SCP Premium for under-ones (£40/week),2030,14.441965513571422
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,61.69966993401835
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,63.140271000507866
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,64.19182255110807
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,65.23202728843229
-income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,66.4568963277898
+combined,Both policies combined,2026,75.93138069488575
+combined,Both policies combined,2027,70.17442048903071
+combined,Both policies combined,2028,63.49339769324206
+combined,Both policies combined,2029,56.18424159358479
+combined,Both policies combined,2030,48.43026053980683
+scp_baby_boost,SCP Premium for under-ones (£40/week),2026,14.20470765066467
+scp_baby_boost,SCP Premium for under-ones (£40/week),2027,14.257235732043458
+scp_baby_boost,SCP Premium for under-ones (£40/week),2028,14.314330149615653
+scp_baby_boost,SCP Premium for under-ones (£40/week),2029,14.377245687280581
+scp_baby_boost,SCP Premium for under-ones (£40/week),2030,14.441986704248915
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2026,61.72669380528605
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2027,55.917139668568396
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2028,49.17910634535437
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2029,41.806969826172875
+income_tax_threshold_uplift,Income tax threshold uplift (7.4%),2030,33.98828786145117
