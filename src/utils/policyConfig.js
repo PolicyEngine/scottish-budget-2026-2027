@@ -6,11 +6,11 @@
  * - All Scottish Budget policies are costs to treasury, so all use teal spectrum
  */
 
-// Policy colors by display name - teal spectrum from darkest to lightest
+// Policy colors by display name - teal spectrum from darkest (bottom/largest) to lightest (top/smallest)
 export const POLICY_COLORS = {
-  "SCP inflation adjustment": "#0D9488",      // Teal 600 (darkest - base SCP)
-  "SCP Premium for under-ones": "#14B8A6",    // Teal 500 (medium - baby boost)
-  "Income tax threshold uplift": "#2DD4BF",   // Teal 400 (lightest - tax relief)
+  "Income tax threshold uplift": "#0D9488",   // Teal 600 (darkest - largest, bottom)
+  "SCP inflation adjustment": "#14B8A6",      // Teal 500 (medium)
+  "SCP Premium for under-ones": "#2DD4BF",    // Teal 400 (lightest - smallest, top)
 };
 
 export const POLICY_IDS = {
@@ -25,7 +25,7 @@ export const POLICY_NAMES = {
   income_tax_threshold_uplift: "Income tax threshold uplift",
 };
 
-// Order: bottom to top in stacked chart
-export const ALL_POLICY_IDS = ["scp_inflation", "scp_baby_boost", "income_tax_threshold_uplift"];
+// Order: bottom to top in stacked chart (largest to smallest)
+export const ALL_POLICY_IDS = ["income_tax_threshold_uplift", "scp_inflation", "scp_baby_boost"];
 
-export const ALL_POLICY_NAMES = ["SCP inflation adjustment", "SCP Premium for under-ones", "Income tax threshold uplift"];
+export const ALL_POLICY_NAMES = ["Income tax threshold uplift", "SCP inflation adjustment", "SCP Premium for under-ones"];

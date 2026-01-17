@@ -6,14 +6,14 @@ import ValidationTab from "./components/ValidationTab";
 import "./App.css";
 
 const POLICIES = [
+  { id: "income_tax_threshold_uplift", name: "Income tax threshold uplift" },
   { id: "scp_inflation", name: "SCP inflation adjustment" },
   { id: "scp_baby_boost", name: "SCP Premium for under-ones" },
-  { id: "income_tax_threshold_uplift", name: "Income tax threshold uplift" },
 ];
 
 function App() {
   const [activeTab, setActiveTab] = useState("budget");
-  const [selectedPolicies, setSelectedPolicies] = useState(["scp_inflation", "scp_baby_boost", "income_tax_threshold_uplift"]);
+  const [selectedPolicies, setSelectedPolicies] = useState(["income_tax_threshold_uplift", "scp_inflation", "scp_baby_boost"]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
 

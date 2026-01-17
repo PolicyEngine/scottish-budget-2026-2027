@@ -82,6 +82,24 @@ export default function BudgetBarChart({
       {title && <h3 className="chart-title">{title}</h3>}
       {description && <p className="chart-description">{description}</p>}
 
+      {/* Custom legend with correct order */}
+      {stacked && (
+        <div className="custom-legend" style={{ display: "flex", justifyContent: "center", gap: "24px", marginBottom: "12px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+            <span style={{ width: "12px", height: "12px", backgroundColor: "#0D9488", display: "inline-block" }}></span>
+            <span style={{ fontSize: "14px", color: "#374151" }}>Income tax threshold uplift</span>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+            <span style={{ width: "12px", height: "12px", backgroundColor: "#14B8A6", display: "inline-block" }}></span>
+            <span style={{ fontSize: "14px", color: "#374151" }}>SCP inflation adjustment</span>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+            <span style={{ width: "12px", height: "12px", backgroundColor: "#2DD4BF", display: "inline-block" }}></span>
+            <span style={{ fontSize: "14px", color: "#374151" }}>SCP Premium for under-ones</span>
+          </div>
+        </div>
+      )}
+
       <ResponsiveContainer width="100%" height={300}>
         <ComposedChart
           data={data}
@@ -127,17 +145,6 @@ export default function BudgetBarChart({
               padding: "8px 12px",
             }}
           />
-          {stacked && activePolicies.length > 1 && (
-            <Legend
-              verticalAlign="top"
-              height={36}
-              payload={activePolicies.map(name => ({
-                value: name,
-                type: "rect",
-                color: POLICY_COLORS[name],
-              }))}
-            />
-          )}
           {stacked ? (
             <>
               {ALL_POLICY_NAMES.map((policyName) => (
@@ -150,6 +157,7 @@ export default function BudgetBarChart({
                   radius={[2, 2, 0, 0]}
                   stroke="none"
                   hide={!activePolicies.includes(policyName)}
+                  legendType="none"
                 />
               ))}
             </>
