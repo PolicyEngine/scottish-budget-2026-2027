@@ -54,13 +54,24 @@ def test_reform_definition_has_required_fields():
     assert reform.reform_class == SCPBabyBoostReform
 
 
-def test_income_tax_constants_are_reasonable():
-    """Test that income tax constants have reasonable values."""
+def test_income_tax_thresholds_match_budget():
+    """Test that income tax thresholds match Scottish Budget 2026-27 values.
+
+    Source: Scottish Income Tax 2026-27 Technical Factsheet, Table 1
+    https://www.gov.scot/publications/scottish-income-tax-technical-factsheet/
+    """
     from scottish_budget_data.reforms import (
-        INCOME_TAX_BASIC_INCREASE,
-        INCOME_TAX_INTERMEDIATE_INCREASE,
+        INCOME_TAX_BASIC_THRESHOLD,
+        INCOME_TAX_INTERMEDIATE_THRESHOLD,
     )
 
-    # Income tax threshold increases in £
-    assert 500 < INCOME_TAX_BASIC_INCREASE < 2000  # ~£1,069
-    assert 1000 < INCOME_TAX_INTERMEDIATE_INCREASE < 3000  # ~£1,665
+    # Thresholds are stored as amounts above personal allowance (£12,570)
+    # Basic rate starts at £16,537 total → £3,967 above PA
+    # Intermediate rate starts at £29,526 total → £16,956 above PA
+    PERSONAL_ALLOWANCE = 12_570
+
+    assert INCOME_TAX_BASIC_THRESHOLD == 3_967
+    assert INCOME_TAX_BASIC_THRESHOLD + PERSONAL_ALLOWANCE == 16_537
+
+    assert INCOME_TAX_INTERMEDIATE_THRESHOLD == 16_956
+    assert INCOME_TAX_INTERMEDIATE_THRESHOLD + PERSONAL_ALLOWANCE == 29_526

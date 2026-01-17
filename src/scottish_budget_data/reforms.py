@@ -9,10 +9,17 @@ from typing import Optional, Type, Union
 from policyengine_core.reforms import Reform as PEReform
 
 
-# Constants for income tax threshold uplift
-# The announced increases for 2026-27 (absolute amounts above baseline)
-INCOME_TAX_BASIC_INCREASE = 1_069  # Basic rate threshold increase
-INCOME_TAX_INTERMEDIATE_INCREASE = 1_665  # Intermediate rate threshold increase
+# Scottish Budget 2026-27 income tax thresholds (absolute values)
+# Source: Scottish Income Tax 2026-27 Technical Factsheet, Table 1
+# https://www.gov.scot/publications/scottish-income-tax-technical-factsheet/
+#
+# Total taxable income thresholds:
+#   Basic rate (20%): £16,538 - £29,526
+#   Intermediate rate (21%): £29,527 - £43,662
+#
+# PolicyEngine stores thresholds as amounts ABOVE personal allowance (£12,570)
+INCOME_TAX_BASIC_THRESHOLD = 3_967  # £16,537 total - £12,570 PA
+INCOME_TAX_INTERMEDIATE_THRESHOLD = 16_956  # £29,526 total - £12,570 PA
 
 # Default years for microsim analysis
 DEFAULT_YEARS = [2026, 2027, 2028, 2029, 2030]
@@ -24,11 +31,13 @@ DEFAULT_YEARS = [2026, 2027, 2028, 2029, 2030]
 
 
 class IncomeTaxThresholdUpliftReform(PEReform):
-    """Reform that increases Scottish income tax thresholds by fixed amounts.
+    """Reform that sets Scottish income tax thresholds to Budget 2026-27 values.
 
-    From Scottish Budget 2026-27:
-    - Basic rate (20%) threshold: +£1,069 above baseline
-    - Intermediate rate (21%) threshold: +£1,665 above baseline
+    From Scottish Income Tax 2026-27 Technical Factsheet (Table 1):
+    - Basic rate (20%): £16,538 - £29,526 (starts at £16,537 total)
+    - Intermediate rate (21%): £29,527 - £43,662 (starts at £29,526 total)
+
+    Source: https://www.gov.scot/publications/scottish-income-tax-technical-factsheet/
     """
 
     def apply(self):
@@ -41,18 +50,15 @@ class IncomeTaxThresholdUpliftReform(PEReform):
         for year in DEFAULT_YEARS:
             period = f"{year}-01-01"
 
-            # Get baseline thresholds
-            baseline_basic = scotland_rates.brackets[1].threshold(period)
-            baseline_intermediate = scotland_rates.brackets[2].threshold(period)
-
-            # Apply the announced increases
+            # Set thresholds to Scottish Budget 2026-27 values
+            # (as amounts above personal allowance, per PolicyEngine format)
             scotland_rates.brackets[1].threshold.update(
                 period=period,
-                value=baseline_basic + INCOME_TAX_BASIC_INCREASE,
+                value=INCOME_TAX_BASIC_THRESHOLD,
             )
             scotland_rates.brackets[2].threshold.update(
                 period=period,
-                value=baseline_intermediate + INCOME_TAX_INTERMEDIATE_INCREASE,
+                value=INCOME_TAX_INTERMEDIATE_THRESHOLD,
             )
 
         return parameters
