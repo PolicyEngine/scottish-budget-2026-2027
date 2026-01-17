@@ -3,12 +3,12 @@
 import pytest
 
 
-def test_get_scottish_budget_reforms_returns_three_reforms():
-    """Test that get_scottish_budget_reforms returns exactly 3 reforms."""
+def test_get_scottish_budget_reforms_returns_four_reforms():
+    """Test that get_scottish_budget_reforms returns exactly 4 reforms."""
     from scottish_budget_data.reforms import get_scottish_budget_reforms
 
     reforms = get_scottish_budget_reforms()
-    assert len(reforms) == 3
+    assert len(reforms) == 4
 
 
 def test_reform_ids():
@@ -18,7 +18,7 @@ def test_reform_ids():
     reforms = get_scottish_budget_reforms()
     reform_ids = {r.id for r in reforms}
 
-    expected_ids = {"combined", "scp_baby_boost", "income_tax_threshold_uplift"}
+    expected_ids = {"combined", "scp_inflation", "scp_baby_boost", "income_tax_threshold_uplift"}
     assert reform_ids == expected_ids
 
 
@@ -85,3 +85,19 @@ def test_scp_premium_amount():
 
     # £40/week for children under 1
     assert SCP_PREMIUM_UNDER_ONE_AMOUNT == 40
+
+
+def test_scp_inflation_rate():
+    """Test that SCP inflation rate matches Scottish Budget 2026-27.
+
+    Source: Scottish Budget 2026-27
+    https://www.gov.scot/news/a-budget-to-tackle-child-poverty/
+    """
+    from scottish_budget_data.reforms import SCP_BASELINE_RATE, SCP_INFLATION_RATE
+
+    # £27.15/week baseline → £28.20/week inflation-adjusted (+3.9%)
+    assert SCP_BASELINE_RATE == 27.15
+    assert SCP_INFLATION_RATE == 28.20
+    # Verify the increase is approximately 3.9%
+    increase_pct = (SCP_INFLATION_RATE - SCP_BASELINE_RATE) / SCP_BASELINE_RATE * 100
+    assert 3.8 < increase_pct < 4.0

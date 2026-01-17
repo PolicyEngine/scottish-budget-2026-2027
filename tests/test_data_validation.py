@@ -39,9 +39,9 @@ def test_budgetary_impact_has_required_columns(budgetary_impact):
 
 
 def test_budgetary_impact_has_all_reforms(budgetary_impact):
-    """Test that budgetary impact includes all three reforms."""
+    """Test that budgetary impact includes all four reforms."""
     reform_ids = set(budgetary_impact["reform_id"].unique())
-    expected = {"combined", "scp_baby_boost", "income_tax_threshold_uplift"}
+    expected = {"combined", "scp_inflation", "scp_baby_boost", "income_tax_threshold_uplift"}
     assert reform_ids == expected
 
 
@@ -50,6 +50,22 @@ def test_budgetary_impact_has_all_years(budgetary_impact):
     years = set(budgetary_impact["year"].unique())
     expected = {2026, 2027, 2028, 2029, 2030}
     assert years == expected
+
+
+def test_scp_inflation_cost_in_expected_range(budgetary_impact):
+    """Test SCP inflation adjustment cost is in expected range (£10-25M for 2026).
+
+    Based on PolicyEngine microsimulation of:
+    - SCP-eligible children in Scotland
+    - £1.05/week increase (£27.15 → £28.20)
+    - Annual per child: £1.05 × 52 = £54.60
+    """
+    scp_inflation_2026 = budgetary_impact[
+        (budgetary_impact["reform_id"] == "scp_inflation")
+        & (budgetary_impact["year"] == 2026)
+    ]["value"].iloc[0]
+
+    assert 10 < scp_inflation_2026 < 25, f"SCP inflation cost £{scp_inflation_2026:.1f}M outside expected range"
 
 
 def test_scp_baby_boost_cost_in_expected_range(budgetary_impact):
@@ -95,7 +111,12 @@ def test_combined_is_sum_of_individual_reforms(budgetary_impact):
             & (budgetary_impact["year"] == year)
         ]["value"].iloc[0]
 
-        scp = budgetary_impact[
+        scp_inflation = budgetary_impact[
+            (budgetary_impact["reform_id"] == "scp_inflation")
+            & (budgetary_impact["year"] == year)
+        ]["value"].iloc[0]
+
+        scp_baby_boost = budgetary_impact[
             (budgetary_impact["reform_id"] == "scp_baby_boost")
             & (budgetary_impact["year"] == year)
         ]["value"].iloc[0]
@@ -105,7 +126,7 @@ def test_combined_is_sum_of_individual_reforms(budgetary_impact):
             & (budgetary_impact["year"] == year)
         ]["value"].iloc[0]
 
-        individual_sum = scp + tax
+        individual_sum = scp_inflation + scp_baby_boost + tax
         # Allow 5% difference due to interaction effects
         assert abs(combined - individual_sum) / individual_sum < 0.05, (
             f"Year {year}: Combined (£{combined:.1f}M) differs from sum "

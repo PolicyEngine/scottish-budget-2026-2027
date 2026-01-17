@@ -12,10 +12,12 @@ from .reforms import (
     apply_combined_reform,
     apply_income_tax_threshold_reform,
     apply_scp_baby_boost_reform,
+    apply_scp_inflation_reform,
 )
 
 # Map reform IDs to their apply functions
 REFORM_APPLY_FNS = {
+    "scp_inflation": apply_scp_inflation_reform,
     "scp_baby_boost": apply_scp_baby_boost_reform,
     "income_tax_threshold_uplift": apply_income_tax_threshold_reform,
     "combined": apply_combined_reform,

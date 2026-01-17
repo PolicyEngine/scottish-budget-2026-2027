@@ -22,9 +22,12 @@ from policyengine_uk import Microsimulation
 INCOME_TAX_BASIC_THRESHOLD = 3_967  # £16,537 total - £12,570 PA
 INCOME_TAX_INTERMEDIATE_THRESHOLD = 16_956  # £29,526 total - £12,570 PA
 
-# SCP Premium for under-ones: £40/week (total, not on top of standard)
+# SCP rates
 # Source: Scottish Budget 2026-27
-SCP_PREMIUM_UNDER_ONE_AMOUNT = 40
+# https://www.gov.scot/news/a-budget-to-tackle-child-poverty/
+SCP_BASELINE_RATE = 27.15  # £/week (current rate from Apr 2025)
+SCP_INFLATION_RATE = 28.20  # £/week (inflation-adjusted from Apr 2026)
+SCP_PREMIUM_UNDER_ONE_AMOUNT = 40  # £/week total for under-1s
 
 # Default years for microsim analysis
 DEFAULT_YEARS = [2026, 2027, 2028, 2029, 2030]
@@ -33,6 +36,25 @@ DEFAULT_YEARS = [2026, 2027, 2028, 2029, 2030]
 # =============================================================================
 # Reform Application Functions
 # =============================================================================
+
+
+def apply_scp_inflation_reform(sim: Microsimulation) -> None:
+    """Apply SCP inflation adjustment to a simulation.
+
+    Updates SCP amount from £27.15/week to £28.20/week (+3.9% inflation).
+    This is applied BEFORE the baby boost so the baby boost correctly
+    calculates as £40 - £28.20 = £11.80/week extra.
+
+    Note: SCP amount parameter is stored as £/week (not annual).
+
+    Source: Scottish Budget 2026-27
+    https://www.gov.scot/news/a-budget-to-tackle-child-poverty/
+    """
+    scp_amount = sim.tax_benefit_system.parameters.gov.social_security_scotland.scottish_child_payment.amount
+
+    for year in DEFAULT_YEARS:
+        period = f"{year}-01-01"
+        scp_amount.update(period=period, value=SCP_INFLATION_RATE)  # £/week
 
 
 def apply_income_tax_threshold_reform(sim: Microsimulation) -> None:
@@ -79,9 +101,14 @@ def apply_scp_baby_boost_reform(sim: Microsimulation) -> None:
 
 
 def apply_combined_reform(sim: Microsimulation) -> None:
-    """Apply both reforms to a simulation."""
-    apply_income_tax_threshold_reform(sim)
-    apply_scp_baby_boost_reform(sim)
+    """Apply all Scottish Budget 2026-27 reforms to a simulation.
+
+    Order matters: SCP inflation must be applied before baby boost
+    so the baby boost correctly stacks on top of £28.20/week.
+    """
+    apply_scp_inflation_reform(sim)  # £27.15 → £28.20/week
+    apply_income_tax_threshold_reform(sim)  # 7.4% threshold uplift
+    apply_scp_baby_boost_reform(sim)  # £40/week for under-1s
 
 
 # =============================================================================
@@ -109,34 +136,50 @@ def get_scottish_budget_reforms() -> list[ReformDefinition]:
     return [
         ReformDefinition(
             id="combined",
-            name="Both policies combined",
+            name="All policies combined",
             description=(
-                "Full Scottish Budget 2026-27 package: SCP Premium for under-ones (£40/week) "
-                "and income tax threshold uplift (7.4%) applied together."
+                "Full Scottish Budget 2026-27 package: SCP inflation adjustment (£28.20/week), "
+                "SCP Premium for under-ones (£40/week), and income tax threshold uplift (7.4%)."
             ),
             apply_fn=apply_combined_reform,
             explanation=(
-                "The complete Scottish Budget 2026-27 package combines both policy reforms: "
-                "the SCP Premium for under-ones (£40/week for babies under 1) and the income tax "
-                "threshold uplift (7.4% increase to basic and intermediate thresholds). Together, "
-                "these measures deliver targeted support to families with young children while "
-                "also providing tax relief to working Scots."
+                "The complete Scottish Budget 2026-27 package combines all three policy reforms: "
+                "the SCP inflation adjustment (£28.20/week), the SCP Premium for under-ones "
+                "(£40/week total for babies under 1), and the income tax threshold uplift (7.4% "
+                "increase to basic and intermediate thresholds). Together, these measures deliver "
+                "targeted support to families with young children while also providing tax relief "
+                "to working Scots."
+            ),
+        ),
+        ReformDefinition(
+            id="scp_inflation",
+            name="SCP inflation adjustment (£28.20/week)",
+            description=(
+                "Scottish Child Payment uprated with inflation from £27.15/week to £28.20/week "
+                "(+£1.05/week). Effective April 2026."
+            ),
+            apply_fn=apply_scp_inflation_reform,
+            explanation=(
+                "The Scottish Child Payment is uprated with inflation from £27.15/week to "
+                "£28.20/week (+£1.05/week, or +3.9%). This inflation adjustment takes effect "
+                "from April 2026 and benefits all families receiving the Scottish Child Payment, "
+                "providing approximately £55 extra per child per year."
             ),
         ),
         ReformDefinition(
             id="scp_baby_boost",
             name="SCP Premium for under-ones (£40/week)",
             description=(
-                "New SCP Premium for under-ones: £40/week for babies under 1 "
-                "(up from £27.15/week). Announced in Scottish Budget 2026-27."
+                "SCP Premium for under-ones: £40/week total for babies under 1 "
+                "(£11.80/week extra on top of the inflation-adjusted £28.20/week rate)."
             ),
             apply_fn=apply_scp_baby_boost_reform,
             explanation=(
                 "The new SCP Premium for under-ones increases the Scottish Child Payment to "
-                "£40/week for families with babies under 1 year old, up from the standard rate "
-                "of £27.15/week. This delivers the strongest package of support for families "
-                "with young children anywhere in the UK, as announced by Finance Secretary "
-                "Shona Robison on 13 January 2026."
+                "£40/week total for families with babies under 1 year old. This is £11.80/week "
+                "extra on top of the inflation-adjusted rate of £28.20/week. This delivers the "
+                "strongest package of support for families with young children anywhere in the UK, "
+                "as announced by Finance Secretary Shona Robison on 13 January 2026."
             ),
         ),
         ReformDefinition(
@@ -178,6 +221,6 @@ PRESETS = [
     {
         "id": "scottish-budget-2026",
         "name": "Scottish Budget 2026",
-        "policies": ["scp_baby_boost", "income_tax_threshold_uplift"],
+        "policies": ["scp_inflation", "scp_baby_boost", "income_tax_threshold_uplift"],
     },
 ]
