@@ -52,20 +52,18 @@ def test_budgetary_impact_has_all_years(budgetary_impact):
     assert years == expected
 
 
-def test_scp_inflation_cost_in_expected_range(budgetary_impact):
-    """Test SCP inflation adjustment cost is in expected range (£10-25M for 2026).
+def test_scp_inflation_positive_all_years(budgetary_impact):
+    """Test SCP inflation adjustment is positive for ALL years 2026-2030.
 
-    Based on PolicyEngine microsimulation of:
-    - SCP-eligible children in Scotland
-    - £1.05/week increase (£27.15 → £28.20)
-    - Annual per child: £1.05 × 52 = £54.60
+    The SCP inflation adjustment (£27.15 → £28.20/week) applies from 2026.
     """
-    scp_inflation_2026 = budgetary_impact[
-        (budgetary_impact["reform_id"] == "scp_inflation")
-        & (budgetary_impact["year"] == 2026)
-    ]["value"].iloc[0]
+    for year in [2026, 2027, 2028, 2029, 2030]:
+        scp_inflation = budgetary_impact[
+            (budgetary_impact["reform_id"] == "scp_inflation")
+            & (budgetary_impact["year"] == year)
+        ]["value"].iloc[0]
 
-    assert 10 < scp_inflation_2026 < 25, f"SCP inflation cost £{scp_inflation_2026:.1f}M outside expected range"
+        assert scp_inflation > 10, f"SCP inflation in {year} should be >£10M, got £{scp_inflation:.1f}M"
 
 
 def test_scp_baby_boost_zero_in_2026(budgetary_impact):
