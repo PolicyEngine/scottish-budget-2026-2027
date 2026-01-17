@@ -68,21 +68,34 @@ def test_scp_inflation_cost_in_expected_range(budgetary_impact):
     assert 10 < scp_inflation_2026 < 25, f"SCP inflation cost £{scp_inflation_2026:.1f}M outside expected range"
 
 
-def test_scp_baby_boost_cost_in_expected_range(budgetary_impact):
-    """Test SCP baby boost cost is in expected range (£10-25M for 2026).
+def test_scp_baby_boost_zero_in_2026(budgetary_impact):
+    """Test SCP baby boost has zero cost in 2026.
 
-    Based on validation analysis:
-    - UC proxy: ~24,099 eligible babies → £16.1M at 100% take-up
-    - SCP take-up (~88%): ~21,258 eligible → £14.2M (our estimate)
-    - Government estimate (57% take-up): 12,000 → £8M
+    The SCP Premium for under-ones doesn't take effect until 2027.
     """
     scp_2026 = budgetary_impact[
         (budgetary_impact["reform_id"] == "scp_baby_boost")
         & (budgetary_impact["year"] == 2026)
     ]["value"].iloc[0]
 
+    assert scp_2026 == 0, f"SCP baby boost should be £0 in 2026, got £{scp_2026:.1f}M"
+
+
+def test_scp_baby_boost_cost_in_expected_range_2027(budgetary_impact):
+    """Test SCP baby boost cost is in expected range (£10-25M for 2027).
+
+    Based on validation analysis:
+    - UC proxy: ~24,099 eligible babies → £16.1M at 100% take-up
+    - SCP take-up (~88%): ~21,258 eligible → £14.2M (our estimate)
+    - Government estimate (57% take-up): 12,000 → £8M
+    """
+    scp_2027 = budgetary_impact[
+        (budgetary_impact["reform_id"] == "scp_baby_boost")
+        & (budgetary_impact["year"] == 2027)
+    ]["value"].iloc[0]
+
     # Should be between government low estimate and UC proxy upper bound
-    assert 8 < scp_2026 < 25, f"SCP baby boost cost £{scp_2026:.1f}M outside expected range"
+    assert 8 < scp_2027 < 25, f"SCP baby boost cost £{scp_2027:.1f}M outside expected range"
 
 
 def test_income_tax_uplift_cost_in_expected_range(budgetary_impact):

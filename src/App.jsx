@@ -6,13 +6,14 @@ import ValidationTab from "./components/ValidationTab";
 import "./App.css";
 
 const POLICIES = [
+  { id: "scp_inflation", name: "SCP inflation adjustment" },
   { id: "scp_baby_boost", name: "SCP Premium for under-ones" },
   { id: "income_tax_threshold_uplift", name: "Income tax threshold uplift" },
 ];
 
 function App() {
   const [activeTab, setActiveTab] = useState("budget");
-  const [selectedPolicies, setSelectedPolicies] = useState(["scp_baby_boost", "income_tax_threshold_uplift"]);
+  const [selectedPolicies, setSelectedPolicies] = useState(["scp_inflation", "scp_baby_boost", "income_tax_threshold_uplift"]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -72,6 +73,7 @@ function App() {
 
   const getDropdownLabel = () => {
     if (selectedPolicies.length === 0) return "Select policies";
+    if (selectedPolicies.length === 3) return "All 3 policies selected";
     if (selectedPolicies.length === 2) return "2 policies selected";
     return POLICIES.find(p => p.id === selectedPolicies[0])?.name || "Select policies";
   };

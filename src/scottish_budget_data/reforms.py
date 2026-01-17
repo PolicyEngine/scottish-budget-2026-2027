@@ -83,7 +83,9 @@ def apply_scp_baby_boost_reform(sim: Microsimulation) -> None:
     """Apply SCP baby boost reform to a simulation.
 
     Enables the SCP baby bonus via the contrib parameters.
-    This gives £40/week total for under-1s (vs £27.15 standard).
+    This gives £40/week total for under-1s (vs £28.20 inflation-adjusted).
+
+    Note: The SCP Premium for under-ones takes effect from 2027, not 2026.
 
     Note: Uses contrib parameters for policyengine-uk < 2.70.0.
     Once the main parameters are available, this should switch to using
@@ -94,10 +96,12 @@ def apply_scp_baby_boost_reform(sim: Microsimulation) -> None:
     """
     scp_reform = sim.tax_benefit_system.parameters.gov.contrib.scotland.scottish_child_payment
 
+    # Baby boost takes effect from 2027, not 2026
     for year in DEFAULT_YEARS:
-        period = f"{year}-01-01"
-        # Enable the baby bonus
-        scp_reform.in_effect.update(period=period, value=True)
+        if year >= 2027:
+            period = f"{year}-01-01"
+            # Enable the baby bonus
+            scp_reform.in_effect.update(period=period, value=True)
 
 
 def apply_combined_reform(sim: Microsimulation) -> None:

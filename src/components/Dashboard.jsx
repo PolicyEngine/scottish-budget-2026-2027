@@ -60,12 +60,12 @@ const POLICY_INFO = {
 export default function Dashboard({ selectedPolicies = [] }) {
   // Determine effective policy for data loading
   const effectivePolicy = useMemo(() => {
-    if (selectedPolicies.length === 2) return "combined";
+    if (selectedPolicies.length >= 2) return "combined";
     if (selectedPolicies.length === 1) return selectedPolicies[0];
     return null;
   }, [selectedPolicies]);
 
-  const isStacked = selectedPolicies.length === 2;
+  const isStacked = selectedPolicies.length >= 2;
   const [loading, setLoading] = useState(true);
   const [livingStandardsData, setLivingStandardsData] = useState(null);
   const [povertyMetrics, setPovertyMetrics] = useState([]);
