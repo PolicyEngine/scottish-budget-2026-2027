@@ -105,12 +105,12 @@ def apply_scp_baby_boost_reform(sim: Microsimulation) -> None:
 def apply_combined_reform(sim: Microsimulation) -> None:
     """Apply all Scottish Budget 2026-27 reforms to a simulation.
 
-    Order matters: SCP inflation must be applied before baby boost
-    so the baby boost correctly stacks on top of £28.20/week.
+    Note: Baby boost is already enabled by default in policyengine-uk from 2027,
+    so we only need to apply inflation and income tax reforms here.
     """
     apply_scp_inflation_reform(sim)  # £27.15 → £28.20/week
     apply_income_tax_threshold_reform(sim)  # 7.4% threshold uplift
-    apply_scp_baby_boost_reform(sim)  # £40/week for under-1s
+    # Baby boost is already enabled by default in policyengine-uk from 2027
 
 
 # =============================================================================
