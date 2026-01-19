@@ -23,11 +23,18 @@ INCOME_TAX_BASIC_THRESHOLD = 3_967  # £16,537 total - £12,570 PA
 INCOME_TAX_INTERMEDIATE_THRESHOLD = 16_956  # £29,526 total - £12,570 PA
 
 # Frozen threshold values for higher/advanced/top rates (2027-28 onwards)
-# Source: SFC costings - freeze at 2026-27 levels for 2027-28 and 2028-29
+# Source: Scottish Income Tax 2026-27 Technical Factsheet
+# https://www.gov.scot/publications/scottish-income-tax-technical-factsheet/
+# These are the 2026-27 thresholds to be frozen for 2027-28 and 2028-29.
 # Note: 2026 freeze is already in baseline per Budget 2025-26
-INCOME_TAX_HIGHER_THRESHOLD = 31_092  # £43,662 total - £12,570 PA
-INCOME_TAX_ADVANCED_THRESHOLD = 49_860  # £62,430 total - £12,570 PA
-INCOME_TAX_TOP_THRESHOLD = 112_570  # £125,140 total - £12,570 PA
+#
+# Band thresholds (total income → above PA):
+#   Higher (42%): £43,663 → £31,093 above PA
+#   Advanced (45%): £75,001 → £62,431 above PA
+#   Top (48%): £125,141 → £112,571 above PA
+INCOME_TAX_HIGHER_THRESHOLD = 31_093  # £43,663 total - £12,570 PA
+INCOME_TAX_ADVANCED_THRESHOLD = 62_431  # £75,001 total - £12,570 PA
+INCOME_TAX_TOP_THRESHOLD = 112_571  # £125,141 total - £12,570 PA
 
 # SCP rates
 # Source: Scottish Budget 2026-27
