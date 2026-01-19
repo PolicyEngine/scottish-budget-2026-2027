@@ -48,64 +48,67 @@ const POLICY_INFO = {
         <strong>Income tax threshold uplift (7.4%)</strong>: The Budget raises the basic rate (20%)
         threshold from £15,398 to £16,538, and the intermediate rate (21%) threshold from £27,492
         to £29,527. Scottish taxpayers pay the lower 19% starter rate on more of their income.
-        <table className="income-tax-table" style={{ marginTop: "12px", width: "100%", borderCollapse: "collapse", fontSize: "14px" }}>
-          <thead>
-            <tr style={{ borderBottom: "2px solid #ddd" }}>
-              <th style={{ textAlign: "left", padding: "8px" }}>Band</th>
-              <th style={{ textAlign: "center", padding: "8px" }}>Rate</th>
-              <th style={{ textAlign: "right", padding: "8px" }}>2025-26</th>
-              <th style={{ textAlign: "right", padding: "8px" }}>2026-27</th>
-              <th style={{ textAlign: "right", padding: "8px" }}>Change</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr style={{ borderBottom: "1px solid #eee" }}>
-              <td style={{ padding: "8px" }}>Starter</td>
-              <td style={{ textAlign: "center", padding: "8px" }}>19%</td>
-              <td style={{ textAlign: "right", padding: "8px" }}>£12,571–£15,397</td>
-              <td style={{ textAlign: "right", padding: "8px" }}>£12,571–£16,537</td>
-              <td style={{ textAlign: "right", padding: "8px", color: "#2e7d32" }}>+£1,140</td>
-            </tr>
-            <tr style={{ borderBottom: "1px solid #eee" }}>
-              <td style={{ padding: "8px" }}>Basic</td>
-              <td style={{ textAlign: "center", padding: "8px" }}>20%</td>
-              <td style={{ textAlign: "right", padding: "8px" }}>£15,398–£27,491</td>
-              <td style={{ textAlign: "right", padding: "8px" }}>£16,538–£29,526</td>
-              <td style={{ textAlign: "right", padding: "8px", color: "#2e7d32" }}>+£2,035</td>
-            </tr>
-            <tr style={{ borderBottom: "1px solid #eee" }}>
-              <td style={{ padding: "8px" }}>Intermediate</td>
-              <td style={{ textAlign: "center", padding: "8px" }}>21%</td>
-              <td style={{ textAlign: "right", padding: "8px" }}>£27,492–£43,662</td>
-              <td style={{ textAlign: "right", padding: "8px" }}>£29,527–£43,662</td>
-              <td style={{ textAlign: "right", padding: "8px", color: "#666" }}>Frozen</td>
-            </tr>
-            <tr style={{ borderBottom: "1px solid #eee" }}>
-              <td style={{ padding: "8px" }}>Higher</td>
-              <td style={{ textAlign: "center", padding: "8px" }}>42%</td>
-              <td style={{ textAlign: "right", padding: "8px" }}>£43,663–£75,000</td>
-              <td style={{ textAlign: "right", padding: "8px" }}>£43,663–£75,000</td>
-              <td style={{ textAlign: "right", padding: "8px", color: "#666" }}>Frozen</td>
-            </tr>
-            <tr style={{ borderBottom: "1px solid #eee" }}>
-              <td style={{ padding: "8px" }}>Advanced</td>
-              <td style={{ textAlign: "center", padding: "8px" }}>45%</td>
-              <td style={{ textAlign: "right", padding: "8px" }}>£75,001–£125,140</td>
-              <td style={{ textAlign: "right", padding: "8px" }}>£75,001–£125,140</td>
-              <td style={{ textAlign: "right", padding: "8px", color: "#666" }}>Frozen</td>
-            </tr>
-            <tr>
-              <td style={{ padding: "8px" }}>Top</td>
-              <td style={{ textAlign: "center", padding: "8px" }}>48%</td>
-              <td style={{ textAlign: "right", padding: "8px" }}>Over £125,140</td>
-              <td style={{ textAlign: "right", padding: "8px" }}>Over £125,140</td>
-              <td style={{ textAlign: "right", padding: "8px", color: "#666" }}>Frozen</td>
-            </tr>
-          </tbody>
-        </table>
-        <p style={{ marginTop: "8px", fontSize: "13px", color: "#666" }}>
-          Source: <a href="https://www.gov.scot/publications/scottish-income-tax-rates-and-bands/pages/2026-to-2027/" target="_blank" rel="noopener noreferrer">Scottish Government</a> | <a href="https://www.gov.scot/publications/scottish-income-tax-technical-factsheet/" target="_blank" rel="noopener noreferrer">Technical Factsheet</a>
-        </p>
+        <details className="tax-table-details" style={{ marginTop: "12px" }}>
+          <summary style={{ cursor: "pointer", color: "#2c6e49", fontWeight: "500" }}>View all tax bands</summary>
+          <table className="income-tax-table" style={{ marginTop: "8px", width: "100%", borderCollapse: "collapse", fontSize: "14px" }}>
+            <thead>
+              <tr style={{ borderBottom: "2px solid #ddd" }}>
+                <th style={{ textAlign: "left", padding: "8px" }}>Band</th>
+                <th style={{ textAlign: "center", padding: "8px" }}>Rate</th>
+                <th style={{ textAlign: "right", padding: "8px" }}>2025-26</th>
+                <th style={{ textAlign: "right", padding: "8px" }}>2026-27</th>
+                <th style={{ textAlign: "right", padding: "8px" }}>Change</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style={{ borderBottom: "1px solid #eee" }}>
+                <td style={{ padding: "8px" }}>Starter</td>
+                <td style={{ textAlign: "center", padding: "8px" }}>19%</td>
+                <td style={{ textAlign: "right", padding: "8px" }}>£12,571–£15,397</td>
+                <td style={{ textAlign: "right", padding: "8px" }}>£12,571–£16,537</td>
+                <td style={{ textAlign: "right", padding: "8px", color: "#2e7d32" }}>+£1,140</td>
+              </tr>
+              <tr style={{ borderBottom: "1px solid #eee" }}>
+                <td style={{ padding: "8px" }}>Basic</td>
+                <td style={{ textAlign: "center", padding: "8px" }}>20%</td>
+                <td style={{ textAlign: "right", padding: "8px" }}>£15,398–£27,491</td>
+                <td style={{ textAlign: "right", padding: "8px" }}>£16,538–£29,526</td>
+                <td style={{ textAlign: "right", padding: "8px", color: "#2e7d32" }}>+£2,035</td>
+              </tr>
+              <tr style={{ borderBottom: "1px solid #eee" }}>
+                <td style={{ padding: "8px" }}>Intermediate</td>
+                <td style={{ textAlign: "center", padding: "8px" }}>21%</td>
+                <td style={{ textAlign: "right", padding: "8px" }}>£27,492–£43,662</td>
+                <td style={{ textAlign: "right", padding: "8px" }}>£29,527–£43,662</td>
+                <td style={{ textAlign: "right", padding: "8px", color: "#666" }}>Frozen</td>
+              </tr>
+              <tr style={{ borderBottom: "1px solid #eee" }}>
+                <td style={{ padding: "8px" }}>Higher</td>
+                <td style={{ textAlign: "center", padding: "8px" }}>42%</td>
+                <td style={{ textAlign: "right", padding: "8px" }}>£43,663–£75,000</td>
+                <td style={{ textAlign: "right", padding: "8px" }}>£43,663–£75,000</td>
+                <td style={{ textAlign: "right", padding: "8px", color: "#666" }}>Frozen</td>
+              </tr>
+              <tr style={{ borderBottom: "1px solid #eee" }}>
+                <td style={{ padding: "8px" }}>Advanced</td>
+                <td style={{ textAlign: "center", padding: "8px" }}>45%</td>
+                <td style={{ textAlign: "right", padding: "8px" }}>£75,001–£125,140</td>
+                <td style={{ textAlign: "right", padding: "8px" }}>£75,001–£125,140</td>
+                <td style={{ textAlign: "right", padding: "8px", color: "#666" }}>Frozen</td>
+              </tr>
+              <tr>
+                <td style={{ padding: "8px" }}>Top</td>
+                <td style={{ textAlign: "center", padding: "8px" }}>48%</td>
+                <td style={{ textAlign: "right", padding: "8px" }}>Over £125,140</td>
+                <td style={{ textAlign: "right", padding: "8px" }}>Over £125,140</td>
+                <td style={{ textAlign: "right", padding: "8px", color: "#666" }}>Frozen</td>
+              </tr>
+            </tbody>
+          </table>
+          <p style={{ marginTop: "8px", fontSize: "13px", color: "#666" }}>
+            Source: <a href="https://www.gov.scot/publications/scottish-income-tax-rates-and-bands/pages/2026-to-2027/" target="_blank" rel="noopener noreferrer">Scottish Government</a> | <a href="https://www.gov.scot/publications/scottish-income-tax-technical-factsheet/" target="_blank" rel="noopener noreferrer">Technical Factsheet</a>
+          </p>
+        </details>
       </li>
     ),
   },
