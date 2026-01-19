@@ -10,17 +10,31 @@ from typing import Callable
 from policyengine_uk import Microsimulation
 
 
-# Scottish Budget 2026-27 income tax thresholds (absolute values)
+# Scottish Budget 2026-27 income tax thresholds
 # Source: Scottish Income Tax 2026-27 Technical Factsheet, Table 1
 # https://www.gov.scot/publications/scottish-income-tax-technical-factsheet/
 #
-# Total taxable income thresholds:
-#   Basic rate (20%): £16,538 - £29,526
-#   Intermediate rate (21%): £29,527 - £43,662
+# 2026-27 reform thresholds (amounts above PA of £12,570):
+#   Starter (19%): up to £16,537 → threshold = £3,967 above PA
+#   Basic (20%): up to £29,526 → threshold = £16,956 above PA
 #
-# PolicyEngine stores thresholds as amounts ABOVE personal allowance (£12,570)
-INCOME_TAX_BASIC_THRESHOLD = 3_967  # £16,537 total - £12,570 PA
-INCOME_TAX_INTERMEDIATE_THRESHOLD = 16_956  # £29,526 total - £12,570 PA
+# Baseline (2025-26) thresholds are read from PolicyEngine UK at runtime.
+# Both baseline and reform are FROZEN (no uprating in future years).
+INCOME_TAX_STARTER_THRESHOLD = 3_967  # £16,537 total - £12,570 PA
+INCOME_TAX_BASIC_THRESHOLD = 16_956  # £29,526 total - £12,570 PA
+
+
+def _get_baseline_scottish_thresholds() -> tuple[float, float]:
+    """Get 2025-26 Scottish income tax thresholds from PolicyEngine UK.
+
+    Returns:
+        Tuple of (starter_threshold, basic_threshold) as amounts above PA.
+    """
+    from policyengine_uk.system import system
+    params = system.parameters.gov.hmrc.income_tax.rates.scotland.rates
+    starter = params.brackets[1].threshold("2025-01-01")
+    basic = params.brackets[2].threshold("2025-01-01")
+    return starter, basic
 
 # SCP rates
 # Source: Scottish Budget 2026-27
@@ -57,12 +71,35 @@ def apply_scp_inflation_reform(sim: Microsimulation) -> None:
         scp_amount.update(period=period, value=SCP_INFLATION_RATE)  # £/week
 
 
+def apply_income_tax_baseline(sim: Microsimulation) -> None:
+    """Apply baseline (2025-26) Scottish income tax thresholds, frozen for all years.
+
+    This represents what would have happened WITHOUT the 2026-27 budget:
+    thresholds frozen at 2025-26 levels (no uprating).
+
+    Source: https://www.mygov.scot/scottish-income-tax
+    """
+    starter_baseline, basic_baseline = _get_baseline_scottish_thresholds()
+    scotland_rates = sim.tax_benefit_system.parameters.gov.hmrc.income_tax.rates.scotland.rates
+
+    for year in DEFAULT_YEARS:
+        period = f"{year}-01-01"
+        scotland_rates.brackets[1].threshold.update(
+            period=period, value=starter_baseline
+        )
+        scotland_rates.brackets[2].threshold.update(
+            period=period, value=basic_baseline
+        )
+
+
 def apply_income_tax_threshold_reform(sim: Microsimulation) -> None:
-    """Apply income tax threshold uplift to a simulation.
+    """Apply income tax threshold uplift (2026-27 values), frozen for all years.
 
     Sets Scottish income tax thresholds to Budget 2026-27 values:
-    - Basic rate (20%): starts at £16,537 (£3,967 above PA)
-    - Intermediate rate (21%): starts at £29,526 (£16,956 above PA)
+    - Starter rate (19%): up to £16,537 (£3,967 above PA)
+    - Basic rate (20%): up to £29,526 (£16,956 above PA)
+
+    Thresholds are then frozen at these levels (no uprating in future years).
 
     Source: Scottish Income Tax 2026-27 Technical Factsheet, Table 1
     https://www.gov.scot/publications/scottish-income-tax-technical-factsheet/
@@ -72,10 +109,10 @@ def apply_income_tax_threshold_reform(sim: Microsimulation) -> None:
     for year in DEFAULT_YEARS:
         period = f"{year}-01-01"
         scotland_rates.brackets[1].threshold.update(
-            period=period, value=INCOME_TAX_BASIC_THRESHOLD
+            period=period, value=INCOME_TAX_STARTER_THRESHOLD
         )
         scotland_rates.brackets[2].threshold.update(
-            period=period, value=INCOME_TAX_INTERMEDIATE_THRESHOLD
+            period=period, value=INCOME_TAX_BASIC_THRESHOLD
         )
 
 
@@ -129,6 +166,7 @@ class ReformDefinition:
     description: str
     apply_fn: Callable[[Microsimulation], None]
     explanation: str = ""
+    baseline_apply_fn: Callable[[Microsimulation], None] | None = None
 
 
 def get_scottish_budget_reforms() -> list[ReformDefinition]:
@@ -188,18 +226,19 @@ def get_scottish_budget_reforms() -> list[ReformDefinition]:
         ),
         ReformDefinition(
             id="income_tax_threshold_uplift",
-            name="Income tax threshold uplift (7.4%)",
+            name="Income tax threshold uplift",
             description=(
-                "Scottish basic and intermediate rate thresholds increased by 7.4%. "
-                "Basic rate starts at £16,537, intermediate at £29,527."
+                "Scottish starter and basic rate thresholds increased for 2026-27. "
+                "Starter rate up to £16,537, basic rate up to £29,526. Thresholds then frozen."
             ),
             apply_fn=apply_income_tax_threshold_reform,
+            baseline_apply_fn=apply_income_tax_baseline,
             explanation=(
-                "The Scottish basic and intermediate income tax rate thresholds are raised by 7.4%. "
-                "The basic rate (20%) threshold rises from £15,398 to £16,537, and the intermediate "
-                "rate (21%) threshold rises from £27,492 to £29,527. The higher rate (42%) remains "
-                "unchanged at £43,663. This means people pay the lower 19% starter rate on more of "
-                "their income."
+                "The Scottish starter and basic income tax thresholds are raised for 2026-27. "
+                "The starter rate (19%) threshold rises from £15,397 to £16,537 (+£1,140), and "
+                "the basic rate (20%) threshold rises from £27,491 to £29,526 (+£2,035). "
+                "Thresholds are then frozen at these levels. This means people pay the lower "
+                "19% starter rate on more of their income."
             ),
         ),
     ]

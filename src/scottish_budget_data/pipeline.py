@@ -71,25 +71,25 @@ def generate_all_data(
     metrics_calc = MetricsCalculator()
     constituency_calc = ConstituencyCalculator()
 
-    # Load constituency data
-    weights_path = data_dir / "parliamentary_constituency_weights.h5"
-    constituencies_path = data_inputs_dir / "constituencies_2024.csv"
+    # Load local authority data (with properly calibrated income distributions)
+    weights_path = data_dir / "local_authority_weights.h5"
+    local_authorities_path = data_inputs_dir / "local_authorities_2021.csv"
 
     weights = None
-    constituency_df = None
+    local_authority_df = None
 
-    if weights_path.exists() and constituencies_path.exists():
+    if weights_path.exists() and local_authorities_path.exists():
         with h5py.File(weights_path, "r") as f:
             weights = f["2025"][...]
-        constituency_df = pd.read_csv(constituencies_path)
+        local_authority_df = pd.read_csv(local_authorities_path)
 
-        # Filter to Scottish constituencies if requested
+        # Filter to Scottish local authorities if requested
         if scotland_only:
-            scottish_mask = constituency_df["code"].str.startswith("S")
+            scottish_mask = local_authority_df["code"].str.startswith("S")
             scottish_indices = scottish_mask.values
             weights = weights[scottish_indices, :]
-            constituency_df = constituency_df[scottish_mask].reset_index(drop=True)
-            print(f"Filtering to {len(constituency_df)} Scottish constituencies")
+            local_authority_df = local_authority_df[scottish_mask].reset_index(drop=True)
+            print(f"Filtering to {len(local_authority_df)} Scottish local authorities")
 
     # Aggregate results
     all_budgetary = []
@@ -110,6 +110,11 @@ def generate_all_data(
         # Create simulations and apply reform
         baseline = Microsimulation(dataset=dataset_obj)
         reformed = Microsimulation(dataset=dataset_obj)
+
+        # Apply baseline adjustments (for counterfactual comparison)
+        if reform.baseline_apply_fn:
+            reform.baseline_apply_fn(baseline)
+
         reform.apply_fn(reformed)
 
         # Calculate budgetary impact
@@ -138,12 +143,12 @@ def generate_all_data(
             )
             all_metrics.extend(metrics)
 
-            # Constituency impacts
-            if weights is not None and constituency_df is not None:
-                constituency = constituency_calc.calculate(
-                    baseline, reformed, reform.id, year, weights, constituency_df
+            # Local authority impacts
+            if weights is not None and local_authority_df is not None:
+                local_authority = constituency_calc.calculate(
+                    baseline, reformed, reform.id, year, weights, local_authority_df
                 )
-                all_constituency.extend(constituency)
+                all_constituency.extend(local_authority)
 
         print(f"  Done: {reform.name}")
 

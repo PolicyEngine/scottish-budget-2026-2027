@@ -10,6 +10,7 @@ from policyengine_uk import Microsimulation
 
 from .reforms import (
     apply_combined_reform,
+    apply_income_tax_baseline,
     apply_income_tax_threshold_reform,
     apply_scp_baby_boost_reform,
     apply_scp_inflation_reform,
@@ -21,6 +22,13 @@ REFORM_APPLY_FNS = {
     "scp_baby_boost": apply_scp_baby_boost_reform,
     "income_tax_threshold_uplift": apply_income_tax_threshold_reform,
     "combined": apply_combined_reform,
+}
+
+# Map reform IDs to baseline apply functions (for counterfactual comparison)
+# Only needed when PolicyEngine defaults don't match the true counterfactual
+BASELINE_APPLY_FNS = {
+    "income_tax_threshold_uplift": apply_income_tax_baseline,
+    "combined": apply_income_tax_baseline,  # Combined also needs baseline adjustment
 }
 
 
@@ -67,6 +75,10 @@ class BudgetaryImpactCalculator:
             baseline = Microsimulation()
             reformed = Microsimulation()
 
+            # Apply baseline adjustments (for counterfactual comparison)
+            if reform_id in BASELINE_APPLY_FNS:
+                BASELINE_APPLY_FNS[reform_id](baseline)
+
             if reform_id in REFORM_APPLY_FNS:
                 REFORM_APPLY_FNS[reform_id](reformed)
 
@@ -105,6 +117,10 @@ class DistributionalImpactCalculator:
         """
         baseline = Microsimulation()
         reformed = Microsimulation()
+
+        # Apply baseline adjustments (for counterfactual comparison)
+        if reform_id in BASELINE_APPLY_FNS:
+            BASELINE_APPLY_FNS[reform_id](baseline)
 
         if reform_id in REFORM_APPLY_FNS:
             REFORM_APPLY_FNS[reform_id](reformed)
