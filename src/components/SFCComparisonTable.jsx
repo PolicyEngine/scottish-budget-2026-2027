@@ -263,7 +263,8 @@ function SFCComparisonTable() {
           rel="noopener noreferrer"
         >
           IFS analysis
-        </a>.
+        </a>{" "}
+        for methodology.
       </p>
     </div>
   );
