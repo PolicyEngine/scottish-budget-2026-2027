@@ -4,8 +4,8 @@
   margin-top: var(--pe-space-lg);
 }
 
-/* Constituency controls bar */
-.constituency-controls-bar {
+/* Local authority controls bar */
+.local-authority-controls-bar {
   display: flex;
   flex-wrap: wrap;
   gap: var(--pe-space-lg);
@@ -31,7 +31,7 @@
   color: var(--pe-gray-600);
 }
 
-/* Year toggle for constituency comparison */
+/* Year toggle for local authority comparison */
 .year-toggle {
   display: inline-flex;
   background: var(--pe-gray-100);
@@ -70,21 +70,21 @@
   flex-wrap: wrap;
 }
 
-/* Constituency controls */
-.constituency-controls {
+/* Local authority controls */
+.local-authority-controls {
   display: flex;
   gap: var(--pe-space-md);
   margin-bottom: var(--pe-space-lg);
   flex-wrap: wrap;
 }
 
-.constituency-select {
+.local-authority-select {
   min-width: 280px;
   flex: 1;
 }
 
-/* Constituency details card */
-.constituency-details {
+/* Local authority details card */
+.local-authority-details {
   background: var(--pe-surface);
   border: 1px solid var(--pe-gray-200);
   border-radius: var(--pe-radius-lg);
@@ -92,7 +92,7 @@
   margin-top: var(--pe-space-md);
 }
 
-.constituency-name {
+.local-authority-name {
   font-family: var(--pe-font-display);
   font-size: 1.25rem;
   font-weight: 700;
@@ -100,14 +100,14 @@
   margin: 0 0 var(--pe-space-xs) 0;
 }
 
-.constituency-region {
+.local-authority-region {
   font-size: 0.9rem;
   color: var(--pe-gray-500);
   margin: 0 0 var(--pe-space-md) 0;
 }
 
 /* Metrics grid */
-.constituency-metrics {
+.local-authority-metrics {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: var(--pe-space-md);
@@ -143,18 +143,18 @@
   margin-top: var(--pe-space-md);
 }
 
-/* Constituency list */
-.constituency-list {
+/* Local authority list */
+.local-authority-list {
   list-style: none;
   padding: 0;
   margin: var(--pe-space-md) 0 0 0;
   display: flex;
   flex-direction: column;
   gap: var(--pe-space-xs);
-  counter-reset: constituency-counter;
+  counter-reset: local-authority-counter;
 }
 
-.constituency-list-item {
+.local-authority-list-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -163,45 +163,45 @@
   border: 1px solid var(--pe-gray-200);
   border-radius: var(--pe-radius-md);
   transition: all var(--pe-transition-fast);
-  counter-increment: constituency-counter;
+  counter-increment: local-authority-counter;
 }
 
-.constituency-list-item::before {
-  content: counter(constituency-counter) ".";
+.local-authority-list-item::before {
+  content: counter(local-authority-counter) ".";
   font-weight: 600;
   color: var(--pe-gray-400);
   min-width: 28px;
   margin-right: var(--pe-space-sm);
 }
 
-.constituency-list-item:hover {
+.local-authority-list-item:hover {
   border-color: var(--pe-teal-300);
   background: var(--pe-gray-50);
 }
 
-.constituency-list-name {
+.local-authority-list-name {
   flex: 1;
   font-size: 0.95rem;
   font-weight: 500;
   color: var(--pe-gray-800);
 }
 
-.constituency-list-value {
+.local-authority-list-value {
   font-family: var(--pe-font-display);
   font-size: 0.95rem;
   font-weight: 600;
   margin-left: var(--pe-space-md);
 }
 
-.constituency-list-value.positive {
+.local-authority-list-value.positive {
   color: var(--pe-teal-600);
 }
 
-.constituency-list-value.negative {
+.local-authority-list-value.negative {
   color: #dc2626;
 }
 
-.constituency-item {
+.local-authority-item {
   display: flex;
   align-items: center;
   gap: var(--pe-space-md);
@@ -212,18 +212,18 @@
   transition: all var(--pe-transition-fast);
 }
 
-.constituency-item:hover {
+.local-authority-item:hover {
   border-color: var(--pe-teal-300);
   box-shadow: var(--pe-shadow-sm);
 }
 
-.constituency-item.selected {
+.local-authority-item.selected {
   border-color: var(--pe-teal-500);
   background: var(--pe-teal-50);
   box-shadow: var(--pe-shadow-sm);
 }
 
-.constituency-item.selected .rank {
+.local-authority-item.selected .rank {
   background: var(--pe-teal-500);
   color: white;
 }
@@ -252,7 +252,7 @@
   }
 }
 
-.constituency-item .rank {
+.local-authority-item .rank {
   width: 28px;
   height: 28px;
   display: flex;
@@ -266,12 +266,12 @@
   flex-shrink: 0;
 }
 
-.constituency-item .constituency-info {
+.local-authority-item .local-authority-info {
   flex: 1;
   min-width: 0;
 }
 
-.constituency-item .name {
+.local-authority-item .name {
   display: block;
   font-weight: 600;
   color: var(--pe-gray-900);
@@ -281,13 +281,13 @@
   text-overflow: ellipsis;
 }
 
-.constituency-item .region {
+.local-authority-item .region {
   display: block;
   font-size: 0.75rem;
   color: var(--pe-gray-400);
 }
 
-.constituency-item .gain {
+.local-authority-item .gain {
   font-family: var(--pe-font-display);
   font-size: 1.1rem;
   font-weight: 700;
@@ -353,23 +353,23 @@
   box-shadow: var(--pe-shadow-sm);
 }
 
-/* Constituency chart container */
-.constituency-chart-container {
+/* Local authority chart container */
+.local-authority-chart-container {
   margin-top: var(--pe-space-md);
   overflow-x: auto;
 }
 
 /* Responsive */
 @media (max-width: 600px) {
-  .constituency-controls {
+  .local-authority-controls {
     flex-direction: column;
   }
 
-  .constituency-select {
+  .local-authority-select {
     min-width: 100%;
   }
 
-  .constituency-metrics {
+  .local-authority-metrics {
     grid-template-columns: 1fr;
   }
 

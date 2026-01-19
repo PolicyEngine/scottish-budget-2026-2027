@@ -13,8 +13,8 @@ from policyengine_uk.data import UKSingleYearDataset
 
 from .calculators import (
     BudgetaryImpactCalculator,
-    ConstituencyCalculator,
     DistributionalImpactCalculator,
+    LocalAuthorityCalculator,
     MetricsCalculator,
     TwoChildLimitCalculator,
     WinnersLosersCalculator,
@@ -49,10 +49,10 @@ def generate_all_data(
     Args:
         reforms: List of ReformDefinitions to process. Defaults to Scottish Budget 2026.
         output_dir: Directory for output CSV files.
-        data_dir: Directory containing constituency weights.
-        data_inputs_dir: Directory containing constituency metadata.
+        data_dir: Directory containing local authority weights.
+        data_inputs_dir: Directory containing local authority metadata.
         years: Years to analyze.
-        scotland_only: If True, filter to Scottish constituencies only.
+        scotland_only: If True, filter to Scottish local authorities only.
         dataset_path: Path to local enhanced_frs h5 file. If None, downloads from HF.
 
     Returns:
@@ -69,34 +69,34 @@ def generate_all_data(
     distributional_calc = DistributionalImpactCalculator()
     winners_losers_calc = WinnersLosersCalculator()
     metrics_calc = MetricsCalculator()
-    constituency_calc = ConstituencyCalculator()
+    local_authority_calc = LocalAuthorityCalculator()
 
-    # Load constituency data
-    weights_path = data_dir / "parliamentary_constituency_weights.h5"
-    constituencies_path = data_inputs_dir / "constituencies_2024.csv"
+    # Load local authority data
+    weights_path = data_dir / "local_authority_weights.h5"
+    local_authorities_path = data_inputs_dir / "local_authorities_2021.csv"
 
     weights = None
-    constituency_df = None
+    local_authority_df = None
 
-    if weights_path.exists() and constituencies_path.exists():
+    if weights_path.exists() and local_authorities_path.exists():
         with h5py.File(weights_path, "r") as f:
             weights = f["2025"][...]
-        constituency_df = pd.read_csv(constituencies_path)
+        local_authority_df = pd.read_csv(local_authorities_path)
 
-        # Filter to Scottish constituencies if requested
+        # Filter to Scottish local authorities if requested
         if scotland_only:
-            scottish_mask = constituency_df["code"].str.startswith("S")
+            scottish_mask = local_authority_df["code"].str.startswith("S")
             scottish_indices = scottish_mask.values
             weights = weights[scottish_indices, :]
-            constituency_df = constituency_df[scottish_mask].reset_index(drop=True)
-            print(f"Filtering to {len(constituency_df)} Scottish constituencies")
+            local_authority_df = local_authority_df[scottish_mask].reset_index(drop=True)
+            print(f"Filtering to {len(local_authority_df)} Scottish local authorities")
 
     # Aggregate results
     all_budgetary = []
     all_distributional = []
     all_winners_losers = []
     all_metrics = []
-    all_constituency = []
+    all_local_authority = []
 
     # Use local dataset if provided
     if dataset_path:
@@ -138,12 +138,12 @@ def generate_all_data(
             )
             all_metrics.extend(metrics)
 
-            # Constituency impacts
-            if weights is not None and constituency_df is not None:
-                constituency = constituency_calc.calculate(
-                    baseline, reformed, reform.id, year, weights, constituency_df
+            # Local authority impacts
+            if weights is not None and local_authority_df is not None:
+                local_authority = local_authority_calc.calculate(
+                    baseline, reformed, reform.id, year, weights, local_authority_df
                 )
-                all_constituency.extend(constituency)
+                all_local_authority.extend(local_authority)
 
         print(f"  Done: {reform.name}")
 
@@ -153,7 +153,7 @@ def generate_all_data(
         "distributional_impact": pd.DataFrame(all_distributional),
         "winners_losers": pd.DataFrame(all_winners_losers),
         "metrics": pd.DataFrame(all_metrics),
-        "constituency": pd.DataFrame(all_constituency),
+        "local_authorities": pd.DataFrame(all_local_authority),
     }
 
     # Save to CSV

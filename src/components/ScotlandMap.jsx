@@ -5,29 +5,28 @@ import { exportMapAsSvg } from "../utils/exportMapAsSvg";
 import "./ScotlandMap.css";
 
 // Chart metadata for export
-const CHART_TITLE = "Scottish constituency-level impacts";
+const CHART_TITLE = "Scottish local authority-level impacts";
 // Note: CHART_DESCRIPTION is now generated dynamically using policyName prop
 
-// Fixed color scale extent for average gain (in £) - consistent across all years
-const FIXED_COLOR_EXTENT = 35;
+// Color scale will be computed dynamically from data
 
 // Format year for display (e.g., 2026 -> "2026-27")
 const formatYearRange = (year) => `${year}-${(year + 1).toString().slice(-2)}`;
 
-// Scottish constituency codes start with 'S'
-const isScottishConstituency = (code) => code && code.startsWith("S");
+// Scottish local authority codes start with 'S'
+const isScottishLocalAuthority = (code) => code && code.startsWith("S");
 
 export default function ScotlandMap({
-  constituencyData = [],
+  localAuthorityData = [],
   selectedYear = 2026,
   onYearChange = null,
   availableYears = [2026, 2027, 2028, 2029, 2030],
-  selectedConstituency: controlledConstituency = null,
-  onConstituencySelect = null,
+  selectedLocalAuthority: controlledLocalAuthority = null,
+  onLocalAuthoritySelect = null,
   policyName = "SCP Premium for under-ones",
 }) {
   const svgRef = useRef(null);
-  const [internalSelectedConstituency, setInternalSelectedConstituency] = useState(null);
+  const [internalSelectedLocalAuthority, setInternalSelectedLocalAuthority] = useState(null);
   const [tooltipData, setTooltipData] = useState(null);
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
   const [geoData, setGeoData] = useState(null);
@@ -36,28 +35,28 @@ export default function ScotlandMap({
   const [searchResults, setSearchResults] = useState([]);
 
   // Use controlled or internal state
-  const selectedConstituency = controlledConstituency !== null
-    ? controlledConstituency
-    : internalSelectedConstituency;
+  const selectedLocalAuthority = controlledLocalAuthority !== null
+    ? controlledLocalAuthority
+    : internalSelectedLocalAuthority;
 
-  const setSelectedConstituency = (constData) => {
-    if (onConstituencySelect) {
-      if (constData) {
-        onConstituencySelect({
-          code: constData.constituency_code,
-          name: constData.constituency_name,
+  const setSelectedLocalAuthority = (laData) => {
+    if (onLocalAuthoritySelect) {
+      if (laData) {
+        onLocalAuthoritySelect({
+          code: laData.local_authority_code,
+          name: laData.local_authority_name,
         });
       } else {
-        onConstituencySelect(null);
+        onLocalAuthoritySelect(null);
       }
     } else {
-      setInternalSelectedConstituency(constData);
+      setInternalSelectedLocalAuthority(laData);
     }
   };
 
   // Load GeoJSON data (Scotland-only file for faster loading)
   useEffect(() => {
-    fetch("/data/scotland_constituencies_2024.geojson")
+    fetch("/data/scotland_local_authorities_2021.geojson")
       .then((r) => r.json())
       .then((geojson) => {
         setGeoData(geojson);
@@ -69,33 +68,42 @@ export default function ScotlandMap({
       });
   }, []);
 
-  // Create data map from constituency data
+  // Create data map from local authority data
   const dataMap = useMemo(() => {
     return new Map(
-      constituencyData.map((d) => [d.constituency_code, d])
+      localAuthorityData.map((d) => [d.local_authority_code, d])
     );
-  }, [constituencyData]);
+  }, [localAuthorityData]);
 
-  // Highlight and zoom to controlled constituency when it changes
+  // Compute color scale extent from data (min/max of average_gain)
+  const colorExtent = useMemo(() => {
+    if (localAuthorityData.length === 0) return { min: 0, max: 35 };
+    const gains = localAuthorityData.map((d) => d.average_gain || 0);
+    const min = Math.floor(Math.min(...gains));
+    const max = Math.ceil(Math.max(...gains));
+    return { min, max };
+  }, [localAuthorityData]);
+
+  // Highlight and zoom to controlled local authority when it changes
   useEffect(() => {
-    if (!controlledConstituency || !geoData || !svgRef.current) return;
+    if (!controlledLocalAuthority || !geoData || !svgRef.current) return;
 
     const svg = d3.select(svgRef.current);
 
     // Reset all paths
     svg
-      .selectAll(".constituency-path")
+      .selectAll(".local-authority-path")
       .attr("stroke", "#fff")
       .attr("stroke-width", 0.3);
 
-    // Highlight selected constituency
+    // Highlight selected local authority
     const selectedPath = svg
-      .selectAll(".constituency-path")
-      .filter((d) => d.properties.GSScode === controlledConstituency.code);
+      .selectAll(".local-authority-path")
+      .filter((d) => d.properties.LAD21CD === controlledLocalAuthority.code);
 
     selectedPath.attr("stroke", "#1D4044").attr("stroke-width", 1.5);
 
-    // Zoom to the selected constituency
+    // Zoom to the selected local authority
     const pathNode = selectedPath.node();
     if (!pathNode) return;
 
@@ -103,21 +111,21 @@ export default function ScotlandMap({
     const centerX = bbox.x + bbox.width / 2;
     const centerY = bbox.y + bbox.height / 2;
 
-    // Find constituency data
-    const constData = dataMap.get(controlledConstituency.code) || {
-      constituency_code: controlledConstituency.code,
-      constituency_name: controlledConstituency.name,
+    // Find local authority data
+    const laData = dataMap.get(controlledLocalAuthority.code) || {
+      local_authority_code: controlledLocalAuthority.code,
+      local_authority_name: controlledLocalAuthority.name,
       average_gain: 0,
       relative_change: 0,
     };
 
     // Show tooltip
-    setTooltipData(constData);
+    setTooltipData(laData);
     setTooltipPosition({ x: centerX, y: centerY });
 
-    // Smooth zoom to constituency
-    const scale = Math.min(4, 0.9 / Math.max(bbox.width / 600, bbox.height / 600));
-    const translate = [600 / 2 - scale * centerX, 600 / 2 - scale * centerY];
+    // Smooth zoom to local authority
+    const scale = Math.min(4, 0.9 / Math.max(bbox.width / 450, bbox.height / 450));
+    const translate = [450 / 2 - scale * centerX, 550 / 2 - scale * centerY];
 
     if (window.scotlandMapZoomBehavior) {
       const { svg: svgZoom, zoom } = window.scotlandMapZoomBehavior;
@@ -129,7 +137,7 @@ export default function ScotlandMap({
           d3.zoomIdentity.translate(translate[0], translate[1]).scale(scale),
         );
     }
-  }, [controlledConstituency, geoData, dataMap]);
+  }, [controlledLocalAuthority, geoData, dataMap]);
 
   // Render map
   useEffect(() => {
@@ -138,8 +146,8 @@ export default function ScotlandMap({
     const svg = d3.select(svgRef.current);
     svg.selectAll("*").remove();
 
-    const width = 600;
-    const height = 700;
+    const width = 450;
+    const height = 550;
 
     const g = svg.append("g");
 
@@ -177,41 +185,38 @@ export default function ScotlandMap({
       (height - 2 * padding) / dataHeight,
     );
 
+    // Compress width only (85% of normal width)
+    const scaleX = scale * 0.85;
+    const scaleY = scale;
+
     // Calculate centering offsets
-    const scaledWidth = dataWidth * scale;
-    const scaledHeight = dataHeight * scale;
+    const scaledWidth = dataWidth * scaleX;
+    const scaledHeight = dataHeight * scaleY;
     const offsetX = (width - scaledWidth) / 2;
     const offsetY = (height - scaledHeight) / 2;
 
     const projection = d3.geoTransform({
       point: function (x, y) {
         this.stream.point(
-          (x - bounds.xMin) * scale + offsetX,
-          height - ((y - bounds.yMin) * scale + offsetY),
+          (x - bounds.xMin) * scaleX + offsetX,
+          height - ((y - bounds.yMin) * scaleY + offsetY),
         );
       },
     });
 
     const path = d3.geoPath().projection(projection);
 
-    // Color scale - diverging with white at 0, amber for losses, teal for gains
+    // Color scale - sequential from light to dark teal (min to max gain)
     // Uses average_gain (absolute £ values)
     const getValue = (d) => d.average_gain || 0;
 
     const colorScale = d3
-      .scaleDiverging()
-      .domain([-FIXED_COLOR_EXTENT, 0, FIXED_COLOR_EXTENT])
-      .interpolator((t) => {
-        if (t < 0.5) {
-          const ratio = t * 2;
-          return d3.interpolateRgb("#D97706", "#E5E7EB")(ratio);
-        } else {
-          const ratio = (t - 0.5) * 2;
-          return d3.interpolateRgb("#E5E7EB", "#14B8A6")(ratio);
-        }
-      });
+      .scaleLinear()
+      .domain([colorExtent.min, colorExtent.max])
+      .range(["#E0F2F1", "#0D9488"])
+      .clamp(true);
 
-    // Draw constituencies
+    // Draw local authorities
     const paths = g
       .selectAll("path")
       .data(geoData.features)
@@ -219,7 +224,7 @@ export default function ScotlandMap({
       .attr("d", path)
       .attr("stroke", "#fff")
       .attr("stroke-width", 0.3)
-      .attr("class", "constituency-path")
+      .attr("class", "local-authority-path")
       .style("cursor", "pointer");
 
     // Animate fill colors
@@ -227,8 +232,8 @@ export default function ScotlandMap({
       .transition()
       .duration(500)
       .attr("fill", (d) => {
-        const constData = dataMap.get(d.properties.GSScode);
-        return constData ? colorScale(getValue(constData)) : "#ddd";
+        const laData = dataMap.get(d.properties.LAD21CD);
+        return laData ? colorScale(getValue(laData)) : "#ddd";
       });
 
     // Add event handlers
@@ -236,39 +241,39 @@ export default function ScotlandMap({
       .on("click", function (event, d) {
         event.stopPropagation();
 
-        const gssCode = d.properties.GSScode;
-        const constData = dataMap.get(gssCode);
+        const laCode = d.properties.LAD21CD;
+        const laData = dataMap.get(laCode);
 
-        const constituencyName = constData?.constituency_name
-          || d.properties.Name
-          || gssCode;
+        const localAuthorityName = laData?.local_authority_name
+          || d.properties.LAD21NM
+          || laCode;
 
         // Update styling
         svg
-          .selectAll(".constituency-path")
+          .selectAll(".local-authority-path")
           .attr("stroke", "#fff")
           .attr("stroke-width", 0.3);
 
         d3.select(this).attr("stroke", "#1D4044").attr("stroke-width", 1.5);
 
-        const selectionData = constData || {
-          constituency_code: gssCode,
-          constituency_name: constituencyName,
+        const selectionData = laData || {
+          local_authority_code: laCode,
+          local_authority_name: localAuthorityName,
         };
 
-        setSelectedConstituency(selectionData);
+        setSelectedLocalAuthority(selectionData);
 
         // Get centroid for tooltip
         const pathBounds = path.bounds(d);
         const centerX = (pathBounds[0][0] + pathBounds[1][0]) / 2;
         const centerY = (pathBounds[0][1] + pathBounds[1][1]) / 2;
 
-        if (constData) {
-          setTooltipData(constData);
+        if (laData) {
+          setTooltipData(laData);
           setTooltipPosition({ x: centerX, y: centerY });
         }
 
-        // Zoom to constituency
+        // Zoom to local authority
         const dx = pathBounds[1][0] - pathBounds[0][0];
         const dy = pathBounds[1][1] - pathBounds[0][1];
         const x = centerX;
@@ -318,22 +323,22 @@ export default function ScotlandMap({
       .attr("height", CHART_LOGO.height)
       .attr("x", width - CHART_LOGO.width - CHART_LOGO.padding)
       .attr("y", height - CHART_LOGO.height - CHART_LOGO.padding);
-  }, [geoData, dataMap, onConstituencySelect]);
+  }, [geoData, dataMap, colorExtent, onLocalAuthoritySelect]);
 
   // Handle search
   useEffect(() => {
-    if (!searchQuery.trim() || !constituencyData.length) {
+    if (!searchQuery.trim() || !localAuthorityData.length) {
       setSearchResults([]);
       return;
     }
 
     const query = searchQuery.toLowerCase();
-    const results = constituencyData
-      .filter((d) => d.constituency_name.toLowerCase().includes(query))
+    const results = localAuthorityData
+      .filter((d) => d.local_authority_name.toLowerCase().includes(query))
       .slice(0, 5);
 
     setSearchResults(results);
-  }, [searchQuery, constituencyData]);
+  }, [searchQuery, localAuthorityData]);
 
   // Zoom control functions
   const handleZoomIn = () => {
@@ -359,14 +364,14 @@ export default function ScotlandMap({
     if (svgRef.current) {
       const svg = d3.select(svgRef.current);
       svg
-        .selectAll(".constituency-path")
+        .selectAll(".local-authority-path")
         .attr("stroke", "#fff")
         .attr("stroke-width", 0.3);
     }
   };
 
-  const selectConstituency = (constData) => {
-    setSelectedConstituency(constData);
+  const selectLocalAuthority = (laData) => {
+    setSelectedLocalAuthority(laData);
     setSearchQuery("");
     setSearchResults([]);
 
@@ -375,13 +380,13 @@ export default function ScotlandMap({
     const svg = d3.select(svgRef.current);
 
     svg
-      .selectAll(".constituency-path")
+      .selectAll(".local-authority-path")
       .attr("stroke", "#fff")
       .attr("stroke-width", 0.3);
 
     const selectedPath = svg
-      .selectAll(".constituency-path")
-      .filter((d) => d.properties.GSScode === constData.constituency_code);
+      .selectAll(".local-authority-path")
+      .filter((d) => d.properties.LAD21CD === laData.local_authority_code);
 
     selectedPath.attr("stroke", "#1D4044").attr("stroke-width", 1.5);
 
@@ -392,13 +397,13 @@ export default function ScotlandMap({
     const centerX = bbox.x + bbox.width / 2;
     const centerY = bbox.y + bbox.height / 2;
 
-    setTooltipData(constData);
+    setTooltipData(laData);
     setTooltipPosition({ x: centerX, y: centerY });
 
     const dx = bbox.width;
     const dy = bbox.height;
-    const scale = Math.min(4, 0.9 / Math.max(dx / 600, dy / 700));
-    const translate = [600 / 2 - scale * centerX, 700 / 2 - scale * centerY];
+    const scale = Math.min(4, 0.9 / Math.max(dx / 450, dy / 550));
+    const translate = [450 / 2 - scale * centerX, 550 / 2 - scale * centerY];
 
     if (window.scotlandMapZoomBehavior) {
       const { svg: svgZoom, zoom } = window.scotlandMapZoomBehavior;
@@ -417,7 +422,7 @@ export default function ScotlandMap({
 
     await exportMapAsSvg(svgRef.current, `scotland-map-${selectedYear}`, {
       title: `${CHART_TITLE}, ${formatYearRange(selectedYear)}`,
-      description: `This map shows the average annual household gain from the ${policyName} across Scottish constituencies. Green shading indicates larger gains.`,
+      description: `This map shows the average annual household gain from the ${policyName} across Scottish local authorities. Green shading indicates larger gains.`,
       logo: CHART_LOGO,
       tooltipData,
     });
@@ -437,10 +442,10 @@ export default function ScotlandMap({
       <div className="map-header">
         <div className="chart-header">
           <div>
-            <h3 className="chart-title">Constituency impacts, {formatYearRange(selectedYear)}</h3>
+            <h3 className="chart-title">Local authority impacts, {formatYearRange(selectedYear)}</h3>
             <p className="chart-description">
               This map shows the average annual household gain from the {policyName}
-              across Scottish constituencies. Darker green indicates larger gains.
+              across Scottish local authorities. Darker green indicates larger gains.
             </p>
           </div>
           <button
@@ -476,19 +481,19 @@ export default function ScotlandMap({
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search constituency..."
-              className="constituency-search"
+              placeholder="Search local authority..."
+              className="local-authority-search"
             />
             {searchResults.length > 0 && (
               <div className="search-results">
                 {searchResults.map((result) => (
                   <button
-                    key={result.constituency_code}
-                    onClick={() => selectConstituency(result)}
+                    key={result.local_authority_code}
+                    onClick={() => selectLocalAuthority(result)}
                     className="search-result-item"
                   >
                     <div className="result-name">
-                      {result.constituency_name}
+                      {result.local_authority_name}
                     </div>
                     <div className="result-value">
                       £{result.average_gain?.toFixed(0) || 0} (
@@ -517,11 +522,10 @@ export default function ScotlandMap({
 
         <div className="map-legend-horizontal">
           <div className="legend-horizontal-content">
-            <div className="legend-gradient-horizontal" />
+            <div className="legend-gradient-horizontal legend-gradient-sequential" />
             <div className="legend-labels-horizontal">
-              <span>-£{FIXED_COLOR_EXTENT}</span>
-              <span className="legend-zero">£0</span>
-              <span>+£{FIXED_COLOR_EXTENT}</span>
+              <span>£{colorExtent.min}</span>
+              <span>£{colorExtent.max}</span>
             </div>
           </div>
         </div>
@@ -532,16 +536,16 @@ export default function ScotlandMap({
         <div className="map-canvas">
           <svg
             ref={svgRef}
-            width="600"
-            height="700"
-            viewBox="0 0 600 700"
+            width="450"
+            height="550"
+            viewBox="0 0 450 550"
             preserveAspectRatio="xMidYMid meet"
             onClick={() => {
               setTooltipData(null);
               if (svgRef.current) {
                 const svg = d3.select(svgRef.current);
                 svg
-                  .selectAll(".constituency-path")
+                  .selectAll(".local-authority-path")
                   .attr("stroke", "#fff")
                   .attr("stroke-width", 0.3);
               }
@@ -595,7 +599,7 @@ export default function ScotlandMap({
           {/* Tooltip overlay */}
           {tooltipData && (
             <div
-              className="constituency-tooltip"
+              className="local-authority-tooltip"
               style={{
                 left: `${tooltipPosition.x}px`,
                 top: `${tooltipPosition.y}px`,
@@ -608,7 +612,7 @@ export default function ScotlandMap({
               >
                 ×
               </div>
-              <h4>{tooltipData.constituency_name}</h4>
+              <h4>{tooltipData.local_authority_name}</h4>
               <p
                 className="tooltip-value"
                 style={{

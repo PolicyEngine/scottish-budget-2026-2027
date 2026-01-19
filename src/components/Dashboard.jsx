@@ -12,7 +12,7 @@ const SECTIONS = [
   { id: "budgetary-impact", label: "Budgetary impact" },
   { id: "living-standards", label: "Living standards" },
   { id: "poverty", label: "Poverty rate" },
-  { id: "constituencies", label: "Impact by constituency" },
+  { id: "local-authorities", label: "Impact by local authority" },
 ];
 
 // Policy descriptions (active voice, clear impacts)
@@ -452,11 +452,11 @@ export default function Dashboard({ selectedPolicies = [] }) {
         />
       )}
 
-      {/* Constituency Impact Section */}
-      <h2 className="section-title" id="constituencies" ref={(el) => (sectionRefs.current["constituencies"] = el)}>Impact by constituency</h2>
+      {/* Local Authority Impact Section */}
+      <h2 className="section-title" id="local-authorities" ref={(el) => (sectionRefs.current["local-authorities"] = el)}>Impact by local authority</h2>
       <p className="chart-description">
-        This section shows how the budget measures affect different constituencies across Scotland.
-        Select a constituency to see the estimated impact on households in that area.
+        This section shows how the budget measures affect different local authorities across Scotland.
+        Select a local authority to see the estimated impact on households in that area.
       </p>
 
       <LocalAreaSection
