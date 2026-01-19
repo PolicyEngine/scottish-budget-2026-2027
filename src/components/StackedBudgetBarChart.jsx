@@ -41,7 +41,7 @@ export default function StackedBudgetBarChart({
     );
   }
 
-  const defaultFormat = (value) => `£${value.toFixed(0)}m`;
+  const defaultFormat = (value) => `£${value.toFixed(2)}m`;
   const formatValue = yFormat || defaultFormat;
   const formatYearRange = (year) => `${year}–${(year + 1).toString().slice(-2)}`;
 
