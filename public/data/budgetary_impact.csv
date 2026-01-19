@@ -1,9 +1,9 @@
 reform_id,reform_name,year,value
 combined,All policies combined,2026,83.0149259538319
-combined,All policies combined,2027,76.10513265165356
-combined,All policies combined,2028,69.28498661454915
-combined,All policies combined,2029,61.72854859657103
-combined,All policies combined,2030,53.69163812485653
+combined,All policies combined,2027,92.33288983486545
+combined,All policies combined,2028,85.5777391359748
+combined,All policies combined,2029,78.0929106825329
+combined,All policies combined,2030,70.12968349888149
 scp_inflation,SCP inflation adjustment (£28.20/week),2026,19.70111989662402
 scp_inflation,SCP inflation adjustment (£28.20/week),2027,18.554560508618
 scp_inflation,SCP inflation adjustment (£28.20/week),2028,18.628783941739414

@@ -2,18 +2,18 @@ reform_id,reform_name,year,metric,value
 combined,All policies combined,2026,winners_pct,76.66382150911737
 combined,All policies combined,2026,losers_pct,0.2628613984335181
 combined,All policies combined,2026,unchanged_pct,23.073317092449116
-combined,All policies combined,2027,winners_pct,77.15683085610942
+combined,All policies combined,2027,winners_pct,77.23075291007822
 combined,All policies combined,2027,losers_pct,0.2628613948950807
-combined,All policies combined,2027,unchanged_pct,22.580307748995498
-combined,All policies combined,2028,winners_pct,77.18459229646133
+combined,All policies combined,2027,unchanged_pct,22.506385695026694
+combined,All policies combined,2028,winners_pct,77.25851434997844
 combined,All policies combined,2028,losers_pct,0.29558811444682953
-combined,All policies combined,2028,unchanged_pct,22.519819589091846
-combined,All policies combined,2029,winners_pct,77.23138038896526
+combined,All policies combined,2028,unchanged_pct,22.445897535574726
+combined,All policies combined,2029,winners_pct,77.30530244403134
 combined,All policies combined,2029,losers_pct,0.2955733613255321
-combined,All policies combined,2029,unchanged_pct,22.4730462497092
-combined,All policies combined,2030,winners_pct,77.27067340293063
+combined,All policies combined,2029,unchanged_pct,22.399124194643125
+combined,All policies combined,2030,winners_pct,77.34459545609992
 combined,All policies combined,2030,losers_pct,0.29557336005322815
-combined,All policies combined,2030,unchanged_pct,22.43375323701615
+combined,All policies combined,2030,unchanged_pct,22.35983118384685
 scp_inflation,SCP inflation adjustment (£28.20/week),2026,winners_pct,8.372734191674065
 scp_inflation,SCP inflation adjustment (£28.20/week),2026,losers_pct,0.0
 scp_inflation,SCP inflation adjustment (£28.20/week),2026,unchanged_pct,91.62726580832593
