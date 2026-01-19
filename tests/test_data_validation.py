@@ -21,12 +21,6 @@ def distributional_impact():
 
 
 @pytest.fixture
-def winners_losers():
-    """Load winners/losers data."""
-    return pd.read_csv(DATA_DIR / "winners_losers.csv")
-
-
-@pytest.fixture
 def metrics():
     """Load metrics data."""
     return pd.read_csv(DATA_DIR / "metrics.csv")
@@ -161,16 +155,6 @@ def test_distributional_impact_has_all_deciles(distributional_impact):
     assert deciles == expected
 
 
-def test_winners_losers_percentages_sum_to_100(winners_losers):
-    """Test winners/losers percentages sum to approximately 100%."""
-    # Data format: metric column has winners_pct, losers_pct, unchanged_pct
-    for (reform_id, year), group in winners_losers.groupby(["reform_id", "year"]):
-        # Pivot to get percentages as columns
-        metrics = group.set_index("metric")["value"]
-        total = metrics.get("winners_pct", 0) + metrics.get("losers_pct", 0) + metrics.get("unchanged_pct", 0)
-        assert 99 < total < 101, f"Reform {reform_id} year {year}: percentages sum to {total}%, not ~100%"
-
-
 def test_all_data_files_exist():
     """Test that all expected data files exist."""
     expected_files = [
@@ -178,7 +162,6 @@ def test_all_data_files_exist():
         "constituency.csv",
         "distributional_impact.csv",
         "metrics.csv",
-        "winners_losers.csv",
     ]
 
     for filename in expected_files:

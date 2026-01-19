@@ -17,7 +17,6 @@ from .calculators import (
     DistributionalImpactCalculator,
     MetricsCalculator,
     TwoChildLimitCalculator,
-    WinnersLosersCalculator,
 )
 from .reforms import ReformDefinition, get_scottish_budget_reforms
 
@@ -67,7 +66,6 @@ def generate_all_data(
     # Initialize calculators
     budgetary_calc = BudgetaryImpactCalculator(years=years)
     distributional_calc = DistributionalImpactCalculator()
-    winners_losers_calc = WinnersLosersCalculator()
     metrics_calc = MetricsCalculator()
     constituency_calc = ConstituencyCalculator()
 
@@ -94,7 +92,6 @@ def generate_all_data(
     # Aggregate results
     all_budgetary = []
     all_distributional = []
-    all_winners_losers = []
     all_metrics = []
     all_constituency = []
 
@@ -126,16 +123,10 @@ def generate_all_data(
             print(f"  Year {year}...")
 
             # Distributional
-            distributional, decile_df = distributional_calc.calculate(
+            distributional, _ = distributional_calc.calculate(
                 reform.id, reform.name, year
             )
             all_distributional.extend(distributional)
-
-            # Winners/losers
-            winners_losers = winners_losers_calc.calculate(
-                decile_df, reform.id, reform.name, year
-            )
-            all_winners_losers.extend(winners_losers)
 
             # Summary metrics (poverty)
             metrics = metrics_calc.calculate(
@@ -156,7 +147,6 @@ def generate_all_data(
     results = {
         "budgetary_impact": pd.DataFrame(all_budgetary),
         "distributional_impact": pd.DataFrame(all_distributional),
-        "winners_losers": pd.DataFrame(all_winners_losers),
         "metrics": pd.DataFrame(all_metrics),
         "constituency": pd.DataFrame(all_constituency),
     }
