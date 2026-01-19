@@ -5,7 +5,7 @@ import { exportMapAsSvg } from "../utils/exportMapAsSvg";
 import "./ScotlandMap.css";
 
 // Chart metadata for export
-const CHART_TITLE = "Scottish constituency-level impacts";
+const CHART_TITLE = "Scottish local authority-level impacts";
 // Note: CHART_DESCRIPTION is now generated dynamically using policyName prop
 
 // Fixed color scale extent for average gain (in £) - consistent across all years
@@ -13,9 +13,6 @@ const FIXED_COLOR_EXTENT = 35;
 
 // Format year for display (e.g., 2026 -> "2026-27")
 const formatYearRange = (year) => `${year}-${(year + 1).toString().slice(-2)}`;
-
-// Scottish constituency codes start with 'S'
-const isScottishConstituency = (code) => code && code.startsWith("S");
 
 export default function ScotlandMap({
   constituencyData = [],
@@ -55,9 +52,9 @@ export default function ScotlandMap({
     }
   };
 
-  // Load GeoJSON data (Scotland-only file for faster loading)
+  // Load GeoJSON data (Scotland local authorities)
   useEffect(() => {
-    fetch("/data/scotland_constituencies_2024.geojson")
+    fetch("/data/scotland_local_authorities_2021.geojson")
       .then((r) => r.json())
       .then((geojson) => {
         setGeoData(geojson);
@@ -91,7 +88,7 @@ export default function ScotlandMap({
     // Highlight selected constituency
     const selectedPath = svg
       .selectAll(".constituency-path")
-      .filter((d) => d.properties.GSScode === controlledConstituency.code);
+      .filter((d) => d.properties.LAD21CD === controlledConstituency.code);
 
     selectedPath.attr("stroke", "#1D4044").attr("stroke-width", 1.5);
 
@@ -143,7 +140,7 @@ export default function ScotlandMap({
 
     const g = svg.append("g");
 
-    // Get bounds of Scottish constituencies
+    // Get bounds of Scottish local authorities
     const bounds = {
       xMin: Infinity,
       xMax: -Infinity,
@@ -227,7 +224,7 @@ export default function ScotlandMap({
       .transition()
       .duration(500)
       .attr("fill", (d) => {
-        const constData = dataMap.get(d.properties.GSScode);
+        const constData = dataMap.get(d.properties.LAD21CD);
         return constData ? colorScale(getValue(constData)) : "#ddd";
       });
 
@@ -236,12 +233,12 @@ export default function ScotlandMap({
       .on("click", function (event, d) {
         event.stopPropagation();
 
-        const gssCode = d.properties.GSScode;
-        const constData = dataMap.get(gssCode);
+        const areaCode = d.properties.LAD21CD;
+        const constData = dataMap.get(areaCode);
 
-        const constituencyName = constData?.constituency_name
-          || d.properties.Name
-          || gssCode;
+        const areaName = constData?.constituency_name
+          || d.properties.LAD21NM
+          || areaCode;
 
         // Update styling
         svg
@@ -252,8 +249,8 @@ export default function ScotlandMap({
         d3.select(this).attr("stroke", "#1D4044").attr("stroke-width", 1.5);
 
         const selectionData = constData || {
-          constituency_code: gssCode,
-          constituency_name: constituencyName,
+          constituency_code: areaCode,
+          constituency_name: areaName,
         };
 
         setSelectedConstituency(selectionData);
@@ -381,7 +378,7 @@ export default function ScotlandMap({
 
     const selectedPath = svg
       .selectAll(".constituency-path")
-      .filter((d) => d.properties.GSScode === constData.constituency_code);
+      .filter((d) => d.properties.LAD21CD === constData.constituency_code);
 
     selectedPath.attr("stroke", "#1D4044").attr("stroke-width", 1.5);
 
@@ -417,7 +414,7 @@ export default function ScotlandMap({
 
     await exportMapAsSvg(svgRef.current, `scotland-map-${selectedYear}`, {
       title: `${CHART_TITLE}, ${formatYearRange(selectedYear)}`,
-      description: `This map shows the average annual household gain from the ${policyName} across Scottish constituencies. Green shading indicates larger gains.`,
+      description: `This map shows the average annual household gain from the ${policyName} across Scottish local authorities. Green shading indicates larger gains.`,
       logo: CHART_LOGO,
       tooltipData,
     });
@@ -437,10 +434,10 @@ export default function ScotlandMap({
       <div className="map-header">
         <div className="chart-header">
           <div>
-            <h3 className="chart-title">Constituency impacts, {formatYearRange(selectedYear)}</h3>
+            <h3 className="chart-title">Local authority impacts, {formatYearRange(selectedYear)}</h3>
             <p className="chart-description">
               This map shows the average annual household gain from the {policyName}
-              across Scottish constituencies. Darker green indicates larger gains.
+              across Scottish local authorities. Darker green indicates larger gains.
             </p>
           </div>
           <button
@@ -476,7 +473,7 @@ export default function ScotlandMap({
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search constituency..."
+              placeholder="Search local authority..."
               className="constituency-search"
             />
             {searchResults.length > 0 && (
