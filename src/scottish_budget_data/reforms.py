@@ -36,6 +36,7 @@ def _get_baseline_scottish_thresholds() -> tuple[float, float]:
     basic = params.brackets[2].threshold("2025-01-01")
     return starter, basic
 
+
 # SCP rates
 # Source: Scottish Budget 2026-27
 # https://www.gov.scot/news/a-budget-to-tackle-child-poverty/
@@ -184,6 +185,7 @@ def get_scottish_budget_reforms() -> list[ReformDefinition]:
                 "SCP Premium for under-ones (£40/week), and income tax threshold uplift (7.4%)."
             ),
             apply_fn=apply_combined_reform,
+            baseline_apply_fn=apply_income_tax_baseline,
             explanation=(
                 "The complete Scottish Budget 2026-27 package combines all three policy reforms: "
                 "the SCP inflation adjustment (£28.20/week), the SCP Premium for under-ones "
