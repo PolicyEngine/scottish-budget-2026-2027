@@ -139,7 +139,19 @@ export default function BudgetBarChart({
             domain={[yMin, yMax]}
             tickFormatter={formatValue}
             tick={{ fontSize: 12, fill: "#666" }}
-            tickCount={yTickCount}
+            ticks={(() => {
+              const range = yMax - yMin;
+              let interval = 100;
+              if (range > 500) interval = 200;
+              if (range > 1000) interval = 250;
+              if (range > 2000) interval = 500;
+              const ticks = [];
+              for (let i = yMin; i <= yMax + 0.001; i += interval) {
+                ticks.push(Math.round(i));
+              }
+              if (!ticks.includes(0)) ticks.push(0);
+              return ticks.sort((a, b) => a - b);
+            })()}
             label={{
               value: yLabel,
               angle: -90,
