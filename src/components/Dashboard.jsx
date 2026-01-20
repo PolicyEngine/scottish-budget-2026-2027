@@ -86,9 +86,9 @@ const POLICY_INFO = {
             <thead>
               <tr>
                 <th style={thStyle}>Year</th>
-                <th style={thRightStyle}>Standard rate</th>
+                <th style={thRightStyle}>Weekly rate</th>
                 <th style={thRightStyle}>Under-1 premium</th>
-                <th style={thRightStyle}>Total (under-1)</th>
+                <th style={thRightStyle}>Weekly total</th>
               </tr>
             </thead>
             <tbody>
