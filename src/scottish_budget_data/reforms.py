@@ -56,8 +56,8 @@ def apply_scp_inflation_reform(sim: Microsimulation) -> None:
     """Apply SCP inflation adjustment to a simulation.
 
     Updates SCP amount from £27.15/week to £28.20/week (+3.9% inflation).
-    This is applied BEFORE the baby boost so the baby boost correctly
-    calculates as £40 - £28.20 = £11.80/week extra.
+    This is applied BEFORE the baby boost. Note: baby boost starts 2027-28
+    when SCP rate is £28.85/week, so premium = £40 - £28.85 = £11.15/week.
 
     Note: SCP amount parameter is stored as £/week (not annual).
 
@@ -194,7 +194,8 @@ def apply_scp_baby_boost_reform(sim: Microsimulation) -> None:
     """Apply SCP baby boost reform to a simulation.
 
     Enables the SCP baby bonus via the contrib parameters.
-    This gives £40/week total for under-1s (vs £28.20 inflation-adjusted).
+    This gives £40/week total for under-1s (£11.15/week extra in 2027-28
+    when standard rate is £28.85/week). Both total and rate CPI uprated.
 
     Note: The SCP Premium for under-ones takes effect from 2027, not 2026.
 
@@ -286,15 +287,16 @@ def get_scottish_budget_reforms() -> list[ReformDefinition]:
             name="SCP Premium for under-ones (£40/week)",
             description=(
                 "SCP Premium for under-ones: £40/week total for babies under 1 "
-                "(£11.80/week extra on top of the inflation-adjusted £28.20/week rate)."
+                "(£11.15/week extra in 2027-28). Both total and standard rate CPI uprated annually."
             ),
             apply_fn=apply_scp_baby_boost_reform,
             explanation=(
                 "The new SCP Premium for under-ones increases the Scottish Child Payment to "
-                "£40/week total for families with babies under 1 year old. This is £11.80/week "
-                "extra on top of the inflation-adjusted rate of £28.20/week. This delivers the "
-                "strongest package of support for families with young children anywhere in the UK, "
-                "as announced by Finance Secretary Shona Robison on 13 January 2026."
+                "£40/week total for families with babies under 1 year old (£11.15/week extra "
+                "in 2027-28 when standard rate is £28.85/week). Both the total and standard rate "
+                "are CPI uprated annually. This delivers the strongest package of support for "
+                "families with young children anywhere in the UK, as announced by Finance "
+                "Secretary Shona Robison on 13 January 2026."
             ),
         ),
         ReformDefinition(
