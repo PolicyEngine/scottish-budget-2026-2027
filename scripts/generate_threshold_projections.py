@@ -17,6 +17,11 @@ CPI_FORECASTS = {
 BASIC_RATE_2026 = 16538
 INTERMEDIATE_RATE_2026 = 29527
 
+# Frozen thresholds (frozen through 2028-29, then uprated)
+HIGHER_RATE_FROZEN = 43663
+ADVANCED_RATE_FROZEN = 75001
+TOP_RATE_FROZEN = 125140
+
 
 def calculate_projections():
     """Calculate threshold projections based on CPI uprating."""
@@ -39,11 +44,38 @@ def calculate_projections():
         intermediate[year] = new_val
         prev = new_val
 
-    return basic, intermediate
+    # Higher rate threshold (frozen through 2028-29, then CPI uprated)
+    higher = {2025: HIGHER_RATE_FROZEN, 2026: HIGHER_RATE_FROZEN, 2027: HIGHER_RATE_FROZEN, 2028: HIGHER_RATE_FROZEN}
+    prev = HIGHER_RATE_FROZEN
+    for year in [2029, 2030]:
+        cpi = CPI_FORECASTS[year]
+        new_val = round(prev * (1 + cpi))
+        higher[year] = new_val
+        prev = new_val
+
+    # Advanced rate threshold (frozen through 2028-29, then CPI uprated)
+    advanced = {2025: ADVANCED_RATE_FROZEN, 2026: ADVANCED_RATE_FROZEN, 2027: ADVANCED_RATE_FROZEN, 2028: ADVANCED_RATE_FROZEN}
+    prev = ADVANCED_RATE_FROZEN
+    for year in [2029, 2030]:
+        cpi = CPI_FORECASTS[year]
+        new_val = round(prev * (1 + cpi))
+        advanced[year] = new_val
+        prev = new_val
+
+    # Top rate threshold (frozen through 2028-29, then CPI uprated)
+    top = {2025: TOP_RATE_FROZEN, 2026: TOP_RATE_FROZEN, 2027: TOP_RATE_FROZEN, 2028: TOP_RATE_FROZEN}
+    prev = TOP_RATE_FROZEN
+    for year in [2029, 2030]:
+        cpi = CPI_FORECASTS[year]
+        new_val = round(prev * (1 + cpi))
+        top[year] = new_val
+        prev = new_val
+
+    return basic, intermediate, higher, advanced, top
 
 
 def main():
-    basic, intermediate = calculate_projections()
+    basic, intermediate, higher, advanced, top = calculate_projections()
 
     print("=" * 60)
     print("Basic Rate Threshold Projections (CPI uprated)")
@@ -106,6 +138,23 @@ def main():
     year = 2030
     cpi = CPI_FORECASTS[year] * 100
     print(f'<tr><td style={{{{...tdStyle, borderBottom: "none"}}}}>{year}-{year+1-2000}</td><td style={{{{...tdRightStyle, borderBottom: "none"}}}}>£{intermediate[year]:,}</td><td style={{{{...tdCenterStyle, borderBottom: "none", color: "#2e7d32"}}}}>+{cpi:.1f}%</td></tr>')
+
+    print("\n")
+    print("=" * 60)
+    print("Frozen Thresholds (freeze ends 2028-29, then CPI uprated)")
+    print("=" * 60)
+
+    print(f"\nHigher rate (42%): £{HIGHER_RATE_FROZEN:,} frozen through 2028-29")
+    print(f"  2029-30: £{higher[2029]:,}")
+    print(f"  2030-31: £{higher[2030]:,}")
+
+    print(f"\nAdvanced rate (45%): £{ADVANCED_RATE_FROZEN:,} frozen through 2028-29")
+    print(f"  2029-30: £{advanced[2029]:,}")
+    print(f"  2030-31: £{advanced[2030]:,}")
+
+    print(f"\nTop rate (48%): £{TOP_RATE_FROZEN:,} frozen through 2028-29")
+    print(f"  2029-30: £{top[2029]:,}")
+    print(f"  2030-31: £{top[2030]:,}")
 
 
 if __name__ == "__main__":
