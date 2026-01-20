@@ -6,14 +6,31 @@ import ValidationTab from "./components/ValidationTab";
 import "./App.css";
 
 const POLICIES = [
-  { id: "income_tax_threshold_uplift", name: "Income tax threshold uplift" },
-  { id: "scp_inflation", name: "SCP inflation adjustment" },
-  { id: "scp_baby_boost", name: "SCP Premium for under-ones" },
+  // Income tax threshold uplifts (costs to government)
+  { id: "income_tax_threshold_uplift", name: "Income tax threshold uplift", category: "cost" },
+  { id: "income_tax_basic_uplift", name: "Basic rate threshold uplift", category: "cost" },
+  { id: "income_tax_intermediate_uplift", name: "Intermediate rate threshold uplift", category: "cost" },
+  // SCP policies (costs to government)
+  { id: "scp_inflation", name: "SCP inflation adjustment", category: "cost" },
+  { id: "scp_baby_boost", name: "SCP Premium for under-ones", category: "cost" },
+  // Threshold freezes (revenue raisers)
+  { id: "higher_rate_freeze", name: "Higher rate threshold freeze", category: "revenue" },
+  { id: "advanced_rate_freeze", name: "Advanced rate threshold freeze", category: "revenue" },
+  { id: "top_rate_freeze", name: "Top rate threshold freeze", category: "revenue" },
 ];
 
 function App() {
   const [activeTab, setActiveTab] = useState("budget");
-  const [selectedPolicies, setSelectedPolicies] = useState(["income_tax_threshold_uplift", "scp_inflation", "scp_baby_boost"]);
+  const [selectedPolicies, setSelectedPolicies] = useState([
+    "income_tax_threshold_uplift",
+    "income_tax_basic_uplift",
+    "income_tax_intermediate_uplift",
+    "scp_inflation",
+    "scp_baby_boost",
+    "higher_rate_freeze",
+    "advanced_rate_freeze",
+    "top_rate_freeze",
+  ]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -73,8 +90,8 @@ function App() {
 
   const getDropdownLabel = () => {
     if (selectedPolicies.length === 0) return "Select policies";
-    if (selectedPolicies.length === 3) return "All 3 policies selected";
-    if (selectedPolicies.length === 2) return "2 policies selected";
+    if (selectedPolicies.length === POLICIES.length) return `All ${POLICIES.length} policies selected`;
+    if (selectedPolicies.length > 1) return `${selectedPolicies.length} policies selected`;
     return POLICIES.find(p => p.id === selectedPolicies[0])?.name || "Select policies";
   };
 

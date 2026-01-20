@@ -8,10 +8,9 @@ import {
   Tooltip,
   ResponsiveContainer,
   ReferenceLine,
-  Legend,
 } from "recharts";
 import "./DecileChart.css";
-import { POLICY_COLORS, ALL_POLICY_NAMES } from "../utils/policyConfig";
+import { POLICY_COLORS, ALL_POLICY_NAMES, REVENUE_POLICIES, POLICY_NAMES } from "../utils/policyConfig";
 
 /**
  * Decile impact chart showing relative or absolute change by income decile.
@@ -26,6 +25,7 @@ export default function DecileChart({
   selectedYear = 2026,
   onYearChange = null,
   availableYears = [2026, 2027, 2028, 2029, 2030],
+  selectedPolicies = [],
 }) {
   const [viewMode, setViewMode] = useState("absolute"); // "absolute" or "relative"
   const formatYearRange = (year) => `${year}-${(year + 1).toString().slice(-2)}`;
@@ -50,18 +50,28 @@ export default function DecileChart({
     return `£${Math.abs(value).toFixed(2)}`;
   };
 
+  // Get policy IDs that are revenue raisers (bad for households - should be negative)
+  const revenuePolicyNames = REVENUE_POLICIES.map(id => POLICY_NAMES[id]);
+
   // Prepare chart data
   // Note: relative values are already in percentage format from the calculator
+  // Revenue policies (freezes) should be negative as they reduce household income
   let chartData;
   if (stacked && stackedData) {
     chartData = stackedData.map((d) => {
       const point = { decile: d.decile };
       ALL_POLICY_NAMES.forEach(name => {
+        let value;
         if (viewMode === "relative") {
-          point[name] = d[`${name}_relative`] || 0;
+          value = d[`${name}_relative`] || 0;
         } else {
-          point[name] = d[`${name}_absolute`] || 0;
+          value = d[`${name}_absolute`] || 0;
         }
+        // Negate revenue policy values (they're costs to households)
+        if (revenuePolicyNames.includes(name)) {
+          value = -Math.abs(value);
+        }
+        point[name] = value;
       });
       point.netChange = viewMode === "relative"
         ? (d.netRelative || 0)
@@ -75,39 +85,55 @@ export default function DecileChart({
     }));
   }
 
-  // Check which policies have data
+  // Convert selected policy IDs to names
+  const selectedPolicyNames = selectedPolicies.map(id => POLICY_NAMES[id]);
+
+  // All selected policies for legend (show all selected, even with zero data)
+  const legendPolicies = stacked
+    ? ALL_POLICY_NAMES.filter(name => selectedPolicyNames.includes(name))
+    : [];
+
+  // Policies with actual data for rendering bars
   const activePolicies = stacked
     ? ALL_POLICY_NAMES.filter(name =>
-        chartData.some(d => Math.abs(d[name] || 0) > 0.001)
+        chartData.some(d => Math.abs(d[name] || 0) > 0.001) &&
+        selectedPolicyNames.includes(name)
       )
     : [];
 
-  // Calculate y-axis domain with equal increments
-  let maxValue;
+  // Calculate y-axis domain - symmetric around zero for stacked charts (only for active policies)
+  let yMin = 0, yMax = 10;
   if (stacked) {
-    maxValue = Math.max(...chartData.map((d) => {
-      let sum = 0;
-      ALL_POLICY_NAMES.forEach(name => { sum += Math.abs(d[name] || 0); });
-      return sum || Math.abs(d.netChange || 0);
-    }));
+    let minSum = 0, maxSum = 0;
+    chartData.forEach(d => {
+      let positiveSum = 0, negativeSum = 0;
+      activePolicies.forEach(name => {
+        const val = d[name] || 0;
+        if (val > 0) positiveSum += val;
+        else negativeSum += val;
+      });
+      minSum = Math.min(minSum, negativeSum);
+      maxSum = Math.max(maxSum, positiveSum);
+    });
+    // Make symmetric around zero
+    const absMax = Math.max(Math.abs(minSum), Math.abs(maxSum));
+    if (viewMode === "relative") {
+      const rounded = Math.ceil(absMax * 10) / 10;
+      yMin = -rounded;
+      yMax = rounded;
+    } else {
+      const rounded = Math.ceil(absMax / 20) * 20;
+      yMin = -rounded;
+      yMax = rounded || 40;
+    }
   } else {
-    maxValue = Math.max(...chartData.map((d) => Math.abs(d.value || 0)));
+    const values = chartData.map(d => d.value || 0);
+    const maxVal = Math.max(...values);
+    yMin = 0;
+    yMax = viewMode === "relative"
+      ? Math.ceil(maxVal * 10) / 10
+      : Math.max(40, Math.ceil(maxVal / 10) * 10);
   }
-
-  // Calculate nice round numbers for equal increments
-  const getNiceMax = (val) => {
-    if (val <= 0) return viewMode === "relative" ? 0.5 : 10;
-    const magnitude = Math.pow(10, Math.floor(Math.log10(val)));
-    const normalized = val / magnitude;
-    if (normalized <= 1) return magnitude;
-    if (normalized <= 2) return 2 * magnitude;
-    if (normalized <= 5) return 5 * magnitude;
-    return 10 * magnitude;
-  };
-
-  const yMax = viewMode === "relative"
-    ? getNiceMax(Math.max(0.5, maxValue * 1.1))
-    : 40; // Fixed max for absolute mode
 
   return (
     <div className="decile-chart">
@@ -148,10 +174,36 @@ export default function DecileChart({
         )}
       </div>
 
+      {/* Custom legend showing all selected policies */}
+      {stacked && legendPolicies.length > 0 && (
+        <div className="custom-legend" style={{
+          display: "flex",
+          flexWrap: "wrap",
+          justifyContent: "center",
+          gap: "16px",
+          marginBottom: "12px",
+          maxWidth: "800px",
+          margin: "0 auto 12px auto"
+        }}>
+          {legendPolicies.map(name => (
+            <div key={name} style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+              <span style={{
+                width: "12px",
+                height: "12px",
+                backgroundColor: POLICY_COLORS[name],
+                display: "inline-block"
+              }}></span>
+              <span style={{ fontSize: "13px", color: "#374151" }}>{name}</span>
+            </div>
+          ))}
+        </div>
+      )}
+
       <ResponsiveContainer width="100%" height={350}>
         <ComposedChart
           data={chartData}
           margin={{ top: 20, right: 30, left: 60, bottom: 40 }}
+          stackOffset="sign"
         >
           <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
           <XAxis
@@ -166,7 +218,7 @@ export default function DecileChart({
             }}
           />
           <YAxis
-            domain={[0, yMax]}
+            domain={[yMin, yMax]}
             tickFormatter={formatValue}
             tick={{ fontSize: 12, fill: "#666" }}
             tickCount={5}
@@ -196,17 +248,6 @@ export default function DecileChart({
               padding: "8px 12px",
             }}
           />
-          {stacked && activePolicies.length > 1 && (
-            <Legend
-              verticalAlign="top"
-              height={70}
-              payload={[...activePolicies].reverse().map(name => ({
-                value: name,
-                type: "rect",
-                color: POLICY_COLORS[name],
-              }))}
-            />
-          )}
           {stacked ? (
             <>
               {ALL_POLICY_NAMES.map((policyName) => (
@@ -219,6 +260,7 @@ export default function DecileChart({
                   radius={[2, 2, 0, 0]}
                   stroke="none"
                   hide={!activePolicies.includes(policyName)}
+                  legendType="none"
                 />
               ))}
             </>

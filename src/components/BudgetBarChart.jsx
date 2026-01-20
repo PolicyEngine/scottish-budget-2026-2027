@@ -44,21 +44,30 @@ export default function BudgetBarChart({
   const formatValue = yFormat || defaultFormat;
   const formatYearRange = (year) => `${year}–${(year + 1).toString().slice(-2)}`;
 
-  // Check which policies have non-zero data
+  // Convert selected policy IDs to names
+  const selectedPolicyNames = selectedPolicies.map(id => POLICY_NAMES[id]);
+
+  // All selected policies for legend (show all selected, even with zero data)
+  const legendPolicies = stacked
+    ? ALL_POLICY_NAMES.filter(name => selectedPolicyNames.includes(name))
+    : [];
+
+  // Policies with actual data for rendering bars
   const activePolicies = stacked
     ? ALL_POLICY_NAMES.filter(name =>
-        data.some(d => Math.abs(d[name] || 0) > 0.001)
+        data.some(d => Math.abs(d[name] || 0) > 0.001) &&
+        selectedPolicyNames.includes(name)
       )
     : [];
 
   // Calculate y-axis domain based on data - symmetric around zero
   let yMin = 0, yMax = 10;
   if (stacked) {
-    // For stacked with positive/negative, find min and max
+    // For stacked with positive/negative, find min and max (only for active policies)
     let minSum = 0, maxSum = 0;
     data.forEach(d => {
       let positiveSum = 0, negativeSum = 0;
-      ALL_POLICY_NAMES.forEach(name => {
+      activePolicies.forEach(name => {
         const val = d[name] || 0;
         if (val > 0) positiveSum += val;
         else negativeSum += val;
@@ -92,8 +101,8 @@ export default function BudgetBarChart({
       {title && <h3 className="chart-title">{title}</h3>}
       {description && <p className="chart-description">{description}</p>}
 
-      {/* Custom legend showing only active policies */}
-      {stacked && activePolicies.length > 0 && (
+      {/* Custom legend showing all selected policies */}
+      {stacked && legendPolicies.length > 0 && (
         <div className="custom-legend" style={{
           display: "flex",
           flexWrap: "wrap",
@@ -103,7 +112,7 @@ export default function BudgetBarChart({
           maxWidth: "800px",
           margin: "0 auto 12px auto"
         }}>
-          {activePolicies.map(name => (
+          {legendPolicies.map(name => (
             <div key={name} style={{ display: "flex", alignItems: "center", gap: "6px" }}>
               <span style={{
                 width: "12px",
