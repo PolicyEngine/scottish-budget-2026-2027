@@ -46,8 +46,63 @@ const POLICY_INFO = {
     explanation: (
       <li>
         <strong>Income tax threshold uplift (7.4%)</strong>: The Budget raises the basic rate (20%)
-        threshold from £15,398 to £16,537, and the intermediate rate (21%) threshold from £27,492
+        threshold from £15,398 to £16,538, and the intermediate rate (21%) threshold from £27,492
         to £29,527. Scottish taxpayers pay the lower 19% starter rate on more of their income.
+      </li>
+    ),
+  },
+  income_tax_basic_uplift: {
+    name: "Basic rate threshold uplift",
+    description: "Basic rate threshold raised from £15,398 to £16,538 (+7.4%)",
+    explanation: (
+      <li>
+        <strong>Basic rate threshold uplift (+7.4%)</strong>: The Budget raises the basic rate (20%)
+        threshold from £15,398 to £16,538. This means taxpayers can earn £1,140 more before paying
+        the 20% basic rate instead of the 19% starter rate.
+      </li>
+    ),
+  },
+  income_tax_intermediate_uplift: {
+    name: "Intermediate rate threshold uplift",
+    description: "Intermediate rate threshold raised from £27,492 to £29,527 (+7.4%)",
+    explanation: (
+      <li>
+        <strong>Intermediate rate threshold uplift (+7.4%)</strong>: The Budget raises the intermediate
+        rate (21%) threshold from £27,492 to £29,527. This means taxpayers can earn £2,035 more before
+        paying the 21% intermediate rate instead of the 20% basic rate.
+      </li>
+    ),
+  },
+  higher_rate_freeze: {
+    name: "Higher rate threshold freeze",
+    description: "Higher rate threshold frozen at £43,662 until 2028-29",
+    explanation: (
+      <li>
+        <strong>Higher rate threshold freeze</strong>: The higher rate (42%) threshold remains frozen
+        at £43,662 until 2028-29. Without the freeze, this threshold would increase with inflation,
+        meaning fewer taxpayers would pay the higher rate. The freeze raises revenue for the Scottish Government.
+      </li>
+    ),
+  },
+  advanced_rate_freeze: {
+    name: "Advanced rate threshold freeze",
+    description: "Advanced rate threshold frozen at £75,000 until 2028-29",
+    explanation: (
+      <li>
+        <strong>Advanced rate threshold freeze</strong>: The advanced rate (45%) threshold remains frozen
+        at £75,000 until 2028-29. Without the freeze, this threshold would increase with inflation.
+        The freeze raises revenue from higher earners.
+      </li>
+    ),
+  },
+  top_rate_freeze: {
+    name: "Top rate threshold freeze",
+    description: "Top rate threshold frozen at £125,140 until 2028-29",
+    explanation: (
+      <li>
+        <strong>Top rate threshold freeze</strong>: The top rate (48%) threshold remains frozen
+        at £125,140 until 2028-29. Without the freeze, this threshold would increase with inflation.
+        The freeze raises revenue from the highest earners.
       </li>
     ),
   },
@@ -325,9 +380,14 @@ export default function Dashboard({ selectedPolicies = [] }) {
       <ul className="policy-list">
         {isStacked ? (
           <>
+            {POLICY_INFO.income_tax_threshold_uplift.explanation}
+            {POLICY_INFO.income_tax_basic_uplift.explanation}
+            {POLICY_INFO.income_tax_intermediate_uplift.explanation}
             {POLICY_INFO.scp_inflation.explanation}
             {POLICY_INFO.scp_baby_boost.explanation}
-            {POLICY_INFO.income_tax_threshold_uplift.explanation}
+            {POLICY_INFO.higher_rate_freeze.explanation}
+            {POLICY_INFO.advanced_rate_freeze.explanation}
+            {POLICY_INFO.top_rate_freeze.explanation}
           </>
         ) : (
           policyInfo.explanation
