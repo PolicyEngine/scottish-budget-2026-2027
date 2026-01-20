@@ -72,20 +72,20 @@ def test_income_tax_thresholds_match_budget():
     https://www.gov.scot/publications/scottish-income-tax-technical-factsheet/
     """
     from scottish_budget_data.reforms import (
-        INCOME_TAX_BASIC_THRESHOLD,
-        INCOME_TAX_INTERMEDIATE_THRESHOLD,
+        INCOME_TAX_BASIC_THRESHOLD_2026,
+        INCOME_TAX_INTERMEDIATE_THRESHOLD_2026,
     )
 
     # Thresholds are stored as amounts above personal allowance (£12,570)
-    # Basic rate starts at £16,537 total → £3,967 above PA
-    # Intermediate rate starts at £29,526 total → £16,956 above PA
+    # Basic rate starts at £16,538 total → £3,968 above PA
+    # Intermediate rate starts at £29,527 total → £16,957 above PA
     PERSONAL_ALLOWANCE = 12_570
 
-    assert INCOME_TAX_BASIC_THRESHOLD == 3_967
-    assert INCOME_TAX_BASIC_THRESHOLD + PERSONAL_ALLOWANCE == 16_537
+    assert INCOME_TAX_BASIC_THRESHOLD_2026 == 3_968
+    assert INCOME_TAX_BASIC_THRESHOLD_2026 + PERSONAL_ALLOWANCE == 16_538
 
-    assert INCOME_TAX_INTERMEDIATE_THRESHOLD == 16_956
-    assert INCOME_TAX_INTERMEDIATE_THRESHOLD + PERSONAL_ALLOWANCE == 29_526
+    assert INCOME_TAX_INTERMEDIATE_THRESHOLD_2026 == 16_957
+    assert INCOME_TAX_INTERMEDIATE_THRESHOLD_2026 + PERSONAL_ALLOWANCE == 29_527
 
 
 def test_scp_premium_amount():
