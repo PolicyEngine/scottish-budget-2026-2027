@@ -102,36 +102,6 @@ def apply_scp_inflation_reform(sim: Microsimulation) -> None:
         scp_amount.update(period=period, value=SCP_INFLATION_RATE)  # £/week
 
 
-def apply_income_tax_threshold_reform(sim: Microsimulation) -> None:
-    """Apply income tax threshold uplift to a simulation.
-
-    Sets Scottish income tax thresholds to Budget 2026-27 values with CPI uprating:
-    - Basic rate (20%): starts at £16,538 in 2026-27, then CPI uprated
-    - Intermediate rate (21%): starts at £29,527 in 2026-27, then CPI uprated
-
-    Uses PE UK's CPI index for consistent uprating with baseline.
-
-    Source: Scottish Income Tax 2026-27 Technical Factsheet, Table 1
-    https://www.gov.scot/publications/scottish-income-tax-technical-factsheet/
-    """
-    scotland_rates = sim.tax_benefit_system.parameters.gov.hmrc.income_tax.rates.scotland.rates
-
-    for year in DEFAULT_YEARS:
-        period = f"{year}-01-01"
-        basic_threshold = get_cpi_uprated_value(
-            sim, INCOME_TAX_BASIC_THRESHOLD_2026, 2026, year
-        )
-        intermediate_threshold = get_cpi_uprated_value(
-            sim, INCOME_TAX_INTERMEDIATE_THRESHOLD_2026, 2026, year
-        )
-        scotland_rates.brackets[1].threshold.update(
-            period=period, value=basic_threshold
-        )
-        scotland_rates.brackets[2].threshold.update(
-            period=period, value=intermediate_threshold
-        )
-
-
 def apply_basic_rate_uplift_reform(sim: Microsimulation) -> None:
     """Apply basic rate threshold uplift only.
 
@@ -284,7 +254,8 @@ def apply_combined_reform(sim: Microsimulation) -> None:
     so the baby boost correctly stacks on top of £28.20/week.
     """
     apply_scp_inflation_reform(sim)  # £27.15 → £28.20/week
-    apply_income_tax_threshold_reform(sim)  # 7.4% threshold uplift
+    apply_basic_rate_uplift_reform(sim)  # Basic rate +7.4%
+    apply_intermediate_rate_uplift_reform(sim)  # Intermediate rate +7.4%
     apply_scp_baby_boost_reform(sim)  # £40/week for under-1s
 
 
@@ -358,22 +329,6 @@ def get_scottish_budget_reforms() -> list[ReformDefinition]:
                 "are CPI uprated annually. This delivers the strongest package of support for "
                 "families with young children anywhere in the UK, as announced by Finance "
                 "Secretary Shona Robison on 13 January 2026."
-            ),
-        ),
-        ReformDefinition(
-            id="income_tax_threshold_uplift",
-            name="Income tax threshold uplift (7.4%)",
-            description=(
-                "Scottish basic and intermediate rate thresholds increased by 7.4% in 2026-27, "
-                "then CPI uprated. Basic rate starts at £16,538, intermediate at £29,527."
-            ),
-            apply_fn=apply_income_tax_threshold_reform,
-            explanation=(
-                "The Scottish basic and intermediate income tax rate thresholds are raised by 7.4% "
-                "in 2026-27, then CPI uprated annually. The basic rate (20%) threshold rises from "
-                "£15,398 to £16,538, and the intermediate rate (21%) threshold rises from £27,492 "
-                "to £29,527. The higher rate (42%) remains unchanged at £43,662. This means people "
-                "pay the lower 19% starter rate on more of their income."
             ),
         ),
         ReformDefinition(
