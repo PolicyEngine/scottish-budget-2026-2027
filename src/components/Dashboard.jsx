@@ -64,10 +64,7 @@ const POLICY_INFO = {
               <tr><td style={{...tdStyle, borderBottom: "none"}}>2030-31</td><td style={{...tdRightStyle, borderBottom: "none"}}>£30.65</td><td style={{...tdRightStyle, borderBottom: "none"}}>£1,594</td></tr>
             </tbody>
           </table>
-          <div style={noteStyle}>
-            <p style={{ margin: 0 }}>Uprated annually by CPI (September of prior year).</p>
-            <p style={{ margin: "8px 0 0 0" }}>Source: <a href="https://www.gov.scot/publications/scottish-budget-2026-2027/" target="_blank" rel="noopener noreferrer">Scottish Budget 2026-27</a> | <a href="https://fiscalcommission.scot/publications/scotlands-economic-and-fiscal-forecasts-january-2026/" target="_blank" rel="noopener noreferrer">SFC January 2026</a></p>
-          </div>
+          <p style={noteStyle}>Note: Uprated annually by CPI (September of prior year). Source: <a href="https://www.gov.scot/publications/scottish-budget-2026-2027/" target="_blank" rel="noopener noreferrer">Scottish Budget 2026-27</a> | <a href="https://fiscalcommission.scot/publications/scotlands-economic-and-fiscal-forecasts-january-2026/" target="_blank" rel="noopener noreferrer">SFC January 2026</a></p>
         </details>
       </li>
     ),
@@ -100,10 +97,7 @@ const POLICY_INFO = {
               <tr><td style={{...tdStyle, borderBottom: "none"}}>2030-31</td><td style={{...tdRightStyle, borderBottom: "none"}}>£30.65</td><td style={{...tdRightStyle, borderBottom: "none", color: "#2e7d32"}}>+£11.85</td><td style={{...tdRightStyle, borderBottom: "none", color: "#2e7d32"}}>£42.50</td></tr>
             </tbody>
           </table>
-          <div style={noteStyle}>
-            <p style={{ margin: 0 }}>Under-one premium starts 2027-28. Both standard rate and premium uprated by CPI annually.</p>
-            <p style={{ margin: "8px 0 0 0" }}>Source: <a href="https://www.gov.scot/publications/scottish-budget-2026-2027/" target="_blank" rel="noopener noreferrer">Scottish Budget 2026-27</a> | <a href="https://www.gov.scot/news/a-budget-to-tackle-child-poverty/" target="_blank" rel="noopener noreferrer">Scottish Government announcement</a></p>
-          </div>
+          <p style={noteStyle}>Note: Under-one premium starts 2027-28. Both standard rate and premium uprated by CPI annually. Source: <a href="https://www.gov.scot/publications/scottish-budget-2026-2027/" target="_blank" rel="noopener noreferrer">Scottish Budget 2026-27</a> | <a href="https://www.gov.scot/news/a-budget-to-tackle-child-poverty/" target="_blank" rel="noopener noreferrer">Scottish Government announcement</a></p>
         </details>
       </li>
     ),
@@ -135,10 +129,7 @@ const POLICY_INFO = {
               <tr><td style={{...tdStyle, borderBottom: "none"}}>2030-31</td><td style={{...tdRightStyle, borderBottom: "none"}}>£17,918</td><td style={{...tdCenterStyle, borderBottom: "none"}}>CPI</td></tr>
             </tbody>
           </table>
-          <div style={noteStyle}>
-            <p style={{ margin: 0 }}>From 2027-28, thresholds projected using OBR CPI forecasts (~2% annually).</p>
-            <p style={{ margin: "8px 0 0 0" }}>Source: <a href="https://www.gov.scot/publications/scottish-income-tax-rates-and-bands/pages/2026-to-2027/" target="_blank" rel="noopener noreferrer">Scottish Government</a> | <a href="https://obr.uk/efo/economic-and-fiscal-outlook-november-2025/" target="_blank" rel="noopener noreferrer">OBR EFO November 2025</a></p>
-          </div>
+          <p style={noteStyle}>Note: From 2027-28, thresholds projected using OBR CPI forecasts (~2% annually). Source: <a href="https://www.gov.scot/publications/scottish-income-tax-rates-and-bands/pages/2026-to-2027/" target="_blank" rel="noopener noreferrer">Scottish Government</a> | <a href="https://obr.uk/efo/economic-and-fiscal-outlook-november-2025/" target="_blank" rel="noopener noreferrer">OBR EFO November 2025</a></p>
         </details>
       </li>
     ),
@@ -170,10 +161,7 @@ const POLICY_INFO = {
               <tr><td style={{...tdStyle, borderBottom: "none"}}>2030-31</td><td style={{...tdRightStyle, borderBottom: "none"}}>£31,992</td><td style={{...tdCenterStyle, borderBottom: "none"}}>CPI</td></tr>
             </tbody>
           </table>
-          <div style={noteStyle}>
-            <p style={{ margin: 0 }}>From 2027-28, thresholds projected using OBR CPI forecasts (~2% annually).</p>
-            <p style={{ margin: "8px 0 0 0" }}>Source: <a href="https://www.gov.scot/publications/scottish-income-tax-rates-and-bands/pages/2026-to-2027/" target="_blank" rel="noopener noreferrer">Scottish Government</a> | <a href="https://obr.uk/efo/economic-and-fiscal-outlook-november-2025/" target="_blank" rel="noopener noreferrer">OBR EFO November 2025</a></p>
-          </div>
+          <p style={noteStyle}>Note: From 2027-28, thresholds projected using OBR CPI forecasts (~2% annually). Source: <a href="https://www.gov.scot/publications/scottish-income-tax-rates-and-bands/pages/2026-to-2027/" target="_blank" rel="noopener noreferrer">Scottish Government</a> | <a href="https://obr.uk/efo/economic-and-fiscal-outlook-november-2025/" target="_blank" rel="noopener noreferrer">OBR EFO November 2025</a></p>
         </details>
       </li>
     ),
