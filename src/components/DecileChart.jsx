@@ -47,7 +47,7 @@ export default function DecileChart({
     if (viewMode === "relative") {
       return `${value >= 0 ? "+" : ""}${value.toFixed(2)}%`;
     }
-    return `£${Math.abs(value).toLocaleString("en-GB")}`;
+    return `£${Math.abs(value).toFixed(2)}`;
   };
 
   // Prepare chart data
