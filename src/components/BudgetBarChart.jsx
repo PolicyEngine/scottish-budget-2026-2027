@@ -38,7 +38,7 @@ export default function BudgetBarChart({
   }
 
   const defaultFormat = (value) => {
-    const absVal = Math.abs(value).toFixed(0);
+    const absVal = Math.abs(value).toFixed(2);
     return value < 0 ? `-£${absVal}m` : `£${absVal}m`;
   };
   const formatValue = yFormat || defaultFormat;
