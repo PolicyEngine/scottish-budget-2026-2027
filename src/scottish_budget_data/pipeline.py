@@ -9,9 +9,9 @@ import pandas as pd
 import h5py
 
 from policyengine_uk import Microsimulation
-from policyengine_uk.data import UKSingleYearDataset
 
 from .calculators import (
+    BASELINE_MODIFIERS,
     BudgetaryImpactCalculator,
     ConstituencyCalculator,
     DistributionalImpactCalculator,
@@ -42,7 +42,6 @@ def generate_all_data(
     data_inputs_dir: Optional[Path] = None,
     years: list[int] = None,
     scotland_only: bool = True,
-    dataset_path: Optional[Path] = None,
 ) -> dict[str, pd.DataFrame]:
     """Generate all dashboard data for the given reforms.
 
@@ -53,7 +52,6 @@ def generate_all_data(
         data_inputs_dir: Directory containing constituency metadata.
         years: Years to analyze.
         scotland_only: If True, filter to Scottish constituencies only.
-        dataset_path: Path to local enhanced_frs h5 file. If None, downloads from HF.
 
     Returns:
         Dict mapping output name to DataFrame.
@@ -98,18 +96,17 @@ def generate_all_data(
     all_metrics = []
     all_constituency = []
 
-    # Use local dataset if provided
-    if dataset_path:
-        dataset_obj = UKSingleYearDataset(str(dataset_path))
-    else:
-        dataset_obj = None
-
     for reform in reforms:
         print(f"\nProcessing: {reform.name}")
 
-        # Create simulations and apply reform
-        baseline = Microsimulation(dataset=dataset_obj)
-        reformed = Microsimulation(dataset=dataset_obj)
+        # Create simulations using HF dataset (consistent with other calculators)
+        baseline = Microsimulation()
+        reformed = Microsimulation()
+
+        # Apply baseline modifier if needed (for counterfactual baselines)
+        if reform.id in BASELINE_MODIFIERS:
+            BASELINE_MODIFIERS[reform.id](baseline)
+
         reform.apply_fn(reformed)
 
         # Calculate budgetary impact
@@ -168,7 +165,6 @@ def generate_all_data(
 
 def generate_two_child_limit_validation(
     output_dir: Optional[Path] = None,
-    dataset_path: Optional[Path] = None,
     years: list[int] = None,
 ) -> pd.DataFrame:
     """Generate two-child limit validation data for SFC comparison.
@@ -190,15 +186,9 @@ def generate_two_child_limit_validation(
         },
     }
 
-    # Use local dataset if provided
-    if dataset_path:
-        dataset_obj = UKSingleYearDataset(str(dataset_path))
-    else:
-        dataset_obj = None
-
-    # Create simulations
-    sim_without_limit = Microsimulation(dataset=dataset_obj)
-    sim_with_limit = Microsimulation(dataset=dataset_obj, reform=two_child_limit_reform)
+    # Create simulations using HF dataset (consistent with other calculators)
+    sim_without_limit = Microsimulation()
+    sim_with_limit = Microsimulation(reform=two_child_limit_reform)
 
     # Calculate two-child limit impact
     tcl_calc = TwoChildLimitCalculator(years=years)
@@ -223,10 +213,5 @@ def generate_two_child_limit_validation(
 
 
 if __name__ == "__main__":
-    local_dataset = DEFAULT_DATA_DIR / "enhanced_frs_2023_24.h5"
-    dataset_path = local_dataset if local_dataset.exists() else None
-    if dataset_path:
-        print(f"Using local dataset: {dataset_path}")
-
-    generate_all_data(dataset_path=dataset_path)
-    generate_two_child_limit_validation(dataset_path=dataset_path)
+    generate_all_data()
+    generate_two_child_limit_validation()

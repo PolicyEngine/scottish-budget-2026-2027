@@ -13,24 +13,33 @@ from .reforms import (
     apply_basic_rate_uplift_reform,
     apply_combined_reform,
     apply_higher_rate_freeze_reform,
-    apply_income_tax_threshold_reform,
     apply_intermediate_rate_uplift_reform,
     apply_scp_baby_boost_reform,
     apply_scp_inflation_reform,
     apply_top_rate_freeze_reform,
+    disable_scp_baby_boost,
+    disable_scp_combined,
+    disable_scp_inflation,
 )
 
 # Map reform IDs to their apply functions
 REFORM_APPLY_FNS = {
     "scp_inflation": apply_scp_inflation_reform,
     "scp_baby_boost": apply_scp_baby_boost_reform,
-    "income_tax_threshold_uplift": apply_income_tax_threshold_reform,
     "income_tax_basic_uplift": apply_basic_rate_uplift_reform,
     "income_tax_intermediate_uplift": apply_intermediate_rate_uplift_reform,
     "higher_rate_freeze": apply_higher_rate_freeze_reform,
     "advanced_rate_freeze": apply_advanced_rate_freeze_reform,
     "top_rate_freeze": apply_top_rate_freeze_reform,
     "combined": apply_combined_reform,
+}
+
+# Map reform IDs to baseline modifiers (for counterfactual baselines)
+# These are applied to the baseline to create a proper comparison
+BASELINE_MODIFIERS = {
+    "scp_inflation": disable_scp_inflation,  # Set SCP to £27.15 to measure inflation impact
+    "scp_baby_boost": disable_scp_baby_boost,  # Baby boost is in PE baseline, disable to measure impact
+    "combined": disable_scp_combined,  # Combined includes both SCP inflation and baby boost
 }
 
 
@@ -77,6 +86,10 @@ class BudgetaryImpactCalculator:
             baseline = Microsimulation()
             reformed = Microsimulation()
 
+            # Apply baseline modifier if needed (for counterfactual baselines)
+            if reform_id in BASELINE_MODIFIERS:
+                BASELINE_MODIFIERS[reform_id](baseline)
+
             if reform_id in REFORM_APPLY_FNS:
                 REFORM_APPLY_FNS[reform_id](reformed)
 
@@ -119,6 +132,10 @@ class DistributionalImpactCalculator:
         """
         baseline = Microsimulation()
         reformed = Microsimulation()
+
+        # Apply baseline modifier if needed (for counterfactual baselines)
+        if reform_id in BASELINE_MODIFIERS:
+            BASELINE_MODIFIERS[reform_id](baseline)
 
         if reform_id in REFORM_APPLY_FNS:
             REFORM_APPLY_FNS[reform_id](reformed)

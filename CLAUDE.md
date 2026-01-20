@@ -15,9 +15,8 @@ Dashboard analyzing the Scottish Budget 2026-27 announced January 13, 2026. Comp
 From `src/scottish_budget_data/reforms.py`:
 - `scp_inflation` - SCP uprated £27.15 → £28.20/week
 - `scp_baby_boost` - £40/week for under-1s (starts April 2027)
-- `income_tax_threshold_uplift` - Combined basic + intermediate 7.4% uplift
-- `income_tax_basic_uplift` - Basic rate threshold only
-- `income_tax_intermediate_uplift` - Intermediate rate threshold only
+- `income_tax_basic_uplift` - Basic rate threshold +7.4%
+- `income_tax_intermediate_uplift` - Intermediate rate threshold +7.4%
 - `higher_rate_freeze` - Freeze at £43,662 (2027+ only, 2026 already in baseline)
 - `advanced_rate_freeze` - Freeze at £62,430 (2027+ only)
 - `top_rate_freeze` - Freeze at £125,140 (2027+ only)

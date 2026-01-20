@@ -46,10 +46,10 @@ def flask_app():
     INCOME_TAX_BASIC_INCREASE = 1_069
     INCOME_TAX_INTERMEDIATE_INCREASE = 1_665
 
-    def apply_income_tax_threshold_uplift_for_year(sim, year: int):
+    def apply_income_tax_uplift_for_year(sim, year: int):
         """Apply Scottish income tax threshold uplift for a single year.
 
-        Mirrors reforms.apply_income_tax_threshold_uplift_for_year()
+        Mirrors reforms.apply_income_tax_uplift_for_year()
         """
         params = sim.tax_benefit_system.parameters
         scotland_rates = params.gov.hmrc.income_tax.rates.scotland.rates
@@ -168,7 +168,7 @@ def flask_app():
             baseline_net = float(baseline_sim.calculate("household_net_income", YEAR)[0])
 
             income_tax_sim = Simulation(situation=situation)
-            apply_income_tax_threshold_uplift_for_year(income_tax_sim, YEAR)
+            apply_income_tax_uplift_for_year(income_tax_sim, YEAR)
             income_tax_sim.calculate("scottish_child_payment", YEAR)
             income_tax_net = float(income_tax_sim.calculate("household_net_income", YEAR)[0])
             income_tax_impact = income_tax_net - baseline_net
@@ -184,7 +184,7 @@ def flask_app():
             return jsonify({
                 "impacts": {
                     "scp_baby_boost": round(scp_impact, 2),
-                    "income_tax_threshold_uplift": round(income_tax_impact, 2),
+                    "income_tax_uplift": round(income_tax_impact, 2),
                 },
                 "total": round(total, 2),
                 "baseline_net_income": round(baseline_net, 2),
@@ -209,7 +209,7 @@ def flask_app():
             baseline_nets = baseline_sim.calculate("household_net_income", YEAR)
 
             income_tax_sim = Simulation(situation=situation)
-            apply_income_tax_threshold_uplift_for_year(income_tax_sim, YEAR)
+            apply_income_tax_uplift_for_year(income_tax_sim, YEAR)
             income_tax_sim.calculate("scottish_child_payment", YEAR)
             income_tax_nets = income_tax_sim.calculate("household_net_income", YEAR)
             income_tax_impacts = income_tax_nets - baseline_nets
@@ -226,7 +226,7 @@ def flask_app():
                 earnings = i * earnings_step
                 results.append({
                     "earnings": earnings,
-                    "income_tax_threshold_uplift": round(float(income_tax_impacts[i]), 2),
+                    "income_tax_uplift": round(float(income_tax_impacts[i]), 2),
                     "scp_baby_boost": round(float(scp_impacts[i]), 2),
                     "total": round(float(income_tax_impacts[i] + scp_impacts[i]), 2),
                 })

@@ -88,7 +88,7 @@ def calculate():
         return jsonify({
             "impacts": {
                 "scp_baby_boost": round(scp_impact, 2),
-                "income_tax_threshold_uplift": round(income_tax_impact, 2),
+                "income_tax_uplift": round(income_tax_impact, 2),
             },
             "total": round(total, 2),
             "baseline_net_income": round(baseline_net, 2),
@@ -176,7 +176,7 @@ def calculate_variation():
             earnings = i * earnings_step
             results.append({
                 "earnings": earnings,
-                "income_tax_threshold_uplift": round(float(income_tax_impacts[i]), 2),
+                "income_tax_uplift": round(float(income_tax_impacts[i]), 2),
                 "scp_baby_boost": round(float(scp_impacts[i]), 2),
                 "total": round(float(income_tax_impacts[i] + scp_impacts[i]), 2),
             })

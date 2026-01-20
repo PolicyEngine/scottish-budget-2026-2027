@@ -63,27 +63,33 @@ function getRegion(constituencyName) {
 }
 
 const POLICY_DISPLAY_NAMES = {
-  combined: "both policies",
   scp_baby_boost: "SCP Premium for under-ones",
-  income_tax_threshold_uplift: "income tax threshold uplift",
+  scp_inflation: "SCP inflation adjustment",
+  income_tax_basic_uplift: "basic rate threshold uplift",
+  income_tax_intermediate_uplift: "intermediate rate threshold uplift",
 };
 
 export default function LocalAreaSection({
-  selectedPolicy = "scp_baby_boost",
+  selectedPolicies = [],
   selectedYear = 2026,
   onYearChange = null,
   availableYears = [2026, 2027, 2028, 2029, 2030],
 }) {
-  const policyName = POLICY_DISPLAY_NAMES[selectedPolicy] || "the selected policy";
+  // Generate policy name for display
+  const policyName = selectedPolicies.length === 1
+    ? POLICY_DISPLAY_NAMES[selectedPolicies[0]] || "the selected policy"
+    : selectedPolicies.length > 1
+    ? "selected policies"
+    : "the selected policy";
   const formatYearRange = (year) => `${year}-${(year + 1).toString().slice(-2)}`;
 
-  const [constituencyData, setConstituencyData] = useState([]);
+  const [rawConstituencyData, setRawConstituencyData] = useState([]);
   const [selectedConstituency, setSelectedConstituency] = useState(null);
   const [selectedRegion, setSelectedRegion] = useState("All regions");
   const [loading, setLoading] = useState(true);
   const [showTop, setShowTop] = useState(true); // Toggle for Top 10 vs Lowest 10
 
-  // Load constituency data from CSV
+  // Load ALL constituency data from CSV (once)
   useEffect(() => {
     async function loadData() {
       try {
@@ -92,25 +98,20 @@ export default function LocalAreaSection({
           const csvText = await res.text();
           const data = parseCSV(csvText);
 
-          // Transform to expected format and add region (filter by year and selected policy)
+          // Transform to expected format (load all Scottish constituencies)
           const transformed = data
-            .filter(row =>
-              row.constituency_code?.startsWith("S") &&
-              row.year === String(selectedYear) &&
-              row.reform_id === selectedPolicy
-            )
+            .filter(row => row.constituency_code?.startsWith("S"))
             .map(row => ({
+              reform_id: row.reform_id,
+              year: parseInt(row.year),
               code: row.constituency_code,
               name: row.constituency_name,
               avgGain: parseFloat(row.average_gain) || 0,
               relativeChange: parseFloat(row.relative_change) || 0,
               region: getRegion(row.constituency_name),
-              // Estimate poverty reduction from relative change (placeholder)
-              povertyReduction: Math.max(0, (parseFloat(row.relative_change) || 0) * 1.5),
-              households: 40000, // Placeholder
             }));
 
-          setConstituencyData(transformed);
+          setRawConstituencyData(transformed);
         }
       } catch (err) {
         console.warn("Error loading constituency data:", err);
@@ -119,7 +120,49 @@ export default function LocalAreaSection({
       }
     }
     loadData();
-  }, [selectedPolicy, selectedYear]);
+  }, []);
+
+  // Aggregate data across selected policies (dynamically sum)
+  const constituencyData = useMemo(() => {
+    if (!rawConstituencyData.length || !selectedPolicies.length) return [];
+
+    // Group by constituency and sum values across selected policies
+    const constituencyMap = new Map();
+
+    rawConstituencyData.forEach((row) => {
+      if (!selectedPolicies.includes(row.reform_id)) return;
+      if (row.year !== selectedYear) return;
+
+      const key = row.code;
+      if (!constituencyMap.has(key)) {
+        constituencyMap.set(key, {
+          code: row.code,
+          name: row.name,
+          avgGain: 0,
+          relativeChange: 0,
+          region: row.region,
+          policyBreakdown: {},
+          households: 40000, // Placeholder
+        });
+      }
+
+      const existing = constituencyMap.get(key);
+      existing.avgGain += row.avgGain;
+      existing.relativeChange += row.relativeChange;
+
+      // Store individual policy contribution for tooltip
+      existing.policyBreakdown[row.reform_id] = {
+        avgGain: row.avgGain,
+        relativeChange: row.relativeChange,
+      };
+    });
+
+    // Convert to array and add poverty reduction estimate
+    return Array.from(constituencyMap.values()).map(c => ({
+      ...c,
+      povertyReduction: Math.max(0, c.relativeChange * 1.5),
+    }));
+  }, [rawConstituencyData, selectedPolicies, selectedYear]);
 
   // Convert constituency data for the map component
   const mapConstituencyData = useMemo(() => {
@@ -130,6 +173,7 @@ export default function LocalAreaSection({
       relative_change: c.relativeChange,
       households: c.households,
       povertyReduction: parseFloat(c.povertyReduction),
+      policyBreakdown: c.policyBreakdown,
     }));
   }, [constituencyData]);
 
@@ -172,17 +216,25 @@ export default function LocalAreaSection({
     return <div className="local-area-section"><p>Loading constituency data...</p></div>;
   }
 
-  // Show message if no constituency data for this policy
+  // Show message if no policies selected or no data
+  if (selectedPolicies.length === 0) {
+    return (
+      <div className="local-area-section">
+        <div className="section-box">
+          <p className="chart-description">
+            Select at least one policy to see constituency-level impacts.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   if (constituencyData.length === 0) {
     return (
       <div className="local-area-section">
         <div className="section-box">
           <p className="chart-description">
-            Constituency-level data is not yet available for this policy reform.
-            {selectedPolicy === "income_tax_threshold_uplift" && (
-              <> The income tax threshold uplift affects taxpayers across Scotland relatively uniformly,
-              with minor variations based on local income distributions.</>
-            )}
+            Constituency-level data is not yet available for the selected policies.
           </p>
         </div>
       </div>
@@ -201,6 +253,7 @@ export default function LocalAreaSection({
           selectedConstituency={selectedConstituency ? { code: selectedConstituency.code, name: selectedConstituency.name } : null}
           onConstituencySelect={handleConstituencySelect}
           policyName={policyName}
+          selectedPolicies={selectedPolicies}
         />
       </div>
 

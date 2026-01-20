@@ -50,6 +50,13 @@ def parse_args(args: list[str] = None) -> argparse.Namespace:
         help="List all available reform IDs and exit",
     )
 
+    parser.add_argument(
+        "--reform",
+        type=str,
+        nargs="+",
+        help="Only run specific reform(s) by ID (e.g., --reform scp_baby_boost)",
+    )
+
     return parser.parse_args(args)
 
 
@@ -76,8 +83,23 @@ def main(args: list[str] = None) -> int:
     print(f"Output: {parsed.output_dir}")
     print(f"Years: {parsed.years}")
 
-    reforms = get_scottish_budget_reforms()
-    print(f"Reforms: {len(reforms)}")
+    all_reforms = get_scottish_budget_reforms()
+
+    if parsed.reform:
+        # Filter to only requested reforms
+        reform_ids = set(parsed.reform)
+        reforms = [r for r in all_reforms if r.id in reform_ids]
+        # Check for invalid IDs
+        valid_ids = {r.id for r in all_reforms}
+        invalid_ids = reform_ids - valid_ids
+        if invalid_ids:
+            print(f"Error: Unknown reform ID(s): {', '.join(invalid_ids)}")
+            print("Use --list-reforms to see available IDs")
+            return 1
+        print(f"Reforms: {len(reforms)} (filtered)")
+    else:
+        reforms = all_reforms
+        print(f"Reforms: {len(reforms)}")
     print()
 
     try:

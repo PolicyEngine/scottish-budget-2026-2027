@@ -10,17 +10,14 @@ from typing import Callable
 from policyengine_uk import Microsimulation
 
 
-# Scottish Budget 2026-27 income tax thresholds (absolute values)
+# Scottish Budget 2026-27 income tax thresholds (base values for 2026-27)
 # Source: Scottish Income Tax 2026-27 Technical Factsheet, Table 1
 # https://www.gov.scot/publications/scottish-income-tax-technical-factsheet/
 #
-# Total taxable income thresholds:
-#   Basic rate (20%): £16,538 - £29,526
-#   Intermediate rate (21%): £29,527 - £43,662
-#
 # PolicyEngine stores thresholds as amounts ABOVE personal allowance (£12,570)
-INCOME_TAX_BASIC_THRESHOLD = 3_967  # £16,537 total - £12,570 PA
-INCOME_TAX_INTERMEDIATE_THRESHOLD = 16_956  # £29,526 total - £12,570 PA
+# These base values are CPI uprated dynamically using PE UK's CPI index
+INCOME_TAX_BASIC_THRESHOLD_2026 = 3_968   # £16,538 total - £12,570 PA
+INCOME_TAX_INTERMEDIATE_THRESHOLD_2026 = 16_957  # £29,527 total - £12,570 PA
 
 # Frozen threshold values for higher/advanced/top rates (2027-28 onwards)
 # Source: Scottish Income Tax 2026-27 Technical Factsheet
@@ -48,6 +45,40 @@ DEFAULT_YEARS = [2026, 2027, 2028, 2029, 2030]
 
 
 # =============================================================================
+# Helper Functions
+# =============================================================================
+
+
+def get_cpi_uprated_value(sim: Microsimulation, base_value: float, base_year: int, target_year: int) -> float:
+    """Calculate CPI-uprated value using PE UK's CPI index.
+
+    Args:
+        sim: Microsimulation instance to read CPI from
+        base_value: The value in the base year
+        base_year: The year of the base value
+        target_year: The year to uprate to
+
+    Returns:
+        The CPI-uprated value for the target year
+    """
+    if target_year <= base_year:
+        return base_value
+
+    cpi = sim.tax_benefit_system.parameters.gov.economic_assumptions.indices.obr.consumer_price_index
+
+    # Get CPI index values for base and target years
+    base_period = f"{base_year}-01-01"
+    target_period = f"{target_year}-01-01"
+
+    cpi_base = cpi(base_period)
+    cpi_target = cpi(target_period)
+
+    # Calculate uprated value
+    uprating_factor = cpi_target / cpi_base
+    return round(base_value * uprating_factor)
+
+
+# =============================================================================
 # Reform Application Functions
 # =============================================================================
 
@@ -56,8 +87,8 @@ def apply_scp_inflation_reform(sim: Microsimulation) -> None:
     """Apply SCP inflation adjustment to a simulation.
 
     Updates SCP amount from £27.15/week to £28.20/week (+3.9% inflation).
-    This is applied BEFORE the baby boost so the baby boost correctly
-    calculates as £40 - £28.20 = £11.80/week extra.
+    This is applied BEFORE the baby boost. Note: baby boost starts 2027-28
+    when SCP rate is £28.85/week, so premium = £40 - £28.85 = £11.15/week.
 
     Note: SCP amount parameter is stored as £/week (not annual).
 
@@ -71,33 +102,13 @@ def apply_scp_inflation_reform(sim: Microsimulation) -> None:
         scp_amount.update(period=period, value=SCP_INFLATION_RATE)  # £/week
 
 
-def apply_income_tax_threshold_reform(sim: Microsimulation) -> None:
-    """Apply income tax threshold uplift to a simulation.
-
-    Sets Scottish income tax thresholds to Budget 2026-27 values:
-    - Basic rate (20%): starts at £16,537 (£3,967 above PA)
-    - Intermediate rate (21%): starts at £29,526 (£16,956 above PA)
-
-    Source: Scottish Income Tax 2026-27 Technical Factsheet, Table 1
-    https://www.gov.scot/publications/scottish-income-tax-technical-factsheet/
-    """
-    scotland_rates = sim.tax_benefit_system.parameters.gov.hmrc.income_tax.rates.scotland.rates
-
-    for year in DEFAULT_YEARS:
-        period = f"{year}-01-01"
-        scotland_rates.brackets[1].threshold.update(
-            period=period, value=INCOME_TAX_BASIC_THRESHOLD
-        )
-        scotland_rates.brackets[2].threshold.update(
-            period=period, value=INCOME_TAX_INTERMEDIATE_THRESHOLD
-        )
-
-
 def apply_basic_rate_uplift_reform(sim: Microsimulation) -> None:
     """Apply basic rate threshold uplift only.
 
-    Increases Scottish basic rate (20%) threshold by 7.4% from 2026 onwards.
-    Basic rate starts at £16,537 (£3,967 above PA).
+    Increases Scottish basic rate (20%) threshold by 7.4% in 2026, then CPI uprated.
+    Basic rate starts at £16,538 (£3,968 above PA) in 2026-27.
+
+    Uses PE UK's CPI index for consistent uprating with baseline.
 
     Source: SFC costings breakdown - "Basic rate threshold +7.4%"
     """
@@ -105,16 +116,21 @@ def apply_basic_rate_uplift_reform(sim: Microsimulation) -> None:
 
     for year in DEFAULT_YEARS:
         period = f"{year}-01-01"
+        basic_threshold = get_cpi_uprated_value(
+            sim, INCOME_TAX_BASIC_THRESHOLD_2026, 2026, year
+        )
         scotland_rates.brackets[1].threshold.update(
-            period=period, value=INCOME_TAX_BASIC_THRESHOLD
+            period=period, value=basic_threshold
         )
 
 
 def apply_intermediate_rate_uplift_reform(sim: Microsimulation) -> None:
     """Apply intermediate rate threshold uplift only.
 
-    Increases Scottish intermediate rate (21%) threshold by 7.4% from 2026 onwards.
-    Intermediate rate starts at £29,526 (£16,956 above PA).
+    Increases Scottish intermediate rate (21%) threshold by 7.4% in 2026, then CPI uprated.
+    Intermediate rate starts at £29,527 (£16,957 above PA) in 2026-27.
+
+    Uses PE UK's CPI index for consistent uprating with baseline.
 
     Source: SFC costings breakdown - "Intermediate rate threshold +7.4%"
     """
@@ -122,8 +138,11 @@ def apply_intermediate_rate_uplift_reform(sim: Microsimulation) -> None:
 
     for year in DEFAULT_YEARS:
         period = f"{year}-01-01"
+        intermediate_threshold = get_cpi_uprated_value(
+            sim, INCOME_TAX_INTERMEDIATE_THRESHOLD_2026, 2026, year
+        )
         scotland_rates.brackets[2].threshold.update(
-            period=period, value=INCOME_TAX_INTERMEDIATE_THRESHOLD
+            period=period, value=intermediate_threshold
         )
 
 
@@ -190,17 +209,49 @@ def apply_top_rate_freeze_reform(sim: Microsimulation) -> None:
             )
 
 
+def disable_scp_baby_boost(sim: Microsimulation) -> None:
+    """Disable SCP baby boost to create counterfactual baseline.
+
+    The baby boost is already in the PolicyEngine UK baseline from 2027+.
+    This function disables it so we can measure the impact of enabling it.
+    """
+    scp_reform = sim.tax_benefit_system.parameters.gov.contrib.scotland.scottish_child_payment
+
+    for year in DEFAULT_YEARS:
+        if year >= 2027:
+            period = f"{year}-01-01"
+            scp_reform.in_effect.update(period=period, value=False)
+
+
+def disable_scp_inflation(sim: Microsimulation) -> None:
+    """Disable SCP inflation to create counterfactual baseline.
+
+    Sets SCP rate to £27.15/week (the pre-inflation rate) so we can measure
+    the impact of the inflation adjustment (£27.15 → £28.20).
+    """
+    scp_amount = sim.tax_benefit_system.parameters.gov.social_security_scotland.scottish_child_payment.amount
+
+    for year in DEFAULT_YEARS:
+        period = f"{year}-01-01"
+        scp_amount.update(period=period, value=SCP_BASELINE_RATE)  # £27.15/week
+
+
+def disable_scp_combined(sim: Microsimulation) -> None:
+    """Disable both SCP inflation and baby boost for combined reform baseline."""
+    disable_scp_inflation(sim)
+    disable_scp_baby_boost(sim)
+
+
 def apply_scp_baby_boost_reform(sim: Microsimulation) -> None:
     """Apply SCP baby boost reform to a simulation.
 
     Enables the SCP baby bonus via the contrib parameters.
-    This gives £40/week total for under-1s (vs £28.20 inflation-adjusted).
+    This gives £40/week total for under-1s (£11.15/week extra in 2027-28
+    when standard rate is £28.85/week). Both total and rate CPI uprated.
 
     Note: The SCP Premium for under-ones takes effect from 2027, not 2026.
-
-    Note: Uses contrib parameters for policyengine-uk < 2.70.0.
-    Once the main parameters are available, this should switch to using
-    gov.social_security_scotland.scottish_child_payment.premium_under_one_amount.
+    Note: The baseline already has this enabled, so we need to use
+    disable_scp_baby_boost() on the baseline to measure the impact.
 
     Source: Scottish Budget 2026-27
     https://www.gov.scot/publications/scottish-budget-2026-2027/
@@ -222,7 +273,8 @@ def apply_combined_reform(sim: Microsimulation) -> None:
     so the baby boost correctly stacks on top of £28.20/week.
     """
     apply_scp_inflation_reform(sim)  # £27.15 → £28.20/week
-    apply_income_tax_threshold_reform(sim)  # 7.4% threshold uplift
+    apply_basic_rate_uplift_reform(sim)  # Basic rate +7.4%
+    apply_intermediate_rate_uplift_reform(sim)  # Intermediate rate +7.4%
     apply_scp_baby_boost_reform(sim)  # £40/week for under-1s
 
 
@@ -286,61 +338,46 @@ def get_scottish_budget_reforms() -> list[ReformDefinition]:
             name="SCP Premium for under-ones (£40/week)",
             description=(
                 "SCP Premium for under-ones: £40/week total for babies under 1 "
-                "(£11.80/week extra on top of the inflation-adjusted £28.20/week rate)."
+                "(£11.15/week extra in 2027-28). Both total and standard rate CPI uprated annually."
             ),
             apply_fn=apply_scp_baby_boost_reform,
             explanation=(
                 "The new SCP Premium for under-ones increases the Scottish Child Payment to "
-                "£40/week total for families with babies under 1 year old. This is £11.80/week "
-                "extra on top of the inflation-adjusted rate of £28.20/week. This delivers the "
-                "strongest package of support for families with young children anywhere in the UK, "
-                "as announced by Finance Secretary Shona Robison on 13 January 2026."
-            ),
-        ),
-        ReformDefinition(
-            id="income_tax_threshold_uplift",
-            name="Income tax threshold uplift (7.4%)",
-            description=(
-                "Scottish basic and intermediate rate thresholds increased by 7.4%. "
-                "Basic rate starts at £16,537, intermediate at £29,527."
-            ),
-            apply_fn=apply_income_tax_threshold_reform,
-            explanation=(
-                "The Scottish basic and intermediate income tax rate thresholds are raised by 7.4%. "
-                "The basic rate (20%) threshold rises from £15,398 to £16,537, and the intermediate "
-                "rate (21%) threshold rises from £27,492 to £29,527. The higher rate (42%) remains "
-                "unchanged at £43,663. This means people pay the lower 19% starter rate on more of "
-                "their income."
+                "£40/week total for families with babies under 1 year old (£11.15/week extra "
+                "in 2027-28 when standard rate is £28.85/week). Both the total and standard rate "
+                "are CPI uprated annually. This delivers the strongest package of support for "
+                "families with young children anywhere in the UK, as announced by Finance "
+                "Secretary Shona Robison on 13 January 2026."
             ),
         ),
         ReformDefinition(
             id="income_tax_basic_uplift",
             name="Basic rate threshold +7.4%",
             description=(
-                "Scottish basic rate (20%) threshold increased by 7.4% from 2026. "
-                "Basic rate starts at £16,537 (£3,967 above personal allowance)."
+                "Scottish basic rate (20%) threshold increased by 7.4% in 2026-27, then CPI uprated. "
+                "Basic rate starts at £16,538 (£3,968 above personal allowance)."
             ),
             apply_fn=apply_basic_rate_uplift_reform,
             explanation=(
-                "The Scottish basic rate (20%) threshold is raised by 7.4% from 2026 onwards. "
-                "The threshold rises from £15,398 to £16,537 total taxable income (£3,967 above "
-                "the personal allowance of £12,570). This means people pay the lower 19% starter "
-                "rate on more of their income before moving to the 20% basic rate."
+                "The Scottish basic rate (20%) threshold is raised by 7.4% in 2026-27, then CPI "
+                "uprated annually. The threshold rises from £15,398 to £16,538 total taxable income "
+                "(£3,968 above the personal allowance of £12,570). This means people pay the lower "
+                "19% starter rate on more of their income before moving to the 20% basic rate."
             ),
         ),
         ReformDefinition(
             id="income_tax_intermediate_uplift",
             name="Intermediate rate threshold +7.4%",
             description=(
-                "Scottish intermediate rate (21%) threshold increased by 7.4% from 2026. "
-                "Intermediate rate starts at £29,527 (£16,956 above personal allowance)."
+                "Scottish intermediate rate (21%) threshold increased by 7.4% in 2026-27, then CPI uprated. "
+                "Intermediate rate starts at £29,527 (£16,957 above personal allowance)."
             ),
             apply_fn=apply_intermediate_rate_uplift_reform,
             explanation=(
-                "The Scottish intermediate rate (21%) threshold is raised by 7.4% from 2026 onwards. "
-                "The threshold rises from £27,492 to £29,527 total taxable income (£16,956 above "
-                "the personal allowance). This means people pay the lower 20% basic rate on more of "
-                "their income before moving to the 21% intermediate rate."
+                "The Scottish intermediate rate (21%) threshold is raised by 7.4% in 2026-27, then "
+                "CPI uprated annually. The threshold rises from £27,492 to £29,527 total taxable "
+                "income (£16,957 above the personal allowance). This means people pay the lower 20% "
+                "basic rate on more of their income before moving to the 21% intermediate rate."
             ),
         ),
         ReformDefinition(
@@ -411,6 +448,6 @@ PRESETS = [
     {
         "id": "scottish-budget-2026",
         "name": "Scottish Budget 2026",
-        "policies": ["scp_inflation", "scp_baby_boost", "income_tax_threshold_uplift"],
+        "policies": ["scp_inflation", "scp_baby_boost", "income_tax_basic_uplift", "income_tax_intermediate_uplift"],
     },
 ]

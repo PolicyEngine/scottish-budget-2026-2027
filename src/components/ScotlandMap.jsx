@@ -8,14 +8,19 @@ import "./ScotlandMap.css";
 const CHART_TITLE = "Scottish constituency-level impacts";
 // Note: CHART_DESCRIPTION is now generated dynamically using policyName prop
 
-// Fixed color scale extent for average gain (in £) - consistent across all years
-const FIXED_COLOR_EXTENT = 35;
-
 // Format year for display (e.g., 2026 -> "2026-27")
 const formatYearRange = (year) => `${year}-${(year + 1).toString().slice(-2)}`;
 
 // Scottish constituency codes start with 'S'
 const isScottishConstituency = (code) => code && code.startsWith("S");
+
+// Policy display names for breakdown tooltip
+const POLICY_DISPLAY_NAMES = {
+  scp_baby_boost: "SCP Premium for under-ones",
+  scp_inflation: "SCP inflation adjustment",
+  income_tax_basic_uplift: "Basic rate +7.4%",
+  income_tax_intermediate_uplift: "Intermediate rate +7.4%",
+};
 
 export default function ScotlandMap({
   constituencyData = [],
@@ -25,6 +30,7 @@ export default function ScotlandMap({
   selectedConstituency: controlledConstituency = null,
   onConstituencySelect = null,
   policyName = "SCP Premium for under-ones",
+  selectedPolicies = [],
 }) {
   const svgRef = useRef(null);
   const [internalSelectedConstituency, setInternalSelectedConstituency] = useState(null);
@@ -74,6 +80,30 @@ export default function ScotlandMap({
     return new Map(
       constituencyData.map((d) => [d.constituency_code, d])
     );
+  }, [constituencyData]);
+
+  // Calculate dynamic color extent based on min/max values in data
+  const colorExtent = useMemo(() => {
+    if (!constituencyData || constituencyData.length === 0) {
+      return { min: 0, max: 10, type: 'positive' };
+    }
+    const values = constituencyData.map(d => d.average_gain || 0);
+    const minVal = Math.min(...values);
+    const maxVal = Math.max(...values);
+
+    // Determine the type of scale needed
+    let type = 'diverging';
+    if (minVal >= 0) {
+      type = 'positive'; // All positive: light green to dark green
+    } else if (maxVal <= 0) {
+      type = 'negative'; // All negative: light red to dark red
+    }
+
+    return {
+      min: Math.floor(minVal),
+      max: Math.ceil(maxVal),
+      type
+    };
   }, [constituencyData]);
 
   // Highlight and zoom to controlled constituency when it changes
@@ -195,21 +225,35 @@ export default function ScotlandMap({
     const path = d3.geoPath().projection(projection);
 
     // Color scale - diverging with white at 0, amber for losses, teal for gains
-    // Uses average_gain (absolute £ values)
+    // Uses average_gain (absolute £ values) with dynamic extent based on data
     const getValue = (d) => d.average_gain || 0;
 
-    const colorScale = d3
-      .scaleDiverging()
-      .domain([-FIXED_COLOR_EXTENT, 0, FIXED_COLOR_EXTENT])
-      .interpolator((t) => {
-        if (t < 0.5) {
-          const ratio = t * 2;
-          return d3.interpolateRgb("#D97706", "#E5E7EB")(ratio);
-        } else {
-          const ratio = (t - 0.5) * 2;
-          return d3.interpolateRgb("#E5E7EB", "#14B8A6")(ratio);
-        }
-      });
+    // Create color scale based on data range type
+    let colorScale;
+    if (colorExtent.type === 'positive') {
+      // All positive: light green to dark green
+      colorScale = d3.scaleLinear()
+        .domain([colorExtent.min, colorExtent.max])
+        .range(["#bbf7d0", "#15803d"]);
+    } else if (colorExtent.type === 'negative') {
+      // All negative: dark red to light red (more negative = darker)
+      colorScale = d3.scaleLinear()
+        .domain([colorExtent.min, colorExtent.max])
+        .range(["#b91c1c", "#fecaca"]);
+    } else {
+      // Diverging: red for negative, green for positive
+      colorScale = d3.scaleDiverging()
+        .domain([colorExtent.min, 0, colorExtent.max])
+        .interpolator((t) => {
+          if (t < 0.5) {
+            const ratio = t * 2;
+            return d3.interpolateRgb("#b91c1c", "#f5f5f5")(ratio);
+          } else {
+            const ratio = (t - 0.5) * 2;
+            return d3.interpolateRgb("#f5f5f5", "#15803d")(ratio);
+          }
+        });
+    }
 
     // Draw constituencies
     const paths = g
@@ -318,7 +362,7 @@ export default function ScotlandMap({
       .attr("height", CHART_LOGO.height)
       .attr("x", width - CHART_LOGO.width - CHART_LOGO.padding)
       .attr("y", height - CHART_LOGO.height - CHART_LOGO.padding);
-  }, [geoData, dataMap, onConstituencySelect]);
+  }, [geoData, dataMap, onConstituencySelect, colorExtent]);
 
   // Handle search
   useEffect(() => {
@@ -517,11 +561,20 @@ export default function ScotlandMap({
 
         <div className="map-legend-horizontal">
           <div className="legend-horizontal-content">
-            <div className="legend-gradient-horizontal" />
+            <div
+              className="legend-gradient-horizontal"
+              style={{
+                background: colorExtent.type === 'positive'
+                  ? 'linear-gradient(to right, #bbf7d0, #15803d)'
+                  : colorExtent.type === 'negative'
+                  ? 'linear-gradient(to right, #b91c1c, #fecaca)'
+                  : 'linear-gradient(to right, #b91c1c, #f5f5f5, #15803d)'
+              }}
+            />
             <div className="legend-labels-horizontal">
-              <span>-£{FIXED_COLOR_EXTENT}</span>
-              <span className="legend-zero">£0</span>
-              <span>+£{FIXED_COLOR_EXTENT}</span>
+              <span>£{colorExtent.min}</span>
+              {colorExtent.type === 'diverging' && <span className="legend-zero">£0</span>}
+              <span>£{colorExtent.max}</span>
             </div>
           </div>
         </div>
@@ -623,6 +676,34 @@ export default function ScotlandMap({
                 <span style={{ fontSize: "0.75rem", fontWeight: "normal", color: "#6b7280" }}>/year</span>
               </p>
               <p className="tooltip-label">Average household gain</p>
+
+              {/* Policy breakdown - only show if multiple policies selected */}
+              {tooltipData.policyBreakdown &&
+                selectedPolicies.length > 1 &&
+                Object.keys(tooltipData.policyBreakdown).length > 1 && (
+                  <div className="tooltip-breakdown">
+                    <p className="tooltip-breakdown-header">By policy:</p>
+                    {Object.entries(tooltipData.policyBreakdown)
+                      .sort((a, b) => b[1].avgGain - a[1].avgGain)
+                      .map(([reformId, data]) => (
+                        <div key={reformId} className="tooltip-breakdown-row">
+                          <span className="tooltip-breakdown-name">
+                            {POLICY_DISPLAY_NAMES[reformId] || reformId}
+                          </span>
+                          <span
+                            className="tooltip-breakdown-value"
+                            style={{
+                              color: data.avgGain >= 0 ? "#16a34a" : "#dc2626",
+                            }}
+                          >
+                            {data.avgGain < 0 ? "-" : ""}£
+                            {Math.abs(data.avgGain).toFixed(2)}
+                          </span>
+                        </div>
+                      ))}
+                  </div>
+                )}
+
               {tooltipData.povertyReduction !== undefined && (
                 <>
                   <p

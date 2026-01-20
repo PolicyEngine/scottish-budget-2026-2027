@@ -10,21 +10,27 @@ export const API_BASE_URL = import.meta.env.VITE_API_URL || "https://policyengin
  */
 export const REFORMS = [
   {
-    id: "income_tax_threshold_uplift",
-    name: "Income tax threshold uplift (7.4%)",
-    description: "7.4% increase in basic and intermediate thresholds",
+    id: "income_tax_basic_uplift",
+    name: "Basic rate threshold +7.4%",
+    description: "Basic rate (20%) threshold increased by 7.4%",
     color: "#0D9488",  // Teal 600 (darkest - largest)
+  },
+  {
+    id: "income_tax_intermediate_uplift",
+    name: "Intermediate rate threshold +7.4%",
+    description: "Intermediate rate (21%) threshold increased by 7.4%",
+    color: "#14B8A6",  // Teal 500 (medium)
   },
   {
     id: "scp_inflation",
     name: "SCP inflation adjustment (£28.20/week)",
     description: "SCP uprated from £27.15 to £28.20/week (+3.9%)",
-    color: "#14B8A6",  // Teal 500 (medium)
+    color: "#2DD4BF",  // Teal 400 (lightest)
   },
   {
     id: "scp_baby_boost",
     name: "SCP Premium for under-ones (£40/week)",
-    description: "Extra £11.80/week for babies under 1 (from 2027)",
-    color: "#2DD4BF",  // Teal 400 (lightest - smallest)
+    description: "Extra £11.15/week for babies under 1 (from 2027)",
+    color: "#5EEAD4",  // Teal 300 (lightest - smallest)
   },
 ];

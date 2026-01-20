@@ -15,7 +15,7 @@ const DEFAULT_INPUTS = {
 const CHART_COLORS = {
   total: "#319795",
   scp_baby_boost: "#2C6496",
-  income_tax_threshold_uplift: "#29AB87",
+  income_tax_uplift: "#29AB87",
 };
 
 // Slider configurations
@@ -37,7 +37,7 @@ function HouseholdCalculator() {
   const [error, setError] = useState(null);
   const [impacts, setImpacts] = useState({
     scp_baby_boost: 0,
-    income_tax_threshold_uplift: 0,
+    income_tax_uplift: 0,
     total: 0,
   });
   const [variationData, setVariationData] = useState([]);
@@ -102,7 +102,7 @@ function HouseholdCalculator() {
         if (!calcResult.error) {
           setImpacts({
             scp_baby_boost: calcResult.impacts.scp_baby_boost ?? 0,
-            income_tax_threshold_uplift: calcResult.impacts.income_tax_threshold_uplift ?? 0,
+            income_tax_uplift: calcResult.impacts.income_tax_uplift ?? 0,
             total: calcResult.total ?? 0,
           });
         } else {
@@ -150,7 +150,7 @@ function HouseholdCalculator() {
     const allValues = variationData.flatMap((d) => [
       d.total,
       d.scp_baby_boost,
-      d.income_tax_threshold_uplift,
+      d.income_tax_uplift,
     ]);
     const yMax = Math.max(100, d3.max(allValues) * 1.1);
     const yMin = Math.min(0, d3.min(allValues) * 1.1);
@@ -245,14 +245,14 @@ function HouseholdCalculator() {
     const lineTax = d3
       .line()
       .x((d) => x(d.earnings))
-      .y((d) => y(d.income_tax_threshold_uplift))
+      .y((d) => y(d.income_tax_uplift))
       .curve(d3.curveMonotoneX);
 
     // Draw lines
     g.append("path")
       .datum(variationData)
       .attr("fill", "none")
-      .attr("stroke", CHART_COLORS.income_tax_threshold_uplift)
+      .attr("stroke", CHART_COLORS.income_tax_uplift)
       .attr("stroke-width", 2)
       .attr("d", lineTax);
 
@@ -304,7 +304,7 @@ function HouseholdCalculator() {
 
     const legendItems = [
       { label: "Total", color: CHART_COLORS.total },
-      { label: "Income tax", color: CHART_COLORS.income_tax_threshold_uplift },
+      { label: "Income tax", color: CHART_COLORS.income_tax_uplift },
       { label: "SCP Premium", color: CHART_COLORS.scp_baby_boost },
     ];
 
@@ -345,7 +345,7 @@ function HouseholdCalculator() {
 
     const hoverCircleTax = g.append("circle")
       .attr("r", 4)
-      .attr("fill", CHART_COLORS.income_tax_threshold_uplift)
+      .attr("fill", CHART_COLORS.income_tax_uplift)
       .attr("stroke", "white")
       .attr("stroke-width", 1.5)
       .style("opacity", 0);
@@ -403,7 +403,7 @@ function HouseholdCalculator() {
 
         hoverCircleTax
           .attr("cx", x(closest.earnings))
-          .attr("cy", y(closest.income_tax_threshold_uplift))
+          .attr("cy", y(closest.income_tax_uplift))
           .style("opacity", 1);
 
         hoverCircleScp
@@ -414,7 +414,7 @@ function HouseholdCalculator() {
         // Update tooltip
         const sign = (v) => v >= 0 ? "+" : "";
         const tooltipX = x(closest.earnings) + margin.left;
-        const tooltipY = Math.min(y(closest.total), y(closest.income_tax_threshold_uplift), y(closest.scp_baby_boost));
+        const tooltipY = Math.min(y(closest.total), y(closest.income_tax_uplift), y(closest.scp_baby_boost));
 
         tooltip
           .html(`
@@ -427,9 +427,9 @@ function HouseholdCalculator() {
               <span style="font-weight:600;color:${closest.total >= 0 ? '#16a34a' : '#dc2626'}">${sign(closest.total)}£${Math.abs(closest.total).toFixed(0)}</span>
             </div>
             <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
-              <span style="width:10px;height:10px;background:${CHART_COLORS.income_tax_threshold_uplift};border-radius:2px"></span>
+              <span style="width:10px;height:10px;background:${CHART_COLORS.income_tax_uplift};border-radius:2px"></span>
               <span style="color:#475569">Income tax:</span>
-              <span style="font-weight:600;color:${closest.income_tax_threshold_uplift >= 0 ? '#16a34a' : '#dc2626'}">${sign(closest.income_tax_threshold_uplift)}£${Math.abs(closest.income_tax_threshold_uplift).toFixed(0)}</span>
+              <span style="font-weight:600;color:${closest.income_tax_uplift >= 0 ? '#16a34a' : '#dc2626'}">${sign(closest.income_tax_uplift)}£${Math.abs(closest.income_tax_uplift).toFixed(0)}</span>
             </div>
             <div style="display:flex;align-items:center;gap:6px">
               <span style="width:10px;height:10px;background:${CHART_COLORS.scp_baby_boost};border-radius:2px"></span>

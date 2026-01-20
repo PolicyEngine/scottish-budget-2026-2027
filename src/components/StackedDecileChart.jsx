@@ -14,13 +14,17 @@ import "./DecileChart.css";
 
 // Colors for each reform
 const REFORM_COLORS = {
-  scp_baby_boost: "#2C6496",
-  income_tax_threshold_uplift: "#29AB87",
+  scp_baby_boost: "#5EEAD4",
+  scp_inflation: "#2DD4BF",
+  income_tax_basic_uplift: "#0D9488",
+  income_tax_intermediate_uplift: "#14B8A6",
 };
 
 const REFORM_NAMES = {
   scp_baby_boost: "SCP Premium for under-ones",
-  income_tax_threshold_uplift: "Income tax threshold uplift",
+  scp_inflation: "SCP inflation adjustment",
+  income_tax_basic_uplift: "Basic rate +7.4%",
+  income_tax_intermediate_uplift: "Intermediate rate +7.4%",
 };
 
 /**
@@ -30,7 +34,7 @@ export default function StackedDecileChart({
   data,
   title,
   description,
-  reforms = ["scp_baby_boost", "income_tax_threshold_uplift"],
+  reforms = ["income_tax_basic_uplift", "income_tax_intermediate_uplift", "scp_inflation", "scp_baby_boost"],
 }) {
   const [viewMode, setViewMode] = useState("absolute"); // "relative" or "absolute"
 
