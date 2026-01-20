@@ -491,7 +491,7 @@ export default function ScotlandMap({
                       {result.constituency_name}
                     </div>
                     <div className="result-value">
-                      £{result.average_gain?.toFixed(0) || 0} (
+                      £{result.average_gain?.toFixed(2) || 0} (
                       {(result.relative_change || 0).toFixed(2)}%)
                     </div>
                   </button>
@@ -629,7 +629,7 @@ export default function ScotlandMap({
                     className="tooltip-value-secondary"
                     style={{ color: "#16a34a" }}
                   >
-                    -{parseFloat(tooltipData.povertyReduction).toFixed(3)}pp
+                    -{parseFloat(tooltipData.povertyReduction).toFixed(2)}pp
                   </p>
                   <p className="tooltip-label">Poverty rate reduction</p>
                 </>

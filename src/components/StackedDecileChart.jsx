@@ -49,7 +49,7 @@ export default function StackedDecileChart({
     if (viewMode === "relative") {
       return `${value >= 0 ? "+" : ""}${value.toFixed(2)}%`;
     }
-    return `£${Math.abs(value).toFixed(0)}`;
+    return `£${Math.abs(value).toFixed(2)}`;
   };
 
   // Transform data based on view mode
