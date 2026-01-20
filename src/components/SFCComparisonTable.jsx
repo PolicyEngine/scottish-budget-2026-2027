@@ -115,7 +115,7 @@ function SFCComparisonTable() {
   const formatValue = (value) => {
     if (value === null || value === undefined || isNaN(value)) return "—";
     const sign = value >= 0 ? "" : "-";
-    return `${sign}£${Math.abs(value).toFixed(0)}m`;
+    return `${sign}£${Math.abs(value).toFixed(2)}m`;
   };
 
   const getDifferenceClass = (pe, sfc) => {
