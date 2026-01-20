@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import * as d3 from "d3";
 import { CHART_LOGO } from "../utils/chartLogo.jsx";
-import { exportMapAsSvg } from "../utils/exportMapAsSvg";
 import "./MansionTaxMap.css";
 
 /**
@@ -295,17 +294,6 @@ export default function MansionTaxMap() {
     }
   };
 
-  const handleExportSvg = async () => {
-    if (!svgRef.current) return;
-
-    await exportMapAsSvg(svgRef.current, "mansion-tax-map", {
-      title: "Scottish mansion tax by parliament constituency",
-      description: "Share of estimated annual revenue from council tax reform for properties valued at £1m+. Darker colors indicate higher revenue share.",
-      logo: CHART_LOGO,
-      tooltipData,
-    });
-  };
-
   if (loading) {
     return <div className="scotland-map-loading">Loading map...</div>;
   }
@@ -322,32 +310,10 @@ export default function MansionTaxMap() {
           <div>
             <h3 className="chart-title">Mansion tax by parliament constituency</h3>
             <p className="chart-description">
-              Share of estimated annual revenue (£18.5m) from council tax reform for properties valued at £1m+.
-              Darker colors indicate higher revenue share.
+              This map shows each constituency's share of estimated yearly revenue
+              from the mansion tax. Darker green indicates a higher share.
             </p>
           </div>
-          <button
-            className="export-button"
-            onClick={handleExportSvg}
-            title="Download as SVG"
-            aria-label="Download map as SVG"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-              <polyline points="7 10 12 15 17 10" />
-              <line x1="12" y1="15" x2="12" y2="3" />
-            </svg>
-          </button>
         </div>
       </div>
 

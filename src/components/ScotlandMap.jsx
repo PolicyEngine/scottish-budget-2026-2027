@@ -1,18 +1,10 @@
 import { useEffect, useRef, useState, useMemo } from "react";
 import * as d3 from "d3";
 import { CHART_LOGO } from "../utils/chartLogo.jsx";
-import { exportMapAsSvg } from "../utils/exportMapAsSvg";
 import "./ScotlandMap.css";
-
-// Chart metadata for export
-const CHART_TITLE = "Scottish local authority impacts";
-// Note: CHART_DESCRIPTION is now generated dynamically using policyName prop
 
 // Format year for display (e.g., 2026 -> "2026-27")
 const formatYearRange = (year) => `${year}-${(year + 1).toString().slice(-2)}`;
-
-// Scottish local authority codes start with 'S'
-const isScottishLocalAuthority = (code) => code && code.startsWith("S");
 
 // Policy display names for breakdown tooltip
 const POLICY_DISPLAY_NAMES = {
@@ -444,17 +436,6 @@ export default function ScotlandMap({
     }
   };
 
-  const handleExportSvg = async () => {
-    if (!svgRef.current) return;
-
-    await exportMapAsSvg(svgRef.current, `scotland-map-${selectedYear}`, {
-      title: `${CHART_TITLE}, ${formatYearRange(selectedYear)}`,
-      description: `This map shows the average annual household gain from the ${policyName} across Scottish local authorities. Green shading indicates larger gains.`,
-      logo: CHART_LOGO,
-      tooltipData,
-    });
-  };
-
   if (loading) {
     return <div className="scotland-map-loading">Loading map...</div>;
   }
@@ -475,28 +456,6 @@ export default function ScotlandMap({
               across Scottish local authorities. Darker green indicates larger gains.
             </p>
           </div>
-          <button
-            className="export-button"
-            onClick={handleExportSvg}
-            title="Download as SVG"
-            aria-label="Download map as SVG"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-              <polyline points="7 10 12 15 17 10" />
-              <line x1="12" y1="15" x2="12" y2="3" />
-            </svg>
-          </button>
         </div>
       </div>
 
