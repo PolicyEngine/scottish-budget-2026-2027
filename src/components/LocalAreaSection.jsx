@@ -218,7 +218,7 @@ export default function LocalAreaSection({
               </div>
               <div className="metric-card">
                 <span className="metric-label">Poverty rate reduction</span>
-                <span className="metric-value">{selectedConstituency.povertyReduction.toFixed(2)}pp
+                <span className="metric-value">{selectedConstituency.povertyReduction.toFixed(2)}pp</span>
               </div>
             </div>
           </div>
