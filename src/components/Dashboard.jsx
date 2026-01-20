@@ -390,7 +390,7 @@ export default function Dashboard({ selectedPolicies = [] }) {
           <BudgetBarChart
             data={stackedAvgIncomeData}
             yLabel="Average income change (£)"
-            yFormat={(v) => `£${v.toFixed(0)}`}
+            yFormat={(v) => `£${v.toFixed(2)}`}
             tooltipLabel="Income change"
             stacked={true}
             selectedPolicies={selectedPolicies}
@@ -406,7 +406,7 @@ export default function Dashboard({ selectedPolicies = [] }) {
                 .map(year => ({ year, value: avgChange[year] }));
             })()}
             yLabel="Average income change (£)"
-            yFormat={(v) => `£${v.toFixed(0)}`}
+            yFormat={(v) => `£${v.toFixed(2)}`}
             tooltipLabel="Income change"
             yMaxValue={40}
             yTickCount={5}
