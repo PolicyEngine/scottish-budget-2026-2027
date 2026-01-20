@@ -190,6 +190,20 @@ def apply_top_rate_freeze_reform(sim: Microsimulation) -> None:
             )
 
 
+def disable_scp_baby_boost(sim: Microsimulation) -> None:
+    """Disable SCP baby boost to create counterfactual baseline.
+
+    The baby boost is already in the PolicyEngine UK baseline from 2027+.
+    This function disables it so we can measure the impact of enabling it.
+    """
+    scp_reform = sim.tax_benefit_system.parameters.gov.contrib.scotland.scottish_child_payment
+
+    for year in DEFAULT_YEARS:
+        if year >= 2027:
+            period = f"{year}-01-01"
+            scp_reform.in_effect.update(period=period, value=False)
+
+
 def apply_scp_baby_boost_reform(sim: Microsimulation) -> None:
     """Apply SCP baby boost reform to a simulation.
 
@@ -198,10 +212,8 @@ def apply_scp_baby_boost_reform(sim: Microsimulation) -> None:
     when standard rate is £28.85/week). Both total and rate CPI uprated.
 
     Note: The SCP Premium for under-ones takes effect from 2027, not 2026.
-
-    Note: Uses contrib parameters for policyengine-uk < 2.70.0.
-    Once the main parameters are available, this should switch to using
-    gov.social_security_scotland.scottish_child_payment.premium_under_one_amount.
+    Note: The baseline already has this enabled, so we need to use
+    disable_scp_baby_boost() on the baseline to measure the impact.
 
     Source: Scottish Budget 2026-27
     https://www.gov.scot/publications/scottish-budget-2026-2027/

@@ -18,6 +18,7 @@ from .reforms import (
     apply_scp_baby_boost_reform,
     apply_scp_inflation_reform,
     apply_top_rate_freeze_reform,
+    disable_scp_baby_boost,
 )
 
 # Map reform IDs to their apply functions
@@ -31,6 +32,13 @@ REFORM_APPLY_FNS = {
     "advanced_rate_freeze": apply_advanced_rate_freeze_reform,
     "top_rate_freeze": apply_top_rate_freeze_reform,
     "combined": apply_combined_reform,
+}
+
+# Map reform IDs to baseline modifiers (for counterfactual baselines)
+# These are applied to the baseline to create a proper comparison
+BASELINE_MODIFIERS = {
+    "scp_baby_boost": disable_scp_baby_boost,  # Baby boost is in PE baseline, disable to measure impact
+    "combined": disable_scp_baby_boost,  # Combined includes baby boost
 }
 
 
@@ -77,6 +85,10 @@ class BudgetaryImpactCalculator:
             baseline = Microsimulation()
             reformed = Microsimulation()
 
+            # Apply baseline modifier if needed (for counterfactual baselines)
+            if reform_id in BASELINE_MODIFIERS:
+                BASELINE_MODIFIERS[reform_id](baseline)
+
             if reform_id in REFORM_APPLY_FNS:
                 REFORM_APPLY_FNS[reform_id](reformed)
 
@@ -119,6 +131,10 @@ class DistributionalImpactCalculator:
         """
         baseline = Microsimulation()
         reformed = Microsimulation()
+
+        # Apply baseline modifier if needed (for counterfactual baselines)
+        if reform_id in BASELINE_MODIFIERS:
+            BASELINE_MODIFIERS[reform_id](baseline)
 
         if reform_id in REFORM_APPLY_FNS:
             REFORM_APPLY_FNS[reform_id](reformed)
