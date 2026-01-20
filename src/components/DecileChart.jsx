@@ -47,7 +47,11 @@ export default function DecileChart({
     if (viewMode === "relative") {
       return `${value >= 0 ? "+" : ""}${value.toFixed(2)}%`;
     }
-    return `£${Math.abs(value).toFixed(2)}`;
+    // Show negative sign for negative values
+    if (value < 0) {
+      return `-£${Math.abs(value).toFixed(2)}`;
+    }
+    return `£${value.toFixed(2)}`;
   };
 
   // Get policy IDs that are revenue raisers (bad for households - should be negative)

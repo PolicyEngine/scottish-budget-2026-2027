@@ -240,11 +240,11 @@ function createGradientLegend(svg, centerX, y) {
 }
 
 /**
- * Create a tooltip/info card for the selected constituency.
+ * Create a tooltip/info card for the selected local authority.
  *
  * @param {SVGElement} svg - The SVG element to add the tooltip to
  * @param {Object} data - Tooltip data
- * @param {string} data.constituency_name - Constituency name
+ * @param {string} data.local_authority_name - Local authority name
  * @param {number} data.average_gain - Average gain in pounds
  * @param {number} data.relative_change - Relative change as percentage
  * @param {number} x - X position
@@ -267,11 +267,11 @@ function createTooltipCard(svg, data, x, y) {
   });
   svg.appendChild(bg);
 
-  // Constituency name (truncated if needed)
+  // Local authority name (truncated if needed)
   const name =
-    data.constituency_name.length > 22
-      ? data.constituency_name.substring(0, 20) + "..."
-      : data.constituency_name;
+    data.local_authority_name.length > 22
+      ? data.local_authority_name.substring(0, 20) + "..."
+      : data.local_authority_name;
 
   const nameText = createSvgText(name, {
     x: x + tooltipPadding,
@@ -345,7 +345,7 @@ function createTooltipCard(svg, data, x, y) {
  * @param {string} options.logo.href - URL/path to logo image
  * @param {number} options.logo.width - Logo width
  * @param {number} options.logo.height - Logo height
- * @param {Object} options.tooltipData - Selected constituency data for tooltip
+ * @param {Object} options.tooltipData - Selected local authority data for tooltip
  * @returns {Promise<boolean>} - True if export was successful
  */
 export async function exportMapAsSvg(
@@ -457,7 +457,7 @@ export async function exportMapAsSvg(
     }
   }
 
-  // Add tooltip/hovercard if constituency is selected
+  // Add tooltip/hovercard if local authority is selected
   if (tooltipData) {
     const tooltipX = width - STYLES.tooltipWidth - 20;
     const tooltipY = headerHeight + 20;

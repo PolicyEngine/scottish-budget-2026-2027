@@ -23,20 +23,6 @@ def parse_args(args: list[str] = None) -> argparse.Namespace:
     )
 
     parser.add_argument(
-        "--data-dir",
-        type=Path,
-        default=Path("./data"),
-        help="Directory containing input data files (default: ./data)",
-    )
-
-    parser.add_argument(
-        "--data-inputs-dir",
-        type=Path,
-        default=Path("./data_inputs"),
-        help="Directory containing reference data (default: ./data_inputs)",
-    )
-
-    parser.add_argument(
         "--years",
         nargs="+",
         type=int,
@@ -106,8 +92,6 @@ def main(args: list[str] = None) -> int:
         generate_all_data(
             reforms=reforms,
             output_dir=parsed.output_dir,
-            data_dir=parsed.data_dir,
-            data_inputs_dir=parsed.data_inputs_dir,
             years=parsed.years,
         )
         print("\n" + "=" * 50)

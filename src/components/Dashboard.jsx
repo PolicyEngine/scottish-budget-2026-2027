@@ -13,7 +13,7 @@ const SECTIONS = [
   { id: "budgetary-impact", label: "Budgetary impact" },
   { id: "living-standards", label: "Living standards" },
   { id: "poverty", label: "Poverty rate" },
-  { id: "constituencies", label: "Impact by constituency" },
+  { id: "local-authorities", label: "Impact by local authority" },
 ];
 
 // Common table styles
@@ -456,10 +456,36 @@ export default function Dashboard({ selectedPolicies = [] }) {
     });
   }, [isStacked, rawDistributionalData, selectedYear]);
 
-  // Get decile data filtered by selected year
+  // Get decile data filtered by selected year - aggregate selected policies
   const decileDataForYear = useMemo(() => {
     if (rawDistributionalData.length === 0) return [];
 
+    // If multiple policies selected, aggregate their values
+    if (selectedPolicies.length > 1) {
+      const deciles = ["1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th"];
+      return deciles.map(decile => {
+        let relativeSum = 0;
+        let absoluteSum = 0;
+
+        selectedPolicies.forEach(policyId => {
+          const row = rawDistributionalData.find(
+            r => r.reform_id === policyId && r.year === String(selectedYear) && r.decile === decile
+          );
+          if (row) {
+            relativeSum += parseFloat(row.value) || 0;
+            absoluteSum += parseFloat(row.absolute_change) || 0;
+          }
+        });
+
+        return {
+          decile,
+          relativeChange: relativeSum,
+          absoluteChange: absoluteSum,
+        };
+      });
+    }
+
+    // Single policy - use directly
     return rawDistributionalData
       .filter(row =>
         row.year === String(selectedYear) &&
@@ -471,7 +497,7 @@ export default function Dashboard({ selectedPolicies = [] }) {
         relativeChange: parseFloat(row.value) || 0,
         absoluteChange: parseFloat(row.absolute_change) || 0,
       }));
-  }, [rawDistributionalData, selectedYear, effectivePolicy]);
+  }, [rawDistributionalData, selectedYear, effectivePolicy, selectedPolicies]);
 
   const policyInfo = POLICY_INFO[effectivePolicy] || POLICY_INFO.scp_baby_boost;
 
@@ -595,11 +621,11 @@ export default function Dashboard({ selectedPolicies = [] }) {
         />
       )}
 
-      {/* Constituency Impact Section */}
-      <h2 className="section-title" id="constituencies" ref={(el) => (sectionRefs.current["constituencies"] = el)}>Impact by constituency</h2>
+      {/* Local Authority Impact Section */}
+      <h2 className="section-title" id="local-authorities" ref={(el) => (sectionRefs.current["local-authorities"] = el)}>Impact by local authority</h2>
       <p className="chart-description">
-        This section shows how the budget measures affect different constituencies across Scotland.
-        Select a constituency to see the estimated impact on households in that area.
+        This section shows how the budget measures affect different local authorities across Scotland.
+        Select a local authority to see the estimated impact on households in that area.
       </p>
 
       <LocalAreaSection
