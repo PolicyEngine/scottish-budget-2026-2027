@@ -14,6 +14,7 @@ const SECTIONS = [
   { id: "living-standards", label: "Living standards" },
   { id: "poverty", label: "Poverty rate" },
   { id: "local-authorities", label: "Impact by local authority" },
+  { id: "mansion-tax", label: "Mansion tax" },
 ];
 
 // Common table styles
@@ -634,6 +635,40 @@ export default function Dashboard({ selectedPolicies = [] }) {
         onYearChange={setSelectedYear}
         availableYears={AVAILABLE_YEARS}
       />
+
+      {/* Mansion Tax Section */}
+      <h2 className="section-title" id="mansion-tax" ref={(el) => (sectionRefs.current["mansion-tax"] = el)}>Mansion tax</h2>
+      <p className="chart-description">
+        The Scottish Budget 2026-27 introduces new council tax bands for properties valued at £1 million or more,
+        effective from April 2028. Band I applies to properties worth £1m-£2m, and Band J to properties over £2m.
+        This map shows the estimated revenue impact by Scottish Parliament constituency, based on{" "}
+        <a href="https://github.com/PolicyEngine/scotland-mansion-tax" target="_blank" rel="noopener noreferrer">
+          PolicyEngine's mansion tax analysis
+        </a>.
+      </p>
+      <div className="mansion-tax-map-container" style={{
+        width: "100%",
+        maxWidth: "900px",
+        margin: "24px auto",
+        border: "1px solid #e5e7eb",
+        borderRadius: "8px",
+        overflow: "hidden",
+        backgroundColor: "#fff",
+      }}>
+        <iframe
+          src="https://policyengine.github.io/scotland-mansion-tax/scottish_mansion_tax_map.html"
+          title="Scottish Mansion Tax Impact Map"
+          style={{
+            width: "100%",
+            height: "700px",
+            border: "none",
+          }}
+        />
+      </div>
+      <p className="chart-note" style={{ textAlign: "center", marginTop: "8px" }}>
+        Estimated total revenue: £18.5m/year. Edinburgh constituencies account for ~47% of total revenue.
+        See the <a href="https://github.com/PolicyEngine/scotland-mansion-tax#readme" target="_blank" rel="noopener noreferrer">full methodology</a>.
+      </p>
     </div>
   );
 }
