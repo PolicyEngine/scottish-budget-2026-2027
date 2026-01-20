@@ -53,16 +53,15 @@ const POLICY_INFO = {
                 <th style={thStyle}>Year</th>
                 <th style={thRightStyle}>Weekly rate</th>
                 <th style={thRightStyle}>Annual (per child)</th>
-                <th style={thCenterStyle}>Change</th>
               </tr>
             </thead>
             <tbody>
-              <tr><td style={tdStyle}>2025-26</td><td style={tdRightStyle}>£27.15</td><td style={tdRightStyle}>£1,412</td><td style={tdCenterStyle}>—</td></tr>
-              <tr><td style={tdStyle}>2026-27</td><td style={tdRightStyle}>£28.20</td><td style={tdRightStyle}>£1,466</td><td style={{...tdCenterStyle, color: "#2e7d32"}}>+3.9%</td></tr>
-              <tr><td style={tdStyle}>2027-28</td><td style={tdRightStyle}>£28.85</td><td style={tdRightStyle}>£1,500</td><td style={{...tdCenterStyle, color: "#2e7d32"}}>+2.3%</td></tr>
-              <tr><td style={tdStyle}>2028-29</td><td style={tdRightStyle}>£29.45</td><td style={tdRightStyle}>£1,531</td><td style={{...tdCenterStyle, color: "#2e7d32"}}>+2.1%</td></tr>
-              <tr><td style={tdStyle}>2029-30</td><td style={tdRightStyle}>£30.05</td><td style={tdRightStyle}>£1,563</td><td style={{...tdCenterStyle, color: "#2e7d32"}}>+2.0%</td></tr>
-              <tr><td style={{...tdStyle, borderBottom: "none"}}>2030-31</td><td style={{...tdRightStyle, borderBottom: "none"}}>£30.65</td><td style={{...tdRightStyle, borderBottom: "none"}}>£1,594</td><td style={{...tdCenterStyle, borderBottom: "none", color: "#2e7d32"}}>+2.0%</td></tr>
+              <tr><td style={tdStyle}>2025-26</td><td style={tdRightStyle}>£27.15</td><td style={tdRightStyle}>£1,412</td></tr>
+              <tr><td style={tdStyle}>2026-27</td><td style={tdRightStyle}>£28.20</td><td style={tdRightStyle}>£1,466</td></tr>
+              <tr><td style={tdStyle}>2027-28</td><td style={tdRightStyle}>£28.85</td><td style={tdRightStyle}>£1,500</td></tr>
+              <tr><td style={tdStyle}>2028-29</td><td style={tdRightStyle}>£29.45</td><td style={tdRightStyle}>£1,531</td></tr>
+              <tr><td style={tdStyle}>2029-30</td><td style={tdRightStyle}>£30.05</td><td style={tdRightStyle}>£1,563</td></tr>
+              <tr><td style={{...tdStyle, borderBottom: "none"}}>2030-31</td><td style={{...tdRightStyle, borderBottom: "none"}}>£30.65</td><td style={{...tdRightStyle, borderBottom: "none"}}>£1,594</td></tr>
             </tbody>
           </table>
           <div style={noteStyle}>
