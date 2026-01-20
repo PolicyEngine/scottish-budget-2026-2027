@@ -51,14 +51,14 @@ const POLICY_INFO = {
             <tbody>
               <tr><td style={tdStyle}>2025-26</td><td style={tdRightStyle}>£27.15</td><td style={tdRightStyle}>£1,412</td><td style={tdCenterStyle}>—</td></tr>
               <tr><td style={tdStyle}>2026-27</td><td style={tdRightStyle}>£28.20</td><td style={tdRightStyle}>£1,466</td><td style={{...tdCenterStyle, color: "#2e7d32"}}>+3.9%</td></tr>
-              <tr><td style={tdStyle}>2027-28*</td><td style={tdRightStyle}>TBC</td><td style={tdRightStyle}>TBC</td><td style={tdCenterStyle}>CPI</td></tr>
-              <tr><td style={tdStyle}>2028-29*</td><td style={tdRightStyle}>TBC</td><td style={tdRightStyle}>TBC</td><td style={tdCenterStyle}>CPI</td></tr>
-              <tr><td style={tdStyle}>2029-30*</td><td style={tdRightStyle}>TBC</td><td style={tdRightStyle}>TBC</td><td style={tdCenterStyle}>CPI</td></tr>
-              <tr><td style={{...tdStyle, borderBottom: "none"}}>2030-31*</td><td style={{...tdRightStyle, borderBottom: "none"}}>TBC</td><td style={{...tdRightStyle, borderBottom: "none"}}>TBC</td><td style={{...tdCenterStyle, borderBottom: "none"}}>CPI</td></tr>
+              <tr><td style={tdStyle}>2027-28</td><td style={tdRightStyle}>£28.85</td><td style={tdRightStyle}>£1,500</td><td style={{...tdCenterStyle, color: "#2e7d32"}}>+2.3%</td></tr>
+              <tr><td style={tdStyle}>2028-29</td><td style={tdRightStyle}>£29.45</td><td style={tdRightStyle}>£1,531</td><td style={{...tdCenterStyle, color: "#2e7d32"}}>+2.1%</td></tr>
+              <tr><td style={tdStyle}>2029-30</td><td style={tdRightStyle}>£30.05</td><td style={tdRightStyle}>£1,563</td><td style={{...tdCenterStyle, color: "#2e7d32"}}>+2.0%</td></tr>
+              <tr><td style={{...tdStyle, borderBottom: "none"}}>2030-31</td><td style={{...tdRightStyle, borderBottom: "none"}}>£30.65</td><td style={{...tdRightStyle, borderBottom: "none"}}>£1,594</td><td style={{...tdCenterStyle, borderBottom: "none", color: "#2e7d32"}}>+2.0%</td></tr>
             </tbody>
           </table>
           <p style={noteStyle}>
-            *Future years uprated by CPI (September of prior year). SFC forecasts CPI at ~2% from 2027-28 onwards.<br/>
+            Uprated annually by CPI (September of prior year).<br/>
             Source: <a href="https://www.gov.scot/publications/scottish-budget-2026-2027/" target="_blank" rel="noopener noreferrer">Scottish Budget 2026-27</a> |{" "}
             <a href="https://fiscalcommission.scot/publications/scotlands-economic-and-fiscal-forecasts-january-2026/" target="_blank" rel="noopener noreferrer">SFC January 2026</a>
           </p>
@@ -72,30 +72,30 @@ const POLICY_INFO = {
     explanation: (
       <li>
         <strong>SCP Premium for under-ones</strong>: The Budget raises the Scottish Child Payment
-        to £40 per week for each child under one year old. This is £11.80/week extra on top of the
-        inflation-adjusted rate of £28.20/week. Commences 2027-28, subject to parliamentary approval.
+        to £40 per week for each child under one year old. This is £11.15/week extra on top of the
+        standard rate of £28.85/week. Commences 2027-28, subject to parliamentary approval.
         <details className="policy-table-details" style={{ marginTop: "12px" }}>
           <summary style={summaryStyle}>View baby boost rates by year</summary>
           <table style={tableStyle}>
             <thead>
               <tr>
                 <th style={thStyle}>Year</th>
-                <th style={thRightStyle}>Under-1 rate</th>
                 <th style={thRightStyle}>Standard rate</th>
-                <th style={thRightStyle}>Premium</th>
+                <th style={thRightStyle}>Under-1 premium</th>
+                <th style={thRightStyle}>Total (under-1)</th>
               </tr>
             </thead>
             <tbody>
-              <tr><td style={tdStyle}>2025-26</td><td style={tdRightStyle}>£27.15</td><td style={tdRightStyle}>£27.15</td><td style={tdCenterStyle}>—</td></tr>
-              <tr><td style={tdStyle}>2026-27</td><td style={tdRightStyle}>£28.20</td><td style={tdRightStyle}>£28.20</td><td style={tdCenterStyle}>—</td></tr>
-              <tr><td style={tdStyle}>2027-28</td><td style={{...tdRightStyle, color: "#2e7d32"}}>£40.00</td><td style={tdRightStyle}>TBC*</td><td style={{...tdRightStyle, color: "#2e7d32"}}>+£11.80</td></tr>
-              <tr><td style={tdStyle}>2028-29</td><td style={tdRightStyle}>TBC*</td><td style={tdRightStyle}>TBC*</td><td style={tdRightStyle}>TBC*</td></tr>
-              <tr><td style={tdStyle}>2029-30</td><td style={tdRightStyle}>TBC*</td><td style={tdRightStyle}>TBC*</td><td style={tdRightStyle}>TBC*</td></tr>
-              <tr><td style={{...tdStyle, borderBottom: "none"}}>2030-31</td><td style={{...tdRightStyle, borderBottom: "none"}}>TBC*</td><td style={{...tdRightStyle, borderBottom: "none"}}>TBC*</td><td style={{...tdRightStyle, borderBottom: "none"}}>TBC*</td></tr>
+              <tr><td style={tdStyle}>2025-26</td><td style={tdRightStyle}>£27.15</td><td style={tdCenterStyle}>—</td><td style={tdRightStyle}>£27.15</td></tr>
+              <tr><td style={tdStyle}>2026-27</td><td style={tdRightStyle}>£28.20</td><td style={tdCenterStyle}>—</td><td style={tdRightStyle}>£28.20</td></tr>
+              <tr><td style={tdStyle}>2027-28</td><td style={tdRightStyle}>£28.85</td><td style={{...tdRightStyle, color: "#2e7d32"}}>+£11.15</td><td style={{...tdRightStyle, color: "#2e7d32"}}>£40.00</td></tr>
+              <tr><td style={tdStyle}>2028-29</td><td style={tdRightStyle}>£29.45</td><td style={{...tdRightStyle, color: "#2e7d32"}}>+£11.35</td><td style={{...tdRightStyle, color: "#2e7d32"}}>£40.80</td></tr>
+              <tr><td style={tdStyle}>2029-30</td><td style={tdRightStyle}>£30.05</td><td style={{...tdRightStyle, color: "#2e7d32"}}>+£11.60</td><td style={{...tdRightStyle, color: "#2e7d32"}}>£41.65</td></tr>
+              <tr><td style={{...tdStyle, borderBottom: "none"}}>2030-31</td><td style={{...tdRightStyle, borderBottom: "none"}}>£30.65</td><td style={{...tdRightStyle, borderBottom: "none", color: "#2e7d32"}}>+£11.85</td><td style={{...tdRightStyle, borderBottom: "none", color: "#2e7d32"}}>£42.50</td></tr>
             </tbody>
           </table>
           <p style={noteStyle}>
-            *Baby boost starts mid-2027-28. Future rates subject to annual uprating decisions. Expected ~12,000 children to benefit.<br/>
+            Under-one premium starts 2027-28. Both standard rate and premium uprated by CPI annually.<br/>
             Source: <a href="https://www.gov.scot/publications/scottish-budget-2026-2027/" target="_blank" rel="noopener noreferrer">Scottish Budget 2026-27</a> |{" "}
             <a href="https://www.gov.scot/news/a-budget-to-tackle-child-poverty/" target="_blank" rel="noopener noreferrer">Scottish Government announcement</a>
           </p>
