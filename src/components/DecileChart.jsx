@@ -25,6 +25,7 @@ export default function DecileChart({
   selectedYear = 2026,
   onYearChange = null,
   availableYears = [2026, 2027, 2028, 2029, 2030],
+  selectedPolicies = [],
 }) {
   const [viewMode, setViewMode] = useState("absolute"); // "absolute" or "relative"
   const formatYearRange = (year) => `${year}-${(year + 1).toString().slice(-2)}`;
@@ -84,20 +85,24 @@ export default function DecileChart({
     }));
   }
 
-  // Check which policies have data
+  // Convert selected policy IDs to names
+  const selectedPolicyNames = selectedPolicies.map(id => POLICY_NAMES[id]);
+
+  // Check which policies have data AND are selected
   const activePolicies = stacked
     ? ALL_POLICY_NAMES.filter(name =>
-        chartData.some(d => Math.abs(d[name] || 0) > 0.001)
+        chartData.some(d => Math.abs(d[name] || 0) > 0.001) &&
+        selectedPolicyNames.includes(name)
       )
     : [];
 
-  // Calculate y-axis domain - symmetric around zero for stacked charts
+  // Calculate y-axis domain - symmetric around zero for stacked charts (only for active policies)
   let yMin = 0, yMax = 10;
   if (stacked) {
     let minSum = 0, maxSum = 0;
     chartData.forEach(d => {
       let positiveSum = 0, negativeSum = 0;
-      ALL_POLICY_NAMES.forEach(name => {
+      activePolicies.forEach(name => {
         const val = d[name] || 0;
         if (val > 0) positiveSum += val;
         else negativeSum += val;

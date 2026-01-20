@@ -44,21 +44,25 @@ export default function BudgetBarChart({
   const formatValue = yFormat || defaultFormat;
   const formatYearRange = (year) => `${year}–${(year + 1).toString().slice(-2)}`;
 
-  // Check which policies have non-zero data
+  // Convert selected policy IDs to names
+  const selectedPolicyNames = selectedPolicies.map(id => POLICY_NAMES[id]);
+
+  // Check which policies have non-zero data AND are selected
   const activePolicies = stacked
     ? ALL_POLICY_NAMES.filter(name =>
-        data.some(d => Math.abs(d[name] || 0) > 0.001)
+        data.some(d => Math.abs(d[name] || 0) > 0.001) &&
+        selectedPolicyNames.includes(name)
       )
     : [];
 
   // Calculate y-axis domain based on data - symmetric around zero
   let yMin = 0, yMax = 10;
   if (stacked) {
-    // For stacked with positive/negative, find min and max
+    // For stacked with positive/negative, find min and max (only for active policies)
     let minSum = 0, maxSum = 0;
     data.forEach(d => {
       let positiveSum = 0, negativeSum = 0;
-      ALL_POLICY_NAMES.forEach(name => {
+      activePolicies.forEach(name => {
         const val = d[name] || 0;
         if (val > 0) positiveSum += val;
         else negativeSum += val;

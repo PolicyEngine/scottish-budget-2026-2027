@@ -484,13 +484,14 @@ export default function Dashboard({ selectedPolicies = [] }) {
               ? "The SCP Premium for under-ones is a targeted policy that only benefits families receiving Scottish Child Payment (a means-tested benefit) with babies under 1. Higher income deciles show no impact because they don't qualify for SCP. Values shown are averages across all households in each decile."
               : effectivePolicy === "income_tax_threshold_uplift"
               ? "The income tax threshold uplift benefits taxpayers across income levels, with the largest absolute gains in middle deciles where more taxpayers are affected by the threshold changes."
-              : "Combined impact of both policies across income deciles. The SCP Premium for under-ones targets lower income families while the income tax threshold uplift benefits taxpayers across income levels."
+              : "Combined impact of selected policies across income deciles. The SCP Premium for under-ones targets lower income families while the income tax threshold uplift benefits taxpayers across income levels."
           }
           stacked={isStacked}
           stackedData={stackedDecileData}
           selectedYear={selectedYear}
           onYearChange={setSelectedYear}
           availableYears={AVAILABLE_YEARS}
+          selectedPolicies={selectedPolicies}
         />
       ) : null}
 
