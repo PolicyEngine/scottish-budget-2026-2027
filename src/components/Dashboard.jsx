@@ -132,16 +132,16 @@ const POLICY_INFO = {
             <tbody>
               <tr><td style={tdStyle}>2025-26</td><td style={tdRightStyle}>£15,398</td><td style={tdCenterStyle}>—</td></tr>
               <tr><td style={tdStyle}>2026-27</td><td style={tdRightStyle}>£16,538</td><td style={{...tdCenterStyle, color: "#2e7d32"}}>+7.4%</td></tr>
-              <tr><td style={tdStyle}>2027-28*</td><td style={tdRightStyle}>TBC</td><td style={tdCenterStyle}>TBC</td></tr>
-              <tr><td style={tdStyle}>2028-29*</td><td style={tdRightStyle}>TBC</td><td style={tdCenterStyle}>TBC</td></tr>
-              <tr><td style={tdStyle}>2029-30*</td><td style={tdRightStyle}>TBC</td><td style={tdCenterStyle}>TBC</td></tr>
-              <tr><td style={{...tdStyle, borderBottom: "none"}}>2030-31*</td><td style={{...tdRightStyle, borderBottom: "none"}}>TBC</td><td style={{...tdCenterStyle, borderBottom: "none"}}>TBC</td></tr>
+              <tr><td style={tdStyle}>2027-28</td><td style={tdRightStyle}>£16,872</td><td style={{...tdCenterStyle, color: "#2e7d32"}}>+2.0%</td></tr>
+              <tr><td style={tdStyle}>2028-29</td><td style={tdRightStyle}>£17,216</td><td style={{...tdCenterStyle, color: "#2e7d32"}}>+2.0%</td></tr>
+              <tr><td style={tdStyle}>2029-30</td><td style={tdRightStyle}>£17,567</td><td style={{...tdCenterStyle, color: "#2e7d32"}}>+2.0%</td></tr>
+              <tr><td style={{...tdStyle, borderBottom: "none"}}>2030-31</td><td style={{...tdRightStyle, borderBottom: "none"}}>£17,918</td><td style={{...tdCenterStyle, borderBottom: "none", color: "#2e7d32"}}>+2.0%</td></tr>
             </tbody>
           </table>
           <p style={noteStyle}>
-            *From 2027-28, SFC baseline assumes starter/basic rate thresholds increase with CPI inflation.<br/>
+            From 2027-28, thresholds projected using OBR CPI forecasts (~2% annually).<br/>
             Source: <a href="https://www.gov.scot/publications/scottish-income-tax-rates-and-bands/pages/2026-to-2027/" target="_blank" rel="noopener noreferrer">Scottish Government</a> |{" "}
-            <a href="https://fiscalcommission.scot/publications/scotlands-economic-and-fiscal-forecasts-january-2026/" target="_blank" rel="noopener noreferrer">SFC January 2026</a>
+            <a href="https://obr.uk/efo/economic-and-fiscal-outlook-november-2025/" target="_blank" rel="noopener noreferrer">OBR EFO November 2025</a>
           </p>
         </details>
       </li>
@@ -168,16 +168,16 @@ const POLICY_INFO = {
             <tbody>
               <tr><td style={tdStyle}>2025-26</td><td style={tdRightStyle}>£27,492</td><td style={tdCenterStyle}>—</td></tr>
               <tr><td style={tdStyle}>2026-27</td><td style={tdRightStyle}>£29,527</td><td style={{...tdCenterStyle, color: "#2e7d32"}}>+7.4%</td></tr>
-              <tr><td style={tdStyle}>2027-28*</td><td style={tdRightStyle}>TBC</td><td style={tdCenterStyle}>TBC</td></tr>
-              <tr><td style={tdStyle}>2028-29*</td><td style={tdRightStyle}>TBC</td><td style={tdCenterStyle}>TBC</td></tr>
-              <tr><td style={tdStyle}>2029-30*</td><td style={tdRightStyle}>TBC</td><td style={tdCenterStyle}>TBC</td></tr>
-              <tr><td style={{...tdStyle, borderBottom: "none"}}>2030-31*</td><td style={{...tdRightStyle, borderBottom: "none"}}>TBC</td><td style={{...tdCenterStyle, borderBottom: "none"}}>TBC</td></tr>
+              <tr><td style={tdStyle}>2027-28</td><td style={tdRightStyle}>£30,123</td><td style={{...tdCenterStyle, color: "#2e7d32"}}>+2.0%</td></tr>
+              <tr><td style={tdStyle}>2028-29</td><td style={tdRightStyle}>£30,738</td><td style={{...tdCenterStyle, color: "#2e7d32"}}>+2.0%</td></tr>
+              <tr><td style={tdStyle}>2029-30</td><td style={tdRightStyle}>£31,365</td><td style={{...tdCenterStyle, color: "#2e7d32"}}>+2.0%</td></tr>
+              <tr><td style={{...tdStyle, borderBottom: "none"}}>2030-31</td><td style={{...tdRightStyle, borderBottom: "none"}}>£31,992</td><td style={{...tdCenterStyle, borderBottom: "none", color: "#2e7d32"}}>+2.0%</td></tr>
             </tbody>
           </table>
           <p style={noteStyle}>
-            *From 2027-28, SFC baseline assumes intermediate rate threshold increases with CPI inflation.<br/>
+            From 2027-28, thresholds projected using OBR CPI forecasts (~2% annually).<br/>
             Source: <a href="https://www.gov.scot/publications/scottish-income-tax-rates-and-bands/pages/2026-to-2027/" target="_blank" rel="noopener noreferrer">Scottish Government</a> |{" "}
-            <a href="https://fiscalcommission.scot/publications/scotlands-economic-and-fiscal-forecasts-january-2026/" target="_blank" rel="noopener noreferrer">SFC January 2026</a>
+            <a href="https://obr.uk/efo/economic-and-fiscal-outlook-november-2025/" target="_blank" rel="noopener noreferrer">OBR EFO November 2025</a>
           </p>
         </details>
       </li>
