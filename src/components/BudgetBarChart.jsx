@@ -20,7 +20,7 @@ export default function BudgetBarChart({
   data,
   title,
   description,
-  yLabel = "Cost (£ millions)",
+  yLabel = "Impact (£ millions)",
   yFormat,
   tooltipLabel = "Value",
   stacked = false,

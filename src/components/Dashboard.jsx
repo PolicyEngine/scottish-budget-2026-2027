@@ -279,7 +279,6 @@ export default function Dashboard({ selectedPolicies = [] }) {
 
   const isStacked = selectedPolicies.length >= 2;
   const [loading, setLoading] = useState(true);
-  const [livingStandardsData, setLivingStandardsData] = useState(null);
   const [povertyMetrics, setPovertyMetrics] = useState([]);
   const [budgetaryData, setBudgetaryData] = useState(null);
   const [rawBudgetaryData, setRawBudgetaryData] = useState([]);
@@ -326,17 +325,6 @@ export default function Dashboard({ selectedPolicies = [] }) {
 
           // Store raw data for year selection and stacked charts
           setRawDistributionalData(data);
-
-          // Get average income change per year from the "All" row (true weighted average)
-          const avgChangeByYear = {};
-          data
-            .filter(row => row.reform_id === effectivePolicy && row.decile === "All")
-            .forEach(row => {
-              const year = parseInt(row.year);
-              avgChangeByYear[year] = parseFloat(row.absolute_change) || 0;
-            });
-
-          setLivingStandardsData({ avgChangeByYear });
         }
 
         if (metricsRes.ok) {
@@ -468,30 +456,6 @@ export default function Dashboard({ selectedPolicies = [] }) {
     });
   }, [isStacked, rawDistributionalData, selectedYear]);
 
-  // Transform average income change data for stacked chart
-  const stackedAvgIncomeData = useMemo(() => {
-    if (!isStacked || rawDistributionalData.length === 0) return null;
-
-    const years = [2026, 2027, 2028, 2029, 2030];
-    return years.map(year => {
-      const dataPoint = { year };
-      let netImpact = 0;
-
-      ALL_POLICY_IDS.forEach(policyId => {
-        const policyName = POLICY_NAMES[policyId];
-        const row = rawDistributionalData.find(
-          r => r.reform_id === policyId && r.year === String(year) && r.decile === "All"
-        );
-        const value = row ? parseFloat(row.absolute_change) || 0 : 0;
-        dataPoint[policyName] = value;
-        netImpact += value;
-      });
-
-      dataPoint.netImpact = netImpact;
-      return dataPoint;
-    }).filter(d => Object.keys(d).length > 1); // Only include years with data
-  }, [isStacked, rawDistributionalData]);
-
   // Get decile data filtered by selected year
   const decileDataForYear = useMemo(() => {
     if (rawDistributionalData.length === 0) return [];
@@ -569,7 +533,7 @@ export default function Dashboard({ selectedPolicies = [] }) {
         <BudgetBarChart
           data={stackedBudgetData}
           title="Estimated budgetary impact"
-          description="Estimated annual cost of both policies combined. Each bar shows the contribution from each policy."
+          description="Positive values indicate revenue gains for the Government, whilst negative values indicate costs to the Treasury."
           tooltipLabel="Cost"
           stacked={true}
           selectedPolicies={selectedPolicies}
@@ -580,7 +544,7 @@ export default function Dashboard({ selectedPolicies = [] }) {
             .map(([year, value]) => ({ year: parseInt(year), value }))
             .sort((a, b) => a.year - b.year)}
           title="Estimated budgetary impact"
-          description={`Estimated annual cost of the ${policyInfo.name} policy in Scotland.`}
+          description="Positive values indicate revenue gains for the Government, whilst negative values indicate costs to the Treasury."
           tooltipLabel="Cost"
         />
       )}
@@ -593,40 +557,6 @@ export default function Dashboard({ selectedPolicies = [] }) {
       <p className="chart-description">
         This section shows how household incomes in Scotland change as a result of the {policyInfo.name} policy.
       </p>
-
-      <div className="section-box" style={{ marginTop: "var(--pe-space-lg)" }}>
-        <h3 className="chart-title">Average income change from {policyInfo.name}</h3>
-        <p className="chart-description">
-          Average change in household net income due to the policy, across all Scottish households.
-          {effectivePolicy === "scp_baby_boost" && " The change is small when averaged across all households because only families with babies under 1 receiving SCP benefit."}
-        </p>
-        {isStacked && stackedAvgIncomeData ? (
-          <BudgetBarChart
-            data={stackedAvgIncomeData}
-            yLabel="Average income change (£)"
-            yFormat={(v) => `£${v.toFixed(2)}`}
-            tooltipLabel="Income change"
-            stacked={true}
-            selectedPolicies={selectedPolicies}
-            yMaxValue={40}
-            yTickCount={5}
-          />
-        ) : (
-          <BudgetBarChart
-            data={(() => {
-              const avgChange = livingStandardsData?.avgChangeByYear || {};
-              return [2026, 2027, 2028, 2029, 2030]
-                .filter(year => avgChange[year] !== undefined)
-                .map(year => ({ year, value: avgChange[year] }));
-            })()}
-            yLabel="Average income change (£)"
-            yFormat={(v) => `£${v.toFixed(2)}`}
-            tooltipLabel="Income change"
-            yMaxValue={40}
-            yTickCount={5}
-          />
-        )}
-      </div>
 
       {/* Decile Impact Chart */}
       {(isStacked && stackedDecileData) || decileDataForYear.length > 0 ? (
