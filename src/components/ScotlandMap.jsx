@@ -224,10 +224,10 @@ export default function ScotlandMap({
 
     let colorScale;
     if (colorExtent.type === 'negative') {
-      // All negative: light red to dark red (more negative = darker)
+      // All negative: more negative = darker red
       colorScale = d3.scaleLinear()
-        .domain([colorExtent.max, colorExtent.min]) // max is closer to 0, min is more negative
-        .range(["#FECACA", "#B91C1C"])
+        .domain([colorExtent.min, colorExtent.max]) // min is more negative, max is closer to 0
+        .range(["#B91C1C", "#FECACA"])
         .clamp(true);
     } else if (colorExtent.type === 'positive') {
       // All positive: light teal to dark teal
@@ -553,7 +553,7 @@ export default function ScotlandMap({
               className="legend-gradient-horizontal"
               style={{
                 background: colorExtent.type === 'negative'
-                  ? 'linear-gradient(to right, #FECACA, #B91C1C)'
+                  ? 'linear-gradient(to right, #B91C1C, #FECACA)'
                   : colorExtent.type === 'positive'
                   ? 'linear-gradient(to right, #E0F2F1, #0D9488)'
                   : 'linear-gradient(to right, #B91C1C, #F5F5F5, #0D9488)'
