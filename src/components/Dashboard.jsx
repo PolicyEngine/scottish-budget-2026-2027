@@ -197,12 +197,12 @@ const POLICY_INFO = {
               </tr>
             </thead>
             <tbody>
-              <tr><td style={tdStyle}>2025-26</td><td style={tdRightStyle}>£43,663</td><td style={{...tdCenterStyle, color: "#c62828"}}>Frozen</td></tr>
-              <tr><td style={tdStyle}>2026-27</td><td style={tdRightStyle}>£43,663</td><td style={{...tdCenterStyle, color: "#c62828"}}>Frozen</td></tr>
-              <tr><td style={tdStyle}>2027-28</td><td style={tdRightStyle}>£43,663</td><td style={{...tdCenterStyle, color: "#c62828"}}>Frozen</td></tr>
-              <tr><td style={tdStyle}>2028-29</td><td style={tdRightStyle}>£43,663</td><td style={{...tdCenterStyle, color: "#c62828"}}>Frozen</td></tr>
-              <tr><td style={tdStyle}>2029-30*</td><td style={tdRightStyle}>£44,554</td><td style={tdCenterStyle}>CPI</td></tr>
-              <tr><td style={{...tdStyle, borderBottom: "none"}}>2030-31*</td><td style={{...tdRightStyle, borderBottom: "none"}}>£45,445</td><td style={{...tdCenterStyle, borderBottom: "none"}}>CPI</td></tr>
+              <tr><td style={tdStyle}>2025-26</td><td style={tdRightStyle}>£43,662</td><td style={{...tdCenterStyle, color: "#c62828"}}>Frozen</td></tr>
+              <tr><td style={tdStyle}>2026-27</td><td style={tdRightStyle}>£43,662</td><td style={{...tdCenterStyle, color: "#c62828"}}>Frozen</td></tr>
+              <tr><td style={tdStyle}>2027-28</td><td style={tdRightStyle}>£43,662</td><td style={{...tdCenterStyle, color: "#c62828"}}>Frozen</td></tr>
+              <tr><td style={tdStyle}>2028-29</td><td style={tdRightStyle}>£43,662</td><td style={{...tdCenterStyle, color: "#c62828"}}>Frozen</td></tr>
+              <tr><td style={tdStyle}>2029-30*</td><td style={tdRightStyle}>£44,553</td><td style={tdCenterStyle}>CPI</td></tr>
+              <tr><td style={{...tdStyle, borderBottom: "none"}}>2030-31*</td><td style={{...tdRightStyle, borderBottom: "none"}}>£45,444</td><td style={{...tdCenterStyle, borderBottom: "none"}}>CPI</td></tr>
             </tbody>
           </table>
           <p style={noteStyle}>Freeze confirmed until 2028-29. *2029-30 onwards: PolicyEngine assumption (CPI uprating). Source: <a href="https://www.gov.scot/publications/scottish-budget-2026-2027/pages/3/" target="_blank" rel="noopener noreferrer">Scottish Budget Chapter 2</a> | <a href="https://fiscalcommission.scot/publications/scotlands-economic-and-fiscal-forecasts-january-2026/" target="_blank" rel="noopener noreferrer">SFC January 2026</a></p>
@@ -229,12 +229,12 @@ const POLICY_INFO = {
               </tr>
             </thead>
             <tbody>
-              <tr><td style={tdStyle}>2025-26</td><td style={tdRightStyle}>£75,001</td><td style={{...tdCenterStyle, color: "#c62828"}}>Frozen</td></tr>
-              <tr><td style={tdStyle}>2026-27</td><td style={tdRightStyle}>£75,001</td><td style={{...tdCenterStyle, color: "#c62828"}}>Frozen</td></tr>
-              <tr><td style={tdStyle}>2027-28</td><td style={tdRightStyle}>£75,001</td><td style={{...tdCenterStyle, color: "#c62828"}}>Frozen</td></tr>
-              <tr><td style={tdStyle}>2028-29</td><td style={tdRightStyle}>£75,001</td><td style={{...tdCenterStyle, color: "#c62828"}}>Frozen</td></tr>
-              <tr><td style={tdStyle}>2029-30*</td><td style={tdRightStyle}>£76,531</td><td style={tdCenterStyle}>CPI</td></tr>
-              <tr><td style={{...tdStyle, borderBottom: "none"}}>2030-31*</td><td style={{...tdRightStyle, borderBottom: "none"}}>£78,062</td><td style={{...tdCenterStyle, borderBottom: "none"}}>CPI</td></tr>
+              <tr><td style={tdStyle}>2025-26</td><td style={tdRightStyle}>£75,000</td><td style={{...tdCenterStyle, color: "#c62828"}}>Frozen</td></tr>
+              <tr><td style={tdStyle}>2026-27</td><td style={tdRightStyle}>£75,000</td><td style={{...tdCenterStyle, color: "#c62828"}}>Frozen</td></tr>
+              <tr><td style={tdStyle}>2027-28</td><td style={tdRightStyle}>£75,000</td><td style={{...tdCenterStyle, color: "#c62828"}}>Frozen</td></tr>
+              <tr><td style={tdStyle}>2028-29</td><td style={tdRightStyle}>£75,000</td><td style={{...tdCenterStyle, color: "#c62828"}}>Frozen</td></tr>
+              <tr><td style={tdStyle}>2029-30*</td><td style={tdRightStyle}>£76,530</td><td style={tdCenterStyle}>CPI</td></tr>
+              <tr><td style={{...tdStyle, borderBottom: "none"}}>2030-31*</td><td style={{...tdRightStyle, borderBottom: "none"}}>£78,061</td><td style={{...tdCenterStyle, borderBottom: "none"}}>CPI</td></tr>
             </tbody>
           </table>
           <p style={noteStyle}>Freeze confirmed until 2028-29. *2029-30 onwards: PolicyEngine assumption (CPI uprating). Source: <a href="https://www.gov.scot/publications/scottish-budget-2026-2027/pages/3/" target="_blank" rel="noopener noreferrer">Scottish Budget Chapter 2</a></p>
