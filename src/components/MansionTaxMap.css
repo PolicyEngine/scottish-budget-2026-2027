@@ -4,9 +4,6 @@
   width: 100%;
   max-width: 900px;
   margin: 0 auto;
-  padding: 16px;
-  background: white;
-  border-radius: 8px;
 }
 
 .mansion-tax-map.loading {

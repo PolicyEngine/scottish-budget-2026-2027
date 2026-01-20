@@ -647,7 +647,9 @@ export default function Dashboard({ selectedPolicies = [] }) {
           The Scottish Budget 2026-27 introduces new council tax bands for properties valued at £1 million or more,
           effective from April 2028. Band I applies to properties worth £1m-£2m, and Band J to properties over £2m.
         </p>
-        <MansionTaxMap />
+        <div className="section-box map-section">
+          <MansionTaxMap />
+        </div>
         <p className="chart-note" style={{ textAlign: "center", marginTop: "8px" }}>
           Estimated total revenue: £18.5m/year. Edinburgh constituencies account for ~47% of total revenue.
           See the <a href="https://github.com/PolicyEngine/scotland-mansion-tax#readme" target="_blank" rel="noopener noreferrer">full methodology</a>.
