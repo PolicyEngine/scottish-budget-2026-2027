@@ -386,8 +386,8 @@ class TwoChildLimitCalculator:
         return results
 
 
-class ConstituencyCalculator:
-    """Calculate constituency-level impacts."""
+class LocalAuthorityCalculator:
+    """Calculate local authority-level impacts."""
 
     def calculate(
         self,
@@ -396,9 +396,9 @@ class ConstituencyCalculator:
         reform_id: str,
         year: int,
         weights: np.ndarray,
-        constituency_df: pd.DataFrame,
+        local_authority_df: pd.DataFrame,
     ) -> list[dict]:
-        """Calculate average impact for each constituency."""
+        """Calculate average impact for each local authority."""
         baseline_income = baseline.calculate(
             "household_net_income", period=year, map_to="household"
         ).values
@@ -408,17 +408,17 @@ class ConstituencyCalculator:
 
         results = []
 
-        for idx, (_, row) in enumerate(constituency_df.iterrows()):
+        for idx, (_, row) in enumerate(local_authority_df.iterrows()):
             code = row["code"]
             name = row["name"]
 
             if idx >= weights.shape[0]:
                 continue
 
-            const_weights = weights[idx, :]
+            la_weights = weights[idx, :]
 
-            baseline_ms = MicroSeries(baseline_income, weights=const_weights)
-            reform_ms = MicroSeries(reform_income, weights=const_weights)
+            baseline_ms = MicroSeries(baseline_income, weights=la_weights)
+            reform_ms = MicroSeries(reform_income, weights=la_weights)
 
             avg_baseline = baseline_ms.mean()
             avg_reform = reform_ms.mean()
@@ -428,8 +428,8 @@ class ConstituencyCalculator:
             results.append({
                 "reform_id": reform_id,
                 "year": year,
-                "constituency_code": code,
-                "constituency_name": name,
+                "local_authority_code": code,
+                "local_authority_name": name,
                 "average_gain": avg_gain,
                 "relative_change": relative_change,
             })

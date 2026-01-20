@@ -8,12 +8,13 @@ from typing import Optional
 import pandas as pd
 import h5py
 
+from huggingface_hub import hf_hub_download
 from policyengine_uk import Microsimulation
 
 from .calculators import (
     BASELINE_MODIFIERS,
     BudgetaryImpactCalculator,
-    ConstituencyCalculator,
+    LocalAuthorityCalculator,
     DistributionalImpactCalculator,
     MetricsCalculator,
     TwoChildLimitCalculator,
@@ -22,10 +23,31 @@ from .calculators import (
 from .reforms import ReformDefinition, get_scottish_budget_reforms
 
 
+# HuggingFace repo for data files
+HF_REPO = "policyengine/policyengine-uk-data"
+
+
 # Default paths
 DEFAULT_OUTPUT_DIR = Path("public/data")
-DEFAULT_DATA_DIR = Path("data")
-DEFAULT_DATA_INPUTS_DIR = Path("data_inputs")
+
+
+def get_local_authority_files() -> tuple[str, str]:
+    """Download local authority files from HuggingFace.
+
+    Returns:
+        Tuple of (weights_path, csv_path) for local authority data.
+    """
+    weights_path = hf_hub_download(
+        repo_id=HF_REPO,
+        filename="local_authority_weights.h5",
+        repo_type="dataset",
+    )
+    csv_path = hf_hub_download(
+        repo_id=HF_REPO,
+        filename="local_authorities_2021.csv",
+        repo_type="dataset",
+    )
+    return weights_path, csv_path
 
 
 def save_csv(df: pd.DataFrame, csv_path: Path) -> None:
@@ -38,8 +60,6 @@ def save_csv(df: pd.DataFrame, csv_path: Path) -> None:
 def generate_all_data(
     reforms: Optional[list[ReformDefinition]] = None,
     output_dir: Optional[Path] = None,
-    data_dir: Optional[Path] = None,
-    data_inputs_dir: Optional[Path] = None,
     years: list[int] = None,
     scotland_only: bool = True,
 ) -> dict[str, pd.DataFrame]:
@@ -48,18 +68,14 @@ def generate_all_data(
     Args:
         reforms: List of ReformDefinitions to process. Defaults to Scottish Budget 2026.
         output_dir: Directory for output CSV files.
-        data_dir: Directory containing constituency weights.
-        data_inputs_dir: Directory containing constituency metadata.
         years: Years to analyze.
-        scotland_only: If True, filter to Scottish constituencies only.
+        scotland_only: If True, filter to Scottish local authorities only.
 
     Returns:
         Dict mapping output name to DataFrame.
     """
     reforms = reforms or get_scottish_budget_reforms()
     output_dir = output_dir or DEFAULT_OUTPUT_DIR
-    data_dir = data_dir or DEFAULT_DATA_DIR
-    data_inputs_dir = data_inputs_dir or DEFAULT_DATA_INPUTS_DIR
     years = years or [2026, 2027, 2028, 2029, 2030]
 
     # Initialize calculators
@@ -67,34 +83,36 @@ def generate_all_data(
     distributional_calc = DistributionalImpactCalculator()
     winners_losers_calc = WinnersLosersCalculator()
     metrics_calc = MetricsCalculator()
-    constituency_calc = ConstituencyCalculator()
+    local_authority_calc = LocalAuthorityCalculator()
 
-    # Load constituency data
-    weights_path = data_dir / "parliamentary_constituency_weights.h5"
-    constituencies_path = data_inputs_dir / "constituencies_2024.csv"
-
+    # Download local authority data from HuggingFace
     weights = None
-    constituency_df = None
+    local_authority_df = None
 
-    if weights_path.exists() and constituencies_path.exists():
+    try:
+        weights_path, csv_path = get_local_authority_files()
+        print(f"Downloaded local authority files from HuggingFace")
+
         with h5py.File(weights_path, "r") as f:
             weights = f["2025"][...]
-        constituency_df = pd.read_csv(constituencies_path)
+        local_authority_df = pd.read_csv(csv_path)
 
-        # Filter to Scottish constituencies if requested
+        # Filter to Scottish local authorities if requested
         if scotland_only:
-            scottish_mask = constituency_df["code"].str.startswith("S")
+            scottish_mask = local_authority_df["code"].str.startswith("S")
             scottish_indices = scottish_mask.values
             weights = weights[scottish_indices, :]
-            constituency_df = constituency_df[scottish_mask].reset_index(drop=True)
-            print(f"Filtering to {len(constituency_df)} Scottish constituencies")
+            local_authority_df = local_authority_df[scottish_mask].reset_index(drop=True)
+            print(f"Filtering to {len(local_authority_df)} Scottish local authorities")
+    except Exception as e:
+        print(f"Warning: Could not load local authority data: {e}")
 
     # Aggregate results
     all_budgetary = []
     all_distributional = []
     all_winners_losers = []
     all_metrics = []
-    all_constituency = []
+    all_local_authorities = []
 
     for reform in reforms:
         print(f"\nProcessing: {reform.name}")
@@ -135,12 +153,12 @@ def generate_all_data(
             )
             all_metrics.extend(metrics)
 
-            # Constituency impacts
-            if weights is not None and constituency_df is not None:
-                constituency = constituency_calc.calculate(
-                    baseline, reformed, reform.id, year, weights, constituency_df
+            # Local authority impacts
+            if weights is not None and local_authority_df is not None:
+                local_authorities = local_authority_calc.calculate(
+                    baseline, reformed, reform.id, year, weights, local_authority_df
                 )
-                all_constituency.extend(constituency)
+                all_local_authorities.extend(local_authorities)
 
         print(f"  Done: {reform.name}")
 
@@ -150,7 +168,7 @@ def generate_all_data(
         "distributional_impact": pd.DataFrame(all_distributional),
         "winners_losers": pd.DataFrame(all_winners_losers),
         "metrics": pd.DataFrame(all_metrics),
-        "constituency": pd.DataFrame(all_constituency),
+        "local_authorities": pd.DataFrame(all_local_authorities),
     }
 
     # Save to CSV
