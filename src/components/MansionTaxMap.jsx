@@ -139,7 +139,7 @@ export default function MansionTaxMap() {
       .clamp(true);
 
     const colorScale = (pct) => {
-      if (pct === 0 || pct < 0.01) return "#e5e5e5";
+      if (pct === 0 || pct < 0.01) return "#E0F2F1"; // Light green for zero
       const t = logScale(Math.max(pct, minPct));
       // Light green to dark green (matching local authority map)
       return d3.interpolate("#E0F2F1", "#0D9488")(t);
