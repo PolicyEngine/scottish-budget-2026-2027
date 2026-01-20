@@ -86,8 +86,8 @@ const POLICY_INFO = {
               </tr>
             </thead>
             <tbody>
-              <tr><td style={tdStyle}>2025-26</td><td style={tdRightStyle}>£27.15</td><td style={tdCenterStyle}>—</td><td style={tdRightStyle}>£27.15</td></tr>
-              <tr><td style={tdStyle}>2026-27</td><td style={tdRightStyle}>£28.20</td><td style={tdCenterStyle}>—</td><td style={tdRightStyle}>£28.20</td></tr>
+              <tr><td style={tdStyle}>2025-26</td><td style={tdRightStyle}>£27.15</td><td style={tdRightStyle}>—</td><td style={tdRightStyle}>£27.15</td></tr>
+              <tr><td style={tdStyle}>2026-27</td><td style={tdRightStyle}>£28.20</td><td style={tdRightStyle}>—</td><td style={tdRightStyle}>£28.20</td></tr>
               <tr><td style={tdStyle}>2027-28</td><td style={tdRightStyle}>£28.85</td><td style={{...tdRightStyle, color: "#2e7d32"}}>+£11.15</td><td style={{...tdRightStyle, color: "#2e7d32"}}>£40.00</td></tr>
               <tr><td style={tdStyle}>2028-29</td><td style={tdRightStyle}>£29.45</td><td style={{...tdRightStyle, color: "#2e7d32"}}>+£11.35</td><td style={{...tdRightStyle, color: "#2e7d32"}}>£40.80</td></tr>
               <tr><td style={tdStyle}>2029-30</td><td style={tdRightStyle}>£30.05</td><td style={{...tdRightStyle, color: "#2e7d32"}}>+£11.60</td><td style={{...tdRightStyle, color: "#2e7d32"}}>£41.65</td></tr>
