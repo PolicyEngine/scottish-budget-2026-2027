@@ -638,7 +638,8 @@ export default function Dashboard({ selectedPolicies = [] }) {
 
       {/* Mansion Tax Section */}
       <details className="mansion-tax-section" id="mansion-tax" ref={(el) => (sectionRefs.current["mansion-tax"] = el)}>
-        <summary className="section-title" style={{ cursor: "pointer", listStyle: "none" }}>
+        <summary className="section-title expandable-section" style={{ cursor: "pointer", display: "flex", alignItems: "center", gap: "8px" }}>
+          <span className="expand-icon" style={{ fontSize: "12px", transition: "transform 0.2s" }}>▶</span>
           Mansion tax
         </summary>
         <p className="chart-description" style={{ marginTop: "12px" }}>

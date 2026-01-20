@@ -366,3 +366,21 @@
     font-size: 1.5rem;
   }
 }
+
+/* Expandable section styles */
+.mansion-tax-section summary {
+  list-style: none;
+}
+
+.mansion-tax-section summary::-webkit-details-marker {
+  display: none;
+}
+
+.mansion-tax-section .expand-icon {
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+.mansion-tax-section[open] .expand-icon {
+  transform: rotate(90deg);
+}
