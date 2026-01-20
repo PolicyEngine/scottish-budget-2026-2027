@@ -205,10 +205,7 @@ const POLICY_INFO = {
               <tr><td style={{...tdStyle, borderBottom: "none"}}>2030-31*</td><td style={{...tdRightStyle, borderBottom: "none"}}>£45,445</td><td style={{...tdCenterStyle, borderBottom: "none"}}>CPI</td></tr>
             </tbody>
           </table>
-          <div style={noteStyle}>
-            <p style={{ margin: 0 }}>Freeze confirmed until 2028-29. *2029-30 onwards: PolicyEngine assumption (CPI uprating).</p>
-            <p style={{ margin: "8px 0 0 0" }}>Source: <a href="https://www.gov.scot/publications/scottish-budget-2026-2027/pages/3/" target="_blank" rel="noopener noreferrer">Scottish Budget Chapter 2</a> | <a href="https://fiscalcommission.scot/publications/scotlands-economic-and-fiscal-forecasts-january-2026/" target="_blank" rel="noopener noreferrer">SFC January 2026</a></p>
-          </div>
+          <p style={noteStyle}>Freeze confirmed until 2028-29. *2029-30 onwards: PolicyEngine assumption (CPI uprating). Source: <a href="https://www.gov.scot/publications/scottish-budget-2026-2027/pages/3/" target="_blank" rel="noopener noreferrer">Scottish Budget Chapter 2</a> | <a href="https://fiscalcommission.scot/publications/scotlands-economic-and-fiscal-forecasts-january-2026/" target="_blank" rel="noopener noreferrer">SFC January 2026</a></p>
         </details>
       </li>
     ),
@@ -240,10 +237,7 @@ const POLICY_INFO = {
               <tr><td style={{...tdStyle, borderBottom: "none"}}>2030-31*</td><td style={{...tdRightStyle, borderBottom: "none"}}>£78,062</td><td style={{...tdCenterStyle, borderBottom: "none"}}>CPI</td></tr>
             </tbody>
           </table>
-          <div style={noteStyle}>
-            <p style={{ margin: 0 }}>Freeze confirmed until 2028-29. *2029-30 onwards: PolicyEngine assumption (CPI uprating).</p>
-            <p style={{ margin: "8px 0 0 0" }}>Source: <a href="https://www.gov.scot/publications/scottish-budget-2026-2027/pages/3/" target="_blank" rel="noopener noreferrer">Scottish Budget Chapter 2</a></p>
-          </div>
+          <p style={noteStyle}>Freeze confirmed until 2028-29. *2029-30 onwards: PolicyEngine assumption (CPI uprating). Source: <a href="https://www.gov.scot/publications/scottish-budget-2026-2027/pages/3/" target="_blank" rel="noopener noreferrer">Scottish Budget Chapter 2</a></p>
         </details>
       </li>
     ),
@@ -276,9 +270,8 @@ const POLICY_INFO = {
             </tbody>
           </table>
           <div style={noteStyle}>
-            <p style={{ margin: 0 }}>Freeze confirmed until 2028-29. *2029-30 onwards: PolicyEngine assumption (CPI uprating).</p>
+            <p style={{ margin: 0 }}>Freeze confirmed until 2028-29. *2029-30 onwards: PolicyEngine assumption (CPI uprating). Source: <a href="https://www.gov.scot/publications/scottish-budget-2026-2027/pages/3/" target="_blank" rel="noopener noreferrer">Scottish Budget Chapter 2</a></p>
             <p style={{ margin: "4px 0 0 0" }}>Note: £125,140 threshold aligns with UK Personal Allowance taper (allowance fully withdrawn at this income).</p>
-            <p style={{ margin: "8px 0 0 0" }}>Source: <a href="https://www.gov.scot/publications/scottish-budget-2026-2027/pages/3/" target="_blank" rel="noopener noreferrer">Scottish Budget Chapter 2</a></p>
           </div>
         </details>
       </li>
