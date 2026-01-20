@@ -154,7 +154,7 @@ export default function MansionTaxMap() {
       .attr("fill", d => {
         const name = d.properties.SPC21NM;
         const data = impactData[name];
-        return data ? colorScale(data.pct) : "#e5e5e5";
+        return data ? colorScale(data.pct) : "#E0F2F1"; // Light green for missing data
       })
       .attr("stroke", "#fff")
       .attr("stroke-width", 0.3)
