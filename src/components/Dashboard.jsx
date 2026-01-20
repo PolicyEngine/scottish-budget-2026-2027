@@ -207,7 +207,6 @@ const POLICY_INFO = {
           </table>
           <div style={noteStyle}>
             <p style={{ margin: 0 }}>*Freeze confirmed until 2028-29. Future policy beyond 2028-29 to be decided by next Scottish Parliament.</p>
-            <p style={{ margin: "4px 0 0 0" }}>SFC estimates freeze raises ~£190m in 2026-27 (combined with Advanced and Top rate freezes).</p>
             <p style={{ margin: "8px 0 0 0" }}>Source: <a href="https://www.gov.scot/publications/scottish-budget-2026-2027/pages/3/" target="_blank" rel="noopener noreferrer">Scottish Budget Chapter 2</a> | <a href="https://fiscalcommission.scot/publications/scotlands-economic-and-fiscal-forecasts-january-2026/" target="_blank" rel="noopener noreferrer">SFC January 2026</a></p>
           </div>
         </details>
