@@ -132,10 +132,10 @@ const POLICY_INFO = {
             <tbody>
               <tr><td style={tdStyle}>2025-26</td><td style={tdRightStyle}>£15,398</td><td style={tdCenterStyle}>—</td></tr>
               <tr><td style={tdStyle}>2026-27</td><td style={tdRightStyle}>£16,538</td><td style={{...tdCenterStyle, color: "#2e7d32"}}>+7.4%</td></tr>
-              <tr><td style={tdStyle}>2027-28</td><td style={tdRightStyle}>£16,872</td><td style={{...tdCenterStyle, color: "#2e7d32"}}>+2.0%</td></tr>
-              <tr><td style={tdStyle}>2028-29</td><td style={tdRightStyle}>£17,216</td><td style={{...tdCenterStyle, color: "#2e7d32"}}>+2.0%</td></tr>
-              <tr><td style={tdStyle}>2029-30</td><td style={tdRightStyle}>£17,567</td><td style={{...tdCenterStyle, color: "#2e7d32"}}>+2.0%</td></tr>
-              <tr><td style={{...tdStyle, borderBottom: "none"}}>2030-31</td><td style={{...tdRightStyle, borderBottom: "none"}}>£17,918</td><td style={{...tdCenterStyle, borderBottom: "none", color: "#2e7d32"}}>+2.0%</td></tr>
+              <tr><td style={tdStyle}>2027-28</td><td style={tdRightStyle}>£16,872</td><td style={tdCenterStyle}>CPI</td></tr>
+              <tr><td style={tdStyle}>2028-29</td><td style={tdRightStyle}>£17,216</td><td style={tdCenterStyle}>CPI</td></tr>
+              <tr><td style={tdStyle}>2029-30</td><td style={tdRightStyle}>£17,567</td><td style={tdCenterStyle}>CPI</td></tr>
+              <tr><td style={{...tdStyle, borderBottom: "none"}}>2030-31</td><td style={{...tdRightStyle, borderBottom: "none"}}>£17,918</td><td style={{...tdCenterStyle, borderBottom: "none"}}>CPI</td></tr>
             </tbody>
           </table>
           <p style={noteStyle}>
@@ -168,10 +168,10 @@ const POLICY_INFO = {
             <tbody>
               <tr><td style={tdStyle}>2025-26</td><td style={tdRightStyle}>£27,492</td><td style={tdCenterStyle}>—</td></tr>
               <tr><td style={tdStyle}>2026-27</td><td style={tdRightStyle}>£29,527</td><td style={{...tdCenterStyle, color: "#2e7d32"}}>+7.4%</td></tr>
-              <tr><td style={tdStyle}>2027-28</td><td style={tdRightStyle}>£30,123</td><td style={{...tdCenterStyle, color: "#2e7d32"}}>+2.0%</td></tr>
-              <tr><td style={tdStyle}>2028-29</td><td style={tdRightStyle}>£30,738</td><td style={{...tdCenterStyle, color: "#2e7d32"}}>+2.0%</td></tr>
-              <tr><td style={tdStyle}>2029-30</td><td style={tdRightStyle}>£31,365</td><td style={{...tdCenterStyle, color: "#2e7d32"}}>+2.0%</td></tr>
-              <tr><td style={{...tdStyle, borderBottom: "none"}}>2030-31</td><td style={{...tdRightStyle, borderBottom: "none"}}>£31,992</td><td style={{...tdCenterStyle, borderBottom: "none", color: "#2e7d32"}}>+2.0%</td></tr>
+              <tr><td style={tdStyle}>2027-28</td><td style={tdRightStyle}>£30,123</td><td style={tdCenterStyle}>CPI</td></tr>
+              <tr><td style={tdStyle}>2028-29</td><td style={tdRightStyle}>£30,738</td><td style={tdCenterStyle}>CPI</td></tr>
+              <tr><td style={tdStyle}>2029-30</td><td style={tdRightStyle}>£31,365</td><td style={tdCenterStyle}>CPI</td></tr>
+              <tr><td style={{...tdStyle, borderBottom: "none"}}>2030-31</td><td style={{...tdRightStyle, borderBottom: "none"}}>£31,992</td><td style={{...tdCenterStyle, borderBottom: "none"}}>CPI</td></tr>
             </tbody>
           </table>
           <p style={noteStyle}>
