@@ -461,7 +461,7 @@ export default function MansionTaxMap() {
               </div>
               <h4>{tooltipData.name}</h4>
               <p className="tooltip-subtitle">{tooltipData.council}</p>
-              <p className="tooltip-value" style={{ color: "#2E86AB" }}>
+              <p className="tooltip-value" style={{ color: "#0D9488" }}>
                 {tooltipData.pct.toFixed(2)}%
               </p>
               <p className="tooltip-label">Share of revenue</p>
