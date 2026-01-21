@@ -658,11 +658,47 @@ export default function Dashboard({ selectedPolicies = [] }) {
         </summary>
         <p className="chart-description" style={{ marginTop: "12px" }}>
           The Scottish Budget 2026-27 <a href="https://www.bbc.co.uk/news/live/c0lxn7e7rlpt" target="_blank" rel="noopener noreferrer">introduces</a> new council tax bands for properties valued at £1 million or more,
-          effective from April 2028. Band I applies to properties worth £1m-£2m, and Band J to properties over £2m.
-          The Finance Secretary <a href="https://www.lbc.co.uk/article/wealthy-scots-in-snp-sights-as-budget-proposes-mansion-house-tax-and-a-tax-on-pr-5HjdQg9_2/" target="_blank" rel="noopener noreferrer">estimated £16m</a> in annual revenue; using UK benchmark rates, we estimate £18.5m.
+          effective from April 2028. The Finance Secretary <a href="https://www.lbc.co.uk/article/wealthy-scots-in-snp-sights-as-budget-proposes-mansion-house-tax-and-a-tax-on-pr-5HjdQg9_2/" target="_blank" rel="noopener noreferrer">estimated £16m</a> in annual revenue; using UK benchmark rates, we estimate £18.5m.
           The map below shows each constituency's share. Edinburgh constituencies account for ~47% of total revenue.
-          See the <a href="https://github.com/PolicyEngine/scottish-budget-2026-2027" target="_blank" rel="noopener noreferrer">full methodology</a>.
         </p>
+        <details className="methodology-details" style={{ marginTop: "12px", marginBottom: "16px" }}>
+          <summary style={{ cursor: "pointer", fontSize: "0.85rem", color: "#0F766E", fontWeight: 600 }}>How we calculate</summary>
+          <div style={{
+            marginTop: "12px",
+            padding: "16px",
+            background: "#f8fafc",
+            borderRadius: "8px",
+            borderLeft: "3px solid #0F766E"
+          }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "10px", fontSize: "0.85rem", color: "#475569", lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: "10px" }}>
+                <span style={{ color: "#0F766E", fontWeight: 600 }}>1.</span>
+                <span>We estimate total revenue by multiplying <strong>11,481 £1m+ properties</strong> (from Savills) by the <strong>£1,607 average annual rate</strong> based on UK benchmark rates.</span>
+              </div>
+              <div style={{ display: "flex", gap: "10px" }}>
+                <span style={{ color: "#0F766E", fontWeight: 600 }}>2.</span>
+                <span>We use council-level £1m+ sales data from <strong>Registers of Scotland</strong> to determine geographic distribution across Scotland.</span>
+              </div>
+              <div style={{ display: "flex", gap: "10px" }}>
+                <span style={{ color: "#0F766E", fontWeight: 600 }}>3.</span>
+                <span>Within each council, we allocate sales to constituencies based on population weighted by <strong>Band H property concentration</strong>.</span>
+              </div>
+              <div style={{ display: "flex", gap: "10px" }}>
+                <span style={{ color: "#0F766E", fontWeight: 600 }}>4.</span>
+                <span>We use Band H as a proxy because its threshold (&gt;£212k in 1991) equals approximately <strong>£1.06m today</strong>, closely matching the mansion tax's £1m threshold.</span>
+              </div>
+              <div style={{ display: "flex", gap: "10px" }}>
+                <span style={{ color: "#0F766E", fontWeight: 600 }}>5.</span>
+                <span>Each constituency's revenue is calculated by multiplying its share of total sales by the <strong>£18.5m total revenue</strong>.</span>
+              </div>
+            </div>
+            <div style={{ marginTop: "12px", paddingTop: "12px", borderTop: "1px solid #e2e8f0" }}>
+              <a href="https://github.com/PolicyEngine/scottish-budget-2026-2027" target="_blank" rel="noopener noreferrer" style={{ color: "#0F766E", fontWeight: 500, fontSize: "0.85rem" }}>
+                View full methodology on GitHub →
+              </a>
+            </div>
+          </div>
+        </details>
         <div className="section-box map-section">
           <MansionTaxMap />
         </div>
