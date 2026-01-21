@@ -345,40 +345,14 @@ function HouseholdCalculator() {
       .attr("font-size", "12px")
       .text(`Annual impact (£${showRealTerms ? ", 2026 prices" : ""})`);
 
-    // Line generators
+    // Line generators - only draw total line (cleaner without legend)
     const lineTotal = d3
       .line()
       .x((d) => x(d.earnings))
       .y((d) => y(toRealTerms(d.total, selectedYear)))
       .curve(d3.curveMonotoneX);
 
-    const lineScp = d3
-      .line()
-      .x((d) => x(d.earnings))
-      .y((d) => y(toRealTerms(d.scp_baby_boost || 0, selectedYear)))
-      .curve(d3.curveMonotoneX);
-
-    const lineTax = d3
-      .line()
-      .x((d) => x(d.earnings))
-      .y((d) => y(toRealTerms(d.income_tax_uplift || 0, selectedYear)))
-      .curve(d3.curveMonotoneX);
-
-    // Draw lines
-    g.append("path")
-      .datum(variationData)
-      .attr("fill", "none")
-      .attr("stroke", CHART_COLORS.income_tax_basic_uplift)
-      .attr("stroke-width", 2)
-      .attr("d", lineTax);
-
-    g.append("path")
-      .datum(variationData)
-      .attr("fill", "none")
-      .attr("stroke", CHART_COLORS.scp_baby_boost)
-      .attr("stroke-width", 2)
-      .attr("d", lineScp);
-
+    // Draw total line only
     g.append("path")
       .datum(variationData)
       .attr("fill", "none")
@@ -419,35 +393,7 @@ function HouseholdCalculator() {
         .attr("stroke-width", 2);
     }
 
-    // Legend
-    const legend = g.append("g").attr("transform", `translate(${width - 180}, 0)`);
-
-    const legendItems = [
-      { label: "Total", color: CHART_COLORS.total },
-      { label: "Income tax", color: CHART_COLORS.income_tax_basic_uplift },
-      { label: "SCP Premium", color: CHART_COLORS.scp_baby_boost },
-    ];
-
-    legendItems.forEach((item, i) => {
-      const row = legend.append("g").attr("transform", `translate(0, ${i * 18})`);
-      row
-        .append("line")
-        .attr("x1", 0)
-        .attr("x2", 16)
-        .attr("y1", 0)
-        .attr("y2", 0)
-        .attr("stroke", item.color)
-        .attr("stroke-width", 2);
-      row
-        .append("text")
-        .attr("x", 22)
-        .attr("y", 4)
-        .attr("fill", "#475569")
-        .attr("font-size", "11px")
-        .text(item.label);
-    });
-
-    // Hover interaction - tooltip
+    // Hover interaction - tooltip (no legend box)
     d3.select(chartContainerRef.current).style("position", "relative");
 
     const tooltip = d3
@@ -458,12 +404,13 @@ function HouseholdCalculator() {
       .style("background", "white")
       .style("border", "1px solid #e2e8f0")
       .style("border-radius", "8px")
-      .style("padding", "10px 12px")
-      .style("font-size", "12px")
+      .style("padding", "12px")
+      .style("font-size", "11px")
       .style("box-shadow", "0 4px 12px rgba(0,0,0,0.1)")
       .style("pointer-events", "none")
       .style("opacity", 0)
-      .style("z-index", 10);
+      .style("z-index", 10)
+      .style("min-width", "160px");
 
     const hoverLine = g
       .append("line")
@@ -481,6 +428,11 @@ function HouseholdCalculator() {
       .attr("stroke", "white")
       .attr("stroke-width", 2)
       .style("opacity", 0);
+
+    const formatVal = (v) => {
+      const sign = v < 0 ? "-" : "+";
+      return `${sign}£${Math.abs(v).toFixed(0)}`;
+    };
 
     // Overlay for mouse events
     g.append("rect")
@@ -507,31 +459,27 @@ function HouseholdCalculator() {
           .attr("cy", y(toRealTerms(closest.total, selectedYear)))
           .style("opacity", 1);
 
-        const sign = (v) => (v >= 0 ? "+" : "");
         const total = toRealTerms(closest.total, selectedYear);
-        const tax = toRealTerms(closest.income_tax_uplift || 0, selectedYear);
-        const scp = toRealTerms(closest.scp_baby_boost || 0, selectedYear);
+        const tax = toRealTerms(closest.income_tax || 0, selectedYear);
+        const scp = toRealTerms(closest.scp || 0, selectedYear);
 
         tooltip
           .html(
             `
-            <div style="font-weight:600;margin-bottom:6px;color:#1e293b">
+            <div style="font-weight:600;margin-bottom:8px;color:#1e293b;font-size:12px">
               £${closest.earnings.toLocaleString()} income
             </div>
-            <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
-              <span style="width:10px;height:10px;background:${CHART_COLORS.total};border-radius:2px"></span>
-              <span style="color:#475569">Total:</span>
-              <span style="font-weight:600;color:${total >= 0 ? "#16a34a" : "#dc2626"}">${sign(total)}£${Math.abs(total).toFixed(0)}</span>
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+              <span style="color:#0D9488">Income tax reforms</span>
+              <span style="font-weight:500;color:${tax >= 0 ? "#16a34a" : "#dc2626"}">${formatVal(tax)}</span>
             </div>
-            <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
-              <span style="width:10px;height:10px;background:${CHART_COLORS.income_tax_basic_uplift};border-radius:2px"></span>
-              <span style="color:#475569">Income tax:</span>
-              <span style="font-weight:600;color:${tax >= 0 ? "#16a34a" : "#dc2626"}">${sign(tax)}£${Math.abs(tax).toFixed(0)}</span>
+            <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+              <span style="color:#5EEAD4">SCP reforms</span>
+              <span style="font-weight:500;color:${scp >= 0 ? "#16a34a" : "#dc2626"}">${formatVal(scp)}</span>
             </div>
-            <div style="display:flex;align-items:center;gap:6px">
-              <span style="width:10px;height:10px;background:${CHART_COLORS.scp_baby_boost};border-radius:2px"></span>
-              <span style="color:#475569">SCP Premium:</span>
-              <span style="font-weight:600;color:${scp >= 0 ? "#16a34a" : "#dc2626"}">${sign(scp)}£${Math.abs(scp).toFixed(0)}</span>
+            <div style="display:flex;justify-content:space-between;padding-top:6px;border-top:1px solid #e2e8f0">
+              <span style="font-weight:600;color:#0F766E">Total</span>
+              <span style="font-weight:600;color:${total >= 0 ? "#16a34a" : "#dc2626"}">${formatVal(total)}</span>
             </div>
           `
           )
@@ -580,7 +528,7 @@ function HouseholdCalculator() {
       .append("g")
       .attr("transform", `translate(${margin.left},${margin.top})`);
 
-    // Process data for stacked bar
+    // Process data for stacked bar - keep raw data for tooltip
     const processedData = yearlyData.map((d) => ({
       year: d.year,
       income_tax: toRealTerms(
@@ -589,6 +537,14 @@ function HouseholdCalculator() {
       ),
       scp: toRealTerms((d.scp_inflation || 0) + (d.scp_baby_boost || 0), d.year),
       total: toRealTerms(d.total, d.year),
+      // Keep individual reform values for tooltip
+      income_tax_basic_uplift: toRealTerms(d.income_tax_basic_uplift || 0, d.year),
+      income_tax_intermediate_uplift: toRealTerms(d.income_tax_intermediate_uplift || 0, d.year),
+      higher_rate_freeze: toRealTerms(d.higher_rate_freeze || 0, d.year),
+      advanced_rate_freeze: toRealTerms(d.advanced_rate_freeze || 0, d.year),
+      top_rate_freeze: toRealTerms(d.top_rate_freeze || 0, d.year),
+      scp_inflation: toRealTerms(d.scp_inflation || 0, d.year),
+      scp_baby_boost: toRealTerms(d.scp_baby_boost || 0, d.year),
     }));
 
     // Scales
@@ -600,6 +556,20 @@ function HouseholdCalculator() {
 
     const yMax = Math.max(100, d3.max(processedData, (d) => d.total) * 1.1);
     const y = d3.scaleLinear().domain([0, yMax]).range([height, 0]);
+
+    // Light grid lines
+    g.append("g")
+      .attr("class", "grid-lines")
+      .selectAll("line")
+      .data(y.ticks(4))
+      .enter()
+      .append("line")
+      .attr("x1", 0)
+      .attr("x2", width)
+      .attr("y1", (d) => y(d))
+      .attr("y2", (d) => y(d))
+      .attr("stroke", "#E2E8F0")
+      .attr("stroke-dasharray", "2,2");
 
     // X axis
     g.append("g")
@@ -639,6 +609,7 @@ function HouseholdCalculator() {
       if (d.income_tax > 0) {
         const barHeight = height - y(d.income_tax);
         g.append("rect")
+          .attr("class", `bar-${d.year}`)
           .attr("x", x(d.year))
           .attr("y", yPos - barHeight)
           .attr("width", x.bandwidth())
@@ -652,6 +623,7 @@ function HouseholdCalculator() {
       if (d.scp > 0) {
         const barHeight = height - y(d.scp);
         g.append("rect")
+          .attr("class", `bar-${d.year}`)
           .attr("x", x(d.year))
           .attr("y", yPos - barHeight)
           .attr("width", x.bandwidth())
@@ -700,7 +672,30 @@ function HouseholdCalculator() {
       .attr("stroke", "white")
       .attr("stroke-width", 1.5);
 
-    // Click handler for year selection
+    // Tooltip
+    d3.select(yearlyChartContainerRef.current).style("position", "relative");
+    const tooltip = d3
+      .select(yearlyChartContainerRef.current)
+      .append("div")
+      .attr("class", "yearly-chart-tooltip")
+      .style("position", "absolute")
+      .style("background", "white")
+      .style("border", "1px solid #e2e8f0")
+      .style("border-radius", "8px")
+      .style("padding", "12px")
+      .style("font-size", "11px")
+      .style("box-shadow", "0 4px 12px rgba(0,0,0,0.1)")
+      .style("pointer-events", "none")
+      .style("opacity", 0)
+      .style("z-index", 10)
+      .style("min-width", "180px");
+
+    const formatVal = (v) => {
+      const sign = v < 0 ? "-" : "+";
+      return `${sign}£${Math.abs(v).toFixed(0)}`;
+    };
+
+    // Click and hover handler for year selection
     g.selectAll(".year-clickarea")
       .data(processedData)
       .enter()
@@ -711,7 +706,57 @@ function HouseholdCalculator() {
       .attr("height", height)
       .attr("fill", "transparent")
       .style("cursor", "pointer")
-      .on("click", (event, d) => setSelectedYear(d.year));
+      .on("click", (event, d) => setSelectedYear(d.year))
+      .on("mouseover", (event, d) => {
+        tooltip
+          .html(`
+            <div style="font-weight:600;margin-bottom:8px;color:#1e293b;font-size:12px">
+              ${d.year}-${(d.year + 1).toString().slice(-2)}
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+              <span style="color:#0D9488">Basic rate uplift</span>
+              <span style="font-weight:500">${formatVal(d.income_tax_basic_uplift)}</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+              <span style="color:#14B8A6">Intermediate uplift</span>
+              <span style="font-weight:500">${formatVal(d.income_tax_intermediate_uplift)}</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+              <span style="color:#F97316">Higher freeze</span>
+              <span style="font-weight:500">${formatVal(d.higher_rate_freeze)}</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+              <span style="color:#FB923C">Advanced freeze</span>
+              <span style="font-weight:500">${formatVal(d.advanced_rate_freeze)}</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+              <span style="color:#FDBA74">Top rate freeze</span>
+              <span style="font-weight:500">${formatVal(d.top_rate_freeze)}</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+              <span style="color:#2DD4BF">SCP inflation</span>
+              <span style="font-weight:500">${formatVal(d.scp_inflation)}</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+              <span style="color:#5EEAD4">SCP baby boost</span>
+              <span style="font-weight:500">${formatVal(d.scp_baby_boost)}</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding-top:6px;border-top:1px solid #e2e8f0">
+              <span style="font-weight:600;color:#0F766E">Total</span>
+              <span style="font-weight:600;color:${d.total >= 0 ? '#16a34a' : '#dc2626'}">${formatVal(d.total)}</span>
+            </div>
+          `)
+          .style("opacity", 1)
+          .style("left", `${x(d.year) + x.bandwidth() / 2 + margin.left - 90}px`)
+          .style("top", `${y(d.total) - 10}px`);
+      })
+      .on("mouseout", () => {
+        tooltip.style("opacity", 0);
+      });
+
+    return () => {
+      tooltip.remove();
+    };
   }, [yearlyData, selectedYear, showRealTerms, toRealTerms]);
 
   // Format currency
