@@ -149,63 +149,101 @@ def apply_intermediate_rate_uplift_reform(sim: Microsimulation) -> None:
 def apply_higher_rate_freeze_reform(sim: Microsimulation) -> None:
     """Apply higher rate threshold freeze for 2027-28 and 2028-29.
 
-    Freezes Scottish higher rate (42%) threshold at £31,092 (above PA).
+    Freezes Scottish higher rate (42%) threshold at £31,092 (above PA) for 2027-28 and 2028-29.
     Total threshold: £43,662.
 
-    Note: 2026 freeze is already in baseline per Budget 2025-26.
-    This only applies to 2027+ to measure the incremental cost.
+    From 2029-30, thresholds resume CPI uprating BUT from the frozen base (£31,092),
+    not from where they would have been without the freeze. This creates a permanent
+    "wedge" that generates ongoing revenue even after the freeze ends.
 
-    Source: SFC costings breakdown - "Higher rate freeze"
+    Note: 2026 freeze is already in baseline per Budget 2025-26.
+
+    Source: SFC costings breakdown - "Higher rate threshold freeze (2027-28/2028-29)"
     """
     scotland_rates = sim.tax_benefit_system.parameters.gov.hmrc.income_tax.rates.scotland.rates
 
     for year in DEFAULT_YEARS:
-        if year >= 2027:
+        if year in [2027, 2028]:
+            # Freeze at £31,092 for 2027-28 and 2028-29
             period = f"{year}-01-01"
             scotland_rates.brackets[3].threshold.update(
                 period=period, value=INCOME_TAX_HIGHER_THRESHOLD
+            )
+        elif year >= 2029:
+            # CPI uprate from the FROZEN base (£31,092), not from baseline
+            # This maintains the "wedge" created by the freeze
+            period = f"{year}-01-01"
+            uprated_value = get_cpi_uprated_value(
+                sim, INCOME_TAX_HIGHER_THRESHOLD, 2028, year
+            )
+            scotland_rates.brackets[3].threshold.update(
+                period=period, value=uprated_value
             )
 
 
 def apply_advanced_rate_freeze_reform(sim: Microsimulation) -> None:
     """Apply advanced rate threshold freeze for 2027-28 and 2028-29.
 
-    Freezes Scottish advanced rate (45%) threshold at £49,860 (above PA).
-    Total threshold: £62,430.
+    Freezes Scottish advanced rate (45%) threshold at £62,431 (above PA) for 2027-28 and 2028-29.
+    Total threshold: £75,001.
+
+    From 2029-30, thresholds resume CPI uprating BUT from the frozen base,
+    not from where they would have been without the freeze.
 
     Note: 2026 freeze is already in baseline per Budget 2025-26.
-    This only applies to 2027+ to measure the incremental cost.
 
-    Source: SFC costings breakdown - "Advanced rate freeze"
+    Source: SFC costings breakdown - "Advanced rate threshold freeze (2027-28/2028-29)"
     """
     scotland_rates = sim.tax_benefit_system.parameters.gov.hmrc.income_tax.rates.scotland.rates
 
     for year in DEFAULT_YEARS:
-        if year >= 2027:
+        if year in [2027, 2028]:
+            # Freeze at £62,431 for 2027-28 and 2028-29
             period = f"{year}-01-01"
             scotland_rates.brackets[4].threshold.update(
                 period=period, value=INCOME_TAX_ADVANCED_THRESHOLD
+            )
+        elif year >= 2029:
+            # CPI uprate from the FROZEN base, not from baseline
+            period = f"{year}-01-01"
+            uprated_value = get_cpi_uprated_value(
+                sim, INCOME_TAX_ADVANCED_THRESHOLD, 2028, year
+            )
+            scotland_rates.brackets[4].threshold.update(
+                period=period, value=uprated_value
             )
 
 
 def apply_top_rate_freeze_reform(sim: Microsimulation) -> None:
     """Apply top rate threshold freeze for 2027-28 and 2028-29.
 
-    Freezes Scottish top rate (48%) threshold at £112,570 (above PA).
-    Total threshold: £125,140.
+    Freezes Scottish top rate (48%) threshold at £112,571 (above PA) for 2027-28 and 2028-29.
+    Total threshold: £125,141.
+
+    From 2029-30, thresholds resume CPI uprating BUT from the frozen base,
+    not from where they would have been without the freeze.
 
     Note: 2026 freeze is already in baseline per Budget 2025-26.
-    This only applies to 2027+ to measure the incremental cost.
 
-    Source: SFC costings breakdown - "Top rate freeze"
+    Source: SFC costings breakdown - "Top rate threshold freeze (2027-28/2028-29)"
     """
     scotland_rates = sim.tax_benefit_system.parameters.gov.hmrc.income_tax.rates.scotland.rates
 
     for year in DEFAULT_YEARS:
-        if year >= 2027:
+        if year in [2027, 2028]:
+            # Freeze at £112,571 for 2027-28 and 2028-29
             period = f"{year}-01-01"
             scotland_rates.brackets[5].threshold.update(
                 period=period, value=INCOME_TAX_TOP_THRESHOLD
+            )
+        elif year >= 2029:
+            # CPI uprate from the FROZEN base, not from baseline
+            period = f"{year}-01-01"
+            uprated_value = get_cpi_uprated_value(
+                sim, INCOME_TAX_TOP_THRESHOLD, 2028, year
+            )
+            scotland_rates.brackets[5].threshold.update(
+                period=period, value=uprated_value
             )
 
 
