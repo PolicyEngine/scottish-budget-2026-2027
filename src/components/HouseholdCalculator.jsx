@@ -472,13 +472,13 @@ function HouseholdCalculator() {
         tooltip
           .html(
             `<div style="font-weight:600;margin-bottom:8px;color:#1e293b;font-size:12px">£${closest.earnings.toLocaleString()} income</div>
-<div style="display:flex;justify-content:space-between;gap:16px;margin-bottom:3px"><span style="color:#0D9488">Basic rate uplift</span><span style="font-weight:500;text-align:right">${formatVal(basic)}</span></div>
-<div style="display:flex;justify-content:space-between;gap:16px;margin-bottom:3px"><span style="color:#14B8A6">Intermediate uplift</span><span style="font-weight:500;text-align:right">${formatVal(intermediate)}</span></div>
-<div style="display:flex;justify-content:space-between;gap:16px;margin-bottom:3px"><span style="color:#F97316">Higher freeze</span><span style="font-weight:500;text-align:right">${formatVal(higher)}</span></div>
-<div style="display:flex;justify-content:space-between;gap:16px;margin-bottom:3px"><span style="color:#FB923C">Advanced freeze</span><span style="font-weight:500;text-align:right">${formatVal(advanced)}</span></div>
-<div style="display:flex;justify-content:space-between;gap:16px;margin-bottom:3px"><span style="color:#FDBA74">Top rate freeze</span><span style="font-weight:500;text-align:right">${formatVal(top)}</span></div>
-<div style="display:flex;justify-content:space-between;gap:16px;margin-bottom:3px"><span style="color:#2DD4BF">SCP inflation</span><span style="font-weight:500;text-align:right">${formatVal(scpInf)}</span></div>
-<div style="display:flex;justify-content:space-between;gap:16px;margin-bottom:6px"><span style="color:#5EEAD4">SCP baby boost</span><span style="font-weight:500;text-align:right">${formatVal(scpBaby)}</span></div>
+<div style="display:flex;justify-content:space-between;gap:16px;margin-bottom:3px"><span style="color:#0D9488">Basic rate uplift</span><span style="font-weight:500;color:${basic >= 0 ? "#16a34a" : "#dc2626"}">${formatVal(basic)}</span></div>
+<div style="display:flex;justify-content:space-between;gap:16px;margin-bottom:3px"><span style="color:#14B8A6">Intermediate uplift</span><span style="font-weight:500;color:${intermediate >= 0 ? "#16a34a" : "#dc2626"}">${formatVal(intermediate)}</span></div>
+<div style="display:flex;justify-content:space-between;gap:16px;margin-bottom:3px"><span style="color:#F97316">Higher freeze</span><span style="font-weight:500;color:${higher >= 0 ? "#16a34a" : "#dc2626"}">${formatVal(higher)}</span></div>
+<div style="display:flex;justify-content:space-between;gap:16px;margin-bottom:3px"><span style="color:#FB923C">Advanced freeze</span><span style="font-weight:500;color:${advanced >= 0 ? "#16a34a" : "#dc2626"}">${formatVal(advanced)}</span></div>
+<div style="display:flex;justify-content:space-between;gap:16px;margin-bottom:3px"><span style="color:#FDBA74">Top rate freeze</span><span style="font-weight:500;color:${top >= 0 ? "#16a34a" : "#dc2626"}">${formatVal(top)}</span></div>
+<div style="display:flex;justify-content:space-between;gap:16px;margin-bottom:3px"><span style="color:#2DD4BF">SCP inflation</span><span style="font-weight:500;color:${scpInf >= 0 ? "#16a34a" : "#dc2626"}">${formatVal(scpInf)}</span></div>
+<div style="display:flex;justify-content:space-between;gap:16px;margin-bottom:6px"><span style="color:#5EEAD4">SCP baby boost</span><span style="font-weight:500;color:${scpBaby >= 0 ? "#16a34a" : "#dc2626"}">${formatVal(scpBaby)}</span></div>
 <div style="display:flex;justify-content:space-between;gap:16px;padding-top:6px;border-top:1px solid #e2e8f0"><span style="font-weight:600;color:#0F766E">Total</span><span style="font-weight:600;color:${total >= 0 ? "#16a34a" : "#dc2626"}">${formatVal(total)}</span></div>`
           )
           .style("opacity", 1);
