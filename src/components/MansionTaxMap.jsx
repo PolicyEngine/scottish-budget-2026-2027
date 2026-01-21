@@ -16,6 +16,7 @@ export default function MansionTaxMap() {
   const [tooltipData, setTooltipData] = useState(null);
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
   const [loading, setLoading] = useState(true);
+  const [showMethodology, setShowMethodology] = useState(false);
 
   // Load data
   useEffect(() => {
@@ -310,9 +311,33 @@ export default function MansionTaxMap() {
           <div>
             <h3 className="chart-title">Mansion tax by parliament constituency</h3>
             <p className="chart-description">
-              This map shows each constituency's share of estimated yearly revenue
-              from the mansion tax. Darker green indicates a higher share.
+              The Scottish Budget 2026-27 introduces new council tax bands for properties
+              valued at £1 million or more, effective from April 2028. The Finance Secretary
+              estimated £16m in annual revenue; using UK benchmark rates, we estimate £18.5m.
+              The map below shows each constituency's share. Edinburgh constituencies account
+              for ~47% of total revenue.
             </p>
+
+            {/* Expandable methodology section */}
+            <button
+              className="methodology-toggle"
+              onClick={() => setShowMethodology(!showMethodology)}
+            >
+              <span>How we calculate</span>
+              <span className="methodology-toggle-icon">{showMethodology ? "−" : "+"}</span>
+            </button>
+
+            {showMethodology && (
+              <div className="methodology-content">
+                <ul>
+                  <li>We estimate total revenue by multiplying 11,481 £1m+ properties (from Savills) by the £1,607 average annual rate based on UK benchmark rates.</li>
+                  <li>We use council-level £1m+ sales data from Registers of Scotland to determine geographic distribution across Scotland.</li>
+                  <li>Within each council, we allocate sales to constituencies based on population weighted by Band H property concentration.</li>
+                  <li>We use Band H as a proxy because its threshold (&gt;£212k in 1991) equals approximately £1.06m today, closely matching the mansion tax's £1m threshold.</li>
+                  <li>Each constituency's revenue is calculated by multiplying its share of total sales by the £18.5m total revenue.</li>
+                </ul>
+              </div>
+            )}
           </div>
         </div>
       </div>

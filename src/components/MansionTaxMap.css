@@ -7,3 +7,57 @@
   color: #6b7280;
   margin: -4px 0 8px 0;
 }
+
+/* Methodology toggle */
+.methodology-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 8px 12px;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #475569;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.methodology-toggle:hover {
+  background: #e2e8f0;
+  border-color: #cbd5e1;
+}
+
+.methodology-toggle-icon {
+  font-size: 1.1rem;
+  font-weight: 300;
+  color: #64748b;
+  line-height: 1;
+}
+
+.methodology-content {
+  margin-top: 12px;
+  padding: 16px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+}
+
+.methodology-content ul {
+  margin: 0;
+  padding-left: 20px;
+  list-style-type: disc;
+}
+
+.methodology-content li {
+  font-size: 0.85rem;
+  color: #475569;
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+
+.methodology-content li:last-child {
+  margin-bottom: 0;
+}
