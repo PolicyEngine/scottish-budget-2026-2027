@@ -410,7 +410,8 @@ function HouseholdCalculator() {
       .style("pointer-events", "none")
       .style("opacity", 0)
       .style("z-index", 10)
-      .style("min-width", "160px");
+      .style("min-width", "200px")
+      .style("white-space", "nowrap");
 
     const hoverLine = g
       .append("line")
@@ -470,51 +471,23 @@ function HouseholdCalculator() {
 
         tooltip
           .html(
-            `
-            <div style="font-weight:600;margin-bottom:8px;color:#1e293b;font-size:12px">
-              £${closest.earnings.toLocaleString()} income
-            </div>
-            <div style="display:flex;justify-content:space-between;margin-bottom:3px">
-              <span style="color:#0D9488">Basic rate uplift</span>
-              <span style="font-weight:500">${formatVal(basic)}</span>
-            </div>
-            <div style="display:flex;justify-content:space-between;margin-bottom:3px">
-              <span style="color:#14B8A6">Intermediate uplift</span>
-              <span style="font-weight:500">${formatVal(intermediate)}</span>
-            </div>
-            <div style="display:flex;justify-content:space-between;margin-bottom:3px">
-              <span style="color:#F97316">Higher freeze</span>
-              <span style="font-weight:500">${formatVal(higher)}</span>
-            </div>
-            <div style="display:flex;justify-content:space-between;margin-bottom:3px">
-              <span style="color:#FB923C">Advanced freeze</span>
-              <span style="font-weight:500">${formatVal(advanced)}</span>
-            </div>
-            <div style="display:flex;justify-content:space-between;margin-bottom:3px">
-              <span style="color:#FDBA74">Top rate freeze</span>
-              <span style="font-weight:500">${formatVal(top)}</span>
-            </div>
-            <div style="display:flex;justify-content:space-between;margin-bottom:3px">
-              <span style="color:#2DD4BF">SCP inflation</span>
-              <span style="font-weight:500">${formatVal(scpInf)}</span>
-            </div>
-            <div style="display:flex;justify-content:space-between;margin-bottom:6px">
-              <span style="color:#5EEAD4">SCP baby boost</span>
-              <span style="font-weight:500">${formatVal(scpBaby)}</span>
-            </div>
-            <div style="display:flex;justify-content:space-between;padding-top:6px;border-top:1px solid #e2e8f0">
-              <span style="font-weight:600;color:#0F766E">Total</span>
-              <span style="font-weight:600;color:${total >= 0 ? "#16a34a" : "#dc2626"}">${formatVal(total)}</span>
-            </div>
-          `
+            `<div style="font-weight:600;margin-bottom:8px;color:#1e293b;font-size:12px">£${closest.earnings.toLocaleString()} income</div>
+<div style="display:flex;justify-content:space-between;gap:16px;margin-bottom:3px"><span style="color:#0D9488">Basic rate uplift</span><span style="font-weight:500;text-align:right">${formatVal(basic)}</span></div>
+<div style="display:flex;justify-content:space-between;gap:16px;margin-bottom:3px"><span style="color:#14B8A6">Intermediate uplift</span><span style="font-weight:500;text-align:right">${formatVal(intermediate)}</span></div>
+<div style="display:flex;justify-content:space-between;gap:16px;margin-bottom:3px"><span style="color:#F97316">Higher freeze</span><span style="font-weight:500;text-align:right">${formatVal(higher)}</span></div>
+<div style="display:flex;justify-content:space-between;gap:16px;margin-bottom:3px"><span style="color:#FB923C">Advanced freeze</span><span style="font-weight:500;text-align:right">${formatVal(advanced)}</span></div>
+<div style="display:flex;justify-content:space-between;gap:16px;margin-bottom:3px"><span style="color:#FDBA74">Top rate freeze</span><span style="font-weight:500;text-align:right">${formatVal(top)}</span></div>
+<div style="display:flex;justify-content:space-between;gap:16px;margin-bottom:3px"><span style="color:#2DD4BF">SCP inflation</span><span style="font-weight:500;text-align:right">${formatVal(scpInf)}</span></div>
+<div style="display:flex;justify-content:space-between;gap:16px;margin-bottom:6px"><span style="color:#5EEAD4">SCP baby boost</span><span style="font-weight:500;text-align:right">${formatVal(scpBaby)}</span></div>
+<div style="display:flex;justify-content:space-between;gap:16px;padding-top:6px;border-top:1px solid #e2e8f0"><span style="font-weight:600;color:#0F766E">Total</span><span style="font-weight:600;color:${total >= 0 ? "#16a34a" : "#dc2626"}">${formatVal(total)}</span></div>`
           )
           .style("opacity", 1);
 
         const tooltipX = x(closest.earnings) + margin.left;
         const tooltipY = y(toRealTerms(closest.total, selectedYear));
 
-        if (tooltipX > width - 100) {
-          tooltip.style("left", `${tooltipX - 175}px`).style("top", `${tooltipY}px`);
+        if (tooltipX > width - 150) {
+          tooltip.style("left", `${tooltipX - 215}px`).style("top", `${tooltipY}px`);
         } else {
           tooltip.style("left", `${tooltipX + 15}px`).style("top", `${tooltipY}px`);
         }
@@ -1037,7 +1010,8 @@ function HouseholdCalculator() {
                       <span className="reform-label">{reform.name}</span>
                     </div>
                     <div
-                      className={`reform-value ${displayValue > 0 ? "positive" : displayValue < 0 ? "negative" : ""}`}
+                      className="reform-value"
+                      style={{ color: displayValue > 0 ? "#16a34a" : displayValue < 0 ? "#dc2626" : "#64748b" }}
                     >
                       {formatCurrency(displayValue)}
                     </div>
