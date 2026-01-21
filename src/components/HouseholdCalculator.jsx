@@ -697,7 +697,7 @@ function HouseholdCalculator() {
   // Format currency
   const formatCurrency = useCallback(
     (value, showSign = true) => {
-      const sign = showSign && value >= 0 ? "+" : "";
+      const sign = value < 0 ? "-" : (showSign ? "+" : "");
       return `${sign}£${Math.abs(value).toLocaleString("en-GB", {
         minimumFractionDigits: 0,
         maximumFractionDigits: 0,
@@ -812,6 +812,7 @@ function HouseholdCalculator() {
           {/* Children */}
           <div className="input-group">
             <label>Children (add ages)</label>
+            <span className="help-text">For babies under 1, enter age 0</span>
             <div className="children-input-row">
               <input
                 type="number"
@@ -913,14 +914,14 @@ function HouseholdCalculator() {
               className={`total-impact-card ${impacts.total > 0 ? "positive" : impacts.total < 0 ? "negative" : "neutral"}`}
             >
               <div className="total-label">
-                Your estimated annual gain in {selectedYear}-
+                Your estimated annual {impacts.total >= 0 ? "gain" : "cost"} in {selectedYear}-
                 {(selectedYear + 1).toString().slice(-2)}
               </div>
               <div className="total-value">
                 {formatCurrency(toRealTerms(impacts.total, selectedYear))}
               </div>
               <div className="total-context">
-                {impacts.total > 0
+                {impacts.total !== 0
                   ? `per year from Scottish Budget 2026-27${showRealTerms ? " (2026 prices)" : ""}`
                   : "No impact from these policies"}
               </div>
