@@ -579,8 +579,13 @@ function HouseholdCalculator() {
       .range([0, width])
       .padding(0.3);
 
-    const yMax = Math.max(100, d3.max(processedData, (d) => d.total) * 1.1);
-    const y = d3.scaleLinear().domain([0, yMax]).range([height, 0]);
+    // Dynamic Y scale based on actual data values (handle both positive and negative)
+    const allTotals = processedData.map((d) => d.total);
+    const dataMax = Math.max(...allTotals);
+    const dataMin = Math.min(...allTotals);
+    const yMax = dataMax > 0 ? dataMax * 1.2 : 10;
+    const yMin = dataMin < 0 ? dataMin * 1.2 : 0;
+    const y = d3.scaleLinear().domain([yMin, yMax]).range([height, 0]).nice();
 
     // Light grid lines
     g.append("g")
@@ -596,7 +601,18 @@ function HouseholdCalculator() {
       .attr("stroke", "#E2E8F0")
       .attr("stroke-dasharray", "2,2");
 
-    // X axis
+    // Zero line (if scale includes negative values)
+    if (yMin < 0) {
+      g.append("line")
+        .attr("x1", 0)
+        .attr("x2", width)
+        .attr("y1", y(0))
+        .attr("y2", y(0))
+        .attr("stroke", "#94a3b8")
+        .attr("stroke-width", 1);
+    }
+
+    // X axis (always at bottom for this chart)
     g.append("g")
       .attr("transform", `translate(0,${height})`)
       .call(
@@ -626,34 +642,21 @@ function HouseholdCalculator() {
       .attr("fill", "#6B7280")
       .attr("font-size", "11px");
 
-    // Bars - stacked
+    // Bars - simple total bar (handles positive and negative)
+    const zeroY = y(0);
     processedData.forEach((d) => {
-      let yPos = height;
+      const barY = d.total >= 0 ? y(d.total) : zeroY;
+      const barHeight = Math.abs(y(d.total) - zeroY);
 
-      // Income tax portion
-      if (d.income_tax > 0) {
-        const barHeight = height - y(d.income_tax);
+      // Draw bar from zero line
+      if (barHeight > 0) {
         g.append("rect")
           .attr("class", `bar-${d.year}`)
           .attr("x", x(d.year))
-          .attr("y", yPos - barHeight)
+          .attr("y", barY)
           .attr("width", x.bandwidth())
           .attr("height", barHeight)
-          .attr("fill", CHART_COLORS.income_tax_basic_uplift)
-          .attr("rx", 2);
-        yPos -= barHeight;
-      }
-
-      // SCP portion
-      if (d.scp > 0) {
-        const barHeight = height - y(d.scp);
-        g.append("rect")
-          .attr("class", `bar-${d.year}`)
-          .attr("x", x(d.year))
-          .attr("y", yPos - barHeight)
-          .attr("width", x.bandwidth())
-          .attr("height", barHeight)
-          .attr("fill", CHART_COLORS.scp_baby_boost)
+          .attr("fill", d.total >= 0 ? CHART_COLORS.income_tax_basic_uplift : "#F97316")
           .attr("rx", 2);
       }
 
@@ -661,9 +664,9 @@ function HouseholdCalculator() {
       if (d.year === selectedYear) {
         g.append("rect")
           .attr("x", x(d.year) - 2)
-          .attr("y", y(d.total) - 2)
+          .attr("y", barY - 2)
           .attr("width", x.bandwidth() + 4)
-          .attr("height", height - y(d.total) + 4)
+          .attr("height", barHeight + 4)
           .attr("fill", "none")
           .attr("stroke", CHART_COLORS.total)
           .attr("stroke-width", 2)
