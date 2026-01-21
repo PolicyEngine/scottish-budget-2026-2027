@@ -65,7 +65,6 @@ function HouseholdCalculator() {
   });
   const [variationData, setVariationData] = useState([]);
   const [yearlyData, setYearlyData] = useState([]);
-  const [expandedReforms, setExpandedReforms] = useState({});
   const chartRef = useRef(null);
   const chartContainerRef = useRef(null);
   const yearlyChartRef = useRef(null);
@@ -119,14 +118,6 @@ function HouseholdCalculator() {
     setInputs((prev) => ({
       ...prev,
       children_ages: prev.children_ages.filter((_, i) => i !== index),
-    }));
-  }, []);
-
-  // Toggle reform explanation
-  const toggleReform = useCallback((reformId) => {
-    setExpandedReforms((prev) => ({
-      ...prev,
-      [reformId]: !prev[reformId],
     }));
   }, []);
 
@@ -727,7 +718,7 @@ function HouseholdCalculator() {
         <h3>Calculate your household impact</h3>
         <p className="calculator-subtitle">
           Enter your household details to see how the Scottish Budget 2026-27
-          affects you over time
+          affects you over time. For descriptions of the policies, see the 2026 Budget tab.
         </p>
       </div>
 
@@ -1008,44 +999,6 @@ function HouseholdCalculator() {
         </div>
       </div>
 
-      {/* Reforms explanation - expandable accordion for each reform */}
-      <div className="reforms-explanation">
-        <h4>About the reforms</h4>
-        <div className="reform-accordions">
-          {REFORMS.map((reform) => (
-            <div key={reform.id} className="reform-accordion">
-              <button
-                className={`reform-accordion-header ${expandedReforms[reform.id] ? "expanded" : ""}`}
-                onClick={() => toggleReform(reform.id)}
-              >
-                <span
-                  className="reform-color-dot"
-                  style={{ backgroundColor: reform.color }}
-                />
-                <span className="reform-accordion-title">{reform.name}</span>
-                <span className="reform-accordion-icon">
-                  {expandedReforms[reform.id] ? "−" : "+"}
-                </span>
-              </button>
-              {expandedReforms[reform.id] && (
-                <div className="reform-accordion-content">
-                  <p>{reform.description}</p>
-                  {reform.type === "positive" && (
-                    <p className="reform-type-note positive">
-                      This reform benefits households.
-                    </p>
-                  )}
-                  {reform.type === "negative" && (
-                    <p className="reform-type-note negative">
-                      This reform costs households money (raises revenue).
-                    </p>
-                  )}
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
     </div>
   );
 }

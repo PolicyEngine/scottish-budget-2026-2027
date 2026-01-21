@@ -13,15 +13,15 @@ export const REFORMS = [
   // Income tax threshold uplifts (benefit households)
   {
     id: "income_tax_basic_uplift",
-    name: "Basic rate threshold +7.4%",
-    description: "Basic rate (20%) threshold: £14,877 → £16,537",
+    name: "Basic rate threshold uplift",
+    description: "Basic rate threshold raised from £15,398 to £16,538 (+7.4%)",
     color: "#0D9488",  // Teal 600
     type: "positive",
   },
   {
     id: "income_tax_intermediate_uplift",
-    name: "Intermediate rate threshold +7.4%",
-    description: "Intermediate rate (21%) threshold: £26,562 → £29,527",
+    name: "Intermediate rate threshold uplift",
+    description: "Intermediate rate threshold raised from £27,492 to £29,527 (+7.4%)",
     color: "#14B8A6",  // Teal 500
     type: "positive",
   },
@@ -29,21 +29,21 @@ export const REFORMS = [
   {
     id: "higher_rate_freeze",
     name: "Higher rate threshold freeze",
-    description: "Higher rate (42%) threshold frozen at £31,092 through 2028-29",
+    description: "Higher rate threshold frozen at £43,662 until 2028-29",
     color: "#F97316",  // Orange 500
     type: "negative",
   },
   {
     id: "advanced_rate_freeze",
     name: "Advanced rate threshold freeze",
-    description: "Advanced rate (45%) threshold frozen at £62,430 through 2028-29",
+    description: "Advanced rate threshold frozen at £75,000 until 2028-29",
     color: "#FB923C",  // Orange 400
     type: "negative",
   },
   {
     id: "top_rate_freeze",
     name: "Top rate threshold freeze",
-    description: "Top rate (48%) threshold frozen at £125,140 through 2028-29",
+    description: "Top rate threshold frozen at £125,140 until 2028-29",
     color: "#FDBA74",  // Orange 300
     type: "negative",
   },
@@ -51,14 +51,14 @@ export const REFORMS = [
   {
     id: "scp_inflation",
     name: "SCP inflation adjustment",
-    description: "SCP uprated from £27.15 to £28.20/week (+3.9%)",
+    description: "Scottish Child Payment uprated from £27.15 to £28.20/week",
     color: "#2DD4BF",  // Teal 400
     type: "positive",
   },
   {
     id: "scp_baby_boost",
     name: "SCP Premium for under-ones",
-    description: "Extra £11.80/week for babies under 1 (£40/week total from mid-2027)",
+    description: "Scottish Child Payment raised to £40/week for babies under 1",
     color: "#5EEAD4",  // Teal 300
     type: "positive",
   },
