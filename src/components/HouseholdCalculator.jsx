@@ -63,10 +63,7 @@ function HouseholdCalculator() {
     scp_baby_boost: 0,
     total: 0,
   });
-  const [variationData, setVariationData] = useState([]);
   const [yearlyData, setYearlyData] = useState([]);
-  const chartRef = useRef(null);
-  const chartContainerRef = useRef(null);
   const yearlyChartRef = useRef(null);
   const yearlyChartContainerRef = useRef(null);
 
@@ -155,9 +152,6 @@ function HouseholdCalculator() {
           total: currentYearData.total,
         });
       }
-
-      // Set variation data
-      setVariationData(result.variation);
     } catch (err) {
       console.error("Error calculating:", err);
       setError(err.message);
@@ -166,7 +160,7 @@ function HouseholdCalculator() {
     }
   }, [inputs, selectedYear]);
 
-  // Update impacts when year changes (variation data re-fetched via calculate-all)
+  // Update impacts when year changes
   useEffect(() => {
     if (yearlyData.length > 0) {
       const currentYearData = yearlyData.find((d) => d.year === selectedYear);
@@ -182,284 +176,8 @@ function HouseholdCalculator() {
           total: currentYearData.total,
         });
       }
-
-      // Re-fetch variation data for the new year (single request)
-      fetch(`${API_BASE_URL}/calculate-all`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...inputs, year: selectedYear }),
-      })
-        .then((res) => res.json())
-        .then((result) => {
-          if (result.variation) {
-            setVariationData(result.variation);
-          }
-        })
-        .catch((err) => console.error("Error fetching variation data:", err));
     }
-  }, [selectedYear, yearlyData, inputs]);
-
-  // Draw the earnings variation chart
-  useEffect(() => {
-    if (!variationData.length || !chartRef.current || !chartContainerRef.current)
-      return;
-
-    const svg = d3.select(chartRef.current);
-    svg.selectAll("*").remove();
-
-    const containerWidth = chartContainerRef.current.clientWidth;
-    const margin = { top: 20, right: 24, bottom: 50, left: 70 };
-    const width = containerWidth - margin.left - margin.right;
-    const height = 280 - margin.top - margin.bottom;
-
-    svg.attr("width", containerWidth).attr("height", 280);
-
-    const g = svg
-      .append("g")
-      .attr("transform", `translate(${margin.left},${margin.top})`);
-
-    // Scales
-    const x = d3.scaleLinear().domain([0, 150000]).range([0, width]);
-
-    const allValues = variationData.flatMap((d) => [
-      d.total,
-      d.scp_baby_boost || 0,
-      d.income_tax_uplift || 0,
-    ]);
-    const yMax = Math.max(100, d3.max(allValues) * 1.1);
-    const yMin = Math.min(0, d3.min(allValues) * 1.1);
-    const y = d3.scaleLinear().domain([yMin, yMax]).range([height, 0]);
-
-    // Grid lines
-    g.append("g")
-      .attr("class", "grid-lines")
-      .selectAll("line")
-      .data(y.ticks(5))
-      .enter()
-      .append("line")
-      .attr("x1", 0)
-      .attr("x2", width)
-      .attr("y1", (d) => y(d))
-      .attr("y2", (d) => y(d))
-      .attr("stroke", "#E2E8F0")
-      .attr("stroke-dasharray", "2,2");
-
-    // Zero line
-    g.append("line")
-      .attr("x1", 0)
-      .attr("x2", width)
-      .attr("y1", y(0))
-      .attr("y2", y(0))
-      .attr("stroke", "#94a3b8")
-      .attr("stroke-width", 1);
-
-    // X axis
-    g.append("g")
-      .attr("transform", `translate(0,${height})`)
-      .call(
-        d3
-          .axisBottom(x)
-          .tickValues([0, 25000, 50000, 75000, 100000, 125000, 150000])
-          .tickFormat((d) => `£${d / 1000}k`)
-          .tickSize(0)
-          .tickPadding(10)
-      )
-      .call((g) => g.select(".domain").attr("stroke", "#D1D5DB"))
-      .selectAll("text")
-      .attr("fill", "#6B7280")
-      .attr("font-size", "11px");
-
-    // X axis label
-    g.append("text")
-      .attr("x", width / 2)
-      .attr("y", height + 40)
-      .attr("text-anchor", "middle")
-      .attr("fill", "#475569")
-      .attr("font-size", "12px")
-      .text("Employment income");
-
-    // Y axis
-    g.append("g")
-      .call(
-        d3
-          .axisLeft(y)
-          .ticks(5)
-          .tickFormat((d) => `£${d}`)
-          .tickSize(0)
-          .tickPadding(10)
-      )
-      .call((g) => g.select(".domain").remove())
-      .selectAll("text")
-      .attr("fill", "#6B7280")
-      .attr("font-size", "11px");
-
-    // Y axis label
-    g.append("text")
-      .attr("transform", "rotate(-90)")
-      .attr("x", -height / 2)
-      .attr("y", -55)
-      .attr("text-anchor", "middle")
-      .attr("fill", "#475569")
-      .attr("font-size", "12px")
-      .text(`Annual impact (£${showRealTerms ? ", 2026 prices" : ""})`);
-
-    // Line generators - only draw total line (cleaner without legend)
-    const lineTotal = d3
-      .line()
-      .x((d) => x(d.earnings))
-      .y((d) => y(toRealTerms(d.total, selectedYear)))
-      .curve(d3.curveMonotoneX);
-
-    // Draw total line only
-    g.append("path")
-      .datum(variationData)
-      .attr("fill", "none")
-      .attr("stroke", CHART_COLORS.total)
-      .attr("stroke-width", 2.5)
-      .attr("d", lineTotal);
-
-    // Current income marker
-    const currentIncome = inputs.employment_income;
-    const currentPoint =
-      variationData.find((d) => d.earnings === currentIncome) ||
-      variationData.reduce((prev, curr) =>
-        Math.abs(curr.earnings - currentIncome) <
-        Math.abs(prev.earnings - currentIncome)
-          ? curr
-          : prev
-      );
-
-    if (currentPoint) {
-      // Vertical line at current income
-      g.append("line")
-        .attr("x1", x(currentIncome))
-        .attr("x2", x(currentIncome))
-        .attr("y1", 0)
-        .attr("y2", height)
-        .attr("stroke", CHART_COLORS.total)
-        .attr("stroke-width", 1)
-        .attr("stroke-dasharray", "4,4")
-        .attr("opacity", 0.6);
-
-      // Dot at current total
-      g.append("circle")
-        .attr("cx", x(currentIncome))
-        .attr("cy", y(toRealTerms(currentPoint.total, selectedYear)))
-        .attr("r", 6)
-        .attr("fill", CHART_COLORS.total)
-        .attr("stroke", "white")
-        .attr("stroke-width", 2);
-    }
-
-    // Hover interaction - tooltip (no legend box)
-    d3.select(chartContainerRef.current).style("position", "relative");
-
-    const tooltip = d3
-      .select(chartContainerRef.current)
-      .append("div")
-      .attr("class", "chart-tooltip")
-      .style("position", "absolute")
-      .style("background", "white")
-      .style("border", "1px solid #e2e8f0")
-      .style("border-radius", "8px")
-      .style("padding", "12px")
-      .style("font-size", "11px")
-      .style("box-shadow", "0 4px 12px rgba(0,0,0,0.1)")
-      .style("pointer-events", "none")
-      .style("opacity", 0)
-      .style("z-index", 10)
-      .style("min-width", "200px")
-      .style("white-space", "nowrap");
-
-    const hoverLine = g
-      .append("line")
-      .attr("stroke", "#94a3b8")
-      .attr("stroke-width", 1)
-      .attr("stroke-dasharray", "4,4")
-      .attr("y1", 0)
-      .attr("y2", height)
-      .style("opacity", 0);
-
-    const hoverCircle = g
-      .append("circle")
-      .attr("r", 5)
-      .attr("fill", CHART_COLORS.total)
-      .attr("stroke", "white")
-      .attr("stroke-width", 2)
-      .style("opacity", 0);
-
-    const formatVal = (v) => {
-      const sign = v < 0 ? "-" : "+";
-      return `${sign}£${Math.abs(v).toFixed(0)}`;
-    };
-
-    // Overlay for mouse events
-    g.append("rect")
-      .attr("width", width)
-      .attr("height", height)
-      .attr("fill", "transparent")
-      .on("mousemove", function (event) {
-        const [mouseX] = d3.pointer(event);
-        const earnings = x.invert(mouseX);
-
-        const closest = variationData.reduce((prev, curr) =>
-          Math.abs(curr.earnings - earnings) < Math.abs(prev.earnings - earnings)
-            ? curr
-            : prev
-        );
-
-        hoverLine
-          .attr("x1", x(closest.earnings))
-          .attr("x2", x(closest.earnings))
-          .style("opacity", 1);
-
-        hoverCircle
-          .attr("cx", x(closest.earnings))
-          .attr("cy", y(toRealTerms(closest.total, selectedYear)))
-          .style("opacity", 1);
-
-        const total = toRealTerms(closest.total, selectedYear);
-        const basic = toRealTerms(closest.income_tax_basic_uplift || 0, selectedYear);
-        const intermediate = toRealTerms(closest.income_tax_intermediate_uplift || 0, selectedYear);
-        const higher = toRealTerms(closest.higher_rate_freeze || 0, selectedYear);
-        const advanced = toRealTerms(closest.advanced_rate_freeze || 0, selectedYear);
-        const top = toRealTerms(closest.top_rate_freeze || 0, selectedYear);
-        const scpInf = toRealTerms(closest.scp_inflation || 0, selectedYear);
-        const scpBaby = toRealTerms(closest.scp_baby_boost || 0, selectedYear);
-
-        tooltip
-          .html(
-            `<div style="font-weight:600;margin-bottom:8px;color:#1e293b;font-size:12px">£${closest.earnings.toLocaleString()} income</div>
-<div style="display:flex;justify-content:space-between;gap:16px;margin-bottom:3px"><span style="color:#0D9488">Basic rate uplift</span><span style="font-weight:500;color:${basic >= 0 ? "#16a34a" : "#dc2626"}">${formatVal(basic)}</span></div>
-<div style="display:flex;justify-content:space-between;gap:16px;margin-bottom:3px"><span style="color:#14B8A6">Intermediate uplift</span><span style="font-weight:500;color:${intermediate >= 0 ? "#16a34a" : "#dc2626"}">${formatVal(intermediate)}</span></div>
-<div style="display:flex;justify-content:space-between;gap:16px;margin-bottom:3px"><span style="color:#F97316">Higher freeze</span><span style="font-weight:500;color:${higher >= 0 ? "#16a34a" : "#dc2626"}">${formatVal(higher)}</span></div>
-<div style="display:flex;justify-content:space-between;gap:16px;margin-bottom:3px"><span style="color:#FB923C">Advanced freeze</span><span style="font-weight:500;color:${advanced >= 0 ? "#16a34a" : "#dc2626"}">${formatVal(advanced)}</span></div>
-<div style="display:flex;justify-content:space-between;gap:16px;margin-bottom:3px"><span style="color:#FDBA74">Top rate freeze</span><span style="font-weight:500;color:${top >= 0 ? "#16a34a" : "#dc2626"}">${formatVal(top)}</span></div>
-<div style="display:flex;justify-content:space-between;gap:16px;margin-bottom:3px"><span style="color:#2DD4BF">SCP inflation</span><span style="font-weight:500;color:${scpInf >= 0 ? "#16a34a" : "#dc2626"}">${formatVal(scpInf)}</span></div>
-<div style="display:flex;justify-content:space-between;gap:16px;margin-bottom:6px"><span style="color:#5EEAD4">SCP baby boost</span><span style="font-weight:500;color:${scpBaby >= 0 ? "#16a34a" : "#dc2626"}">${formatVal(scpBaby)}</span></div>
-<div style="display:flex;justify-content:space-between;gap:16px;padding-top:6px;border-top:1px solid #e2e8f0"><span style="font-weight:600;color:#0F766E">Total</span><span style="font-weight:600;color:${total >= 0 ? "#16a34a" : "#dc2626"}">${formatVal(total)}</span></div>`
-          )
-          .style("opacity", 1);
-
-        const tooltipX = x(closest.earnings) + margin.left;
-        const tooltipY = y(toRealTerms(closest.total, selectedYear));
-
-        if (tooltipX > width - 150) {
-          tooltip.style("left", `${tooltipX - 215}px`).style("top", `${tooltipY}px`);
-        } else {
-          tooltip.style("left", `${tooltipX + 15}px`).style("top", `${tooltipY}px`);
-        }
-      })
-      .on("mouseleave", function () {
-        hoverLine.style("opacity", 0);
-        hoverCircle.style("opacity", 0);
-        tooltip.style("opacity", 0);
-      });
-
-    return () => {
-      tooltip.remove();
-    };
-  }, [variationData, inputs.employment_income, selectedYear, showRealTerms, toRealTerms]);
+  }, [selectedYear, yearlyData]);
 
   // Draw yearly projection chart
   useEffect(() => {
@@ -995,27 +713,6 @@ function HouseholdCalculator() {
             </div>
           )}
 
-          {/* Earnings variation chart */}
-          {!loading && (
-            <div className="earnings-chart-section">
-              <h4>Impact by earnings level</h4>
-              <p className="chart-subtitle">
-                How the reforms affect households at different income levels
-              </p>
-              <div ref={chartContainerRef} className="earnings-chart-container">
-                {variationData.length > 0 ? (
-                  <svg ref={chartRef}></svg>
-                ) : (
-                  <div className="chart-placeholder">
-                    <span className="chart-hint">
-                      Click Calculate to see how impacts vary across the income
-                      range
-                    </span>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
         </div>
       </div>
 
