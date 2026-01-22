@@ -714,7 +714,7 @@ export default function Dashboard({ selectedPolicies = [] }) {
           Mansion tax
         </summary>
         <p className="chart-description" style={{ marginTop: "12px" }}>
-          The Scottish Budget 2026-27 <a href="https://www.bbc.co.uk/news/live/c0lxn7e7rlpt" target="_blank" rel="noopener noreferrer">introduced</a> new council tax bands for properties valued at £1 million or more,
+          The Scottish Budget 2026-27 <a href="https://www.gov.scot/publications/scottish-budget-2026-2027/pages/5/" target="_blank" rel="noopener noreferrer">introduced</a> new council tax bands for properties valued at £1 million or more,
           effective from April 2028. The Finance Secretary <a href="https://www.lbc.co.uk/article/wealthy-scots-in-snp-sights-as-budget-proposes-mansion-house-tax-and-a-tax-on-pr-5HjdQg9_2/" target="_blank" rel="noopener noreferrer">estimated £16m</a> in annual revenue; using UK benchmark rates, we estimate £18.5m.
           The map below shows each constituency's share. Edinburgh constituencies account for ~47% of total revenue.
         </p>
