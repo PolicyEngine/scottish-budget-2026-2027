@@ -1,6 +1,6 @@
 import { useState } from "react";
 import {
-  ComposedChart,
+  BarChart,
   Bar,
   XAxis,
   YAxis,
@@ -204,7 +204,7 @@ export default function DecileChart({
       )}
 
       <ResponsiveContainer width="100%" height={350}>
-        <ComposedChart
+        <BarChart
           data={chartData}
           margin={{ top: 20, right: 30, left: 60, bottom: 40 }}
           stackOffset="sign"
@@ -253,21 +253,15 @@ export default function DecileChart({
             }}
           />
           {stacked ? (
-            <>
-              {ALL_POLICY_NAMES.map((policyName) => (
-                <Bar
-                  key={policyName}
-                  dataKey={policyName}
-                  fill={POLICY_COLORS[policyName]}
-                  name={policyName}
-                  stackId="stack"
-                  radius={[2, 2, 0, 0]}
-                  stroke="none"
-                  hide={!activePolicies.includes(policyName)}
-                  legendType="none"
-                />
-              ))}
-            </>
+            activePolicies.map((policyName) => (
+              <Bar
+                key={policyName}
+                dataKey={policyName}
+                fill={POLICY_COLORS[policyName]}
+                name={policyName}
+                stackId="stack"
+              />
+            ))
           ) : (
             <Bar
               dataKey="value"
@@ -277,7 +271,7 @@ export default function DecileChart({
               name="Change"
             />
           )}
-        </ComposedChart>
+        </BarChart>
       </ResponsiveContainer>
 
       <p className="chart-note">
