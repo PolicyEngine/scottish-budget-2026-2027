@@ -716,7 +716,7 @@ export default function Dashboard({ selectedPolicies = [] }) {
         <p className="chart-description" style={{ marginTop: "12px" }}>
           The Scottish Budget 2026-27 <a href="https://www.gov.scot/publications/scottish-budget-2026-2027/pages/5/" target="_blank" rel="noopener noreferrer">introduced</a> two new council tax bands for properties with a 2026 market value above £1 million,
           effective from April 2028. The Finance Secretary <a href="https://www.lbc.co.uk/article/wealthy-scots-in-snp-sights-as-budget-proposes-mansion-house-tax-and-a-tax-on-pr-5HjdQg9_2/" target="_blank" rel="noopener noreferrer">estimated £16m</a> in annual revenue.
-          The <a href="https://fiscalcommission.scot/publications/scotlands-economic-and-fiscal-forecasts-january-2026/" target="_blank" rel="noopener noreferrer">SFC</a> does not cost this policy as Council Tax is a local tax outside their remit; they assessed potential LBTT behavioral effects and concluded these are immaterial.
+          The <a href="https://fiscalcommission.scot/publications/scotlands-economic-and-fiscal-forecasts-january-2026/" target="_blank" rel="noopener noreferrer">SFC</a> does not cost this policy as Council Tax is a local tax outside their remit.
           Using UK benchmark rates, we estimate £18.5m in annual revenue. The map below shows each constituency's share. Edinburgh constituencies account for ~47% of total revenue.
         </p>
         <details className="methodology-details" style={{ marginTop: "12px", marginBottom: "16px" }}>
