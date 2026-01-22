@@ -53,7 +53,7 @@ function HouseholdCalculator() {
   const [childAgeInput, setChildAgeInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [selectedYear, setSelectedYear] = useState(2027);
+  const [selectedYear, setSelectedYear] = useState(2026);
   const [showRealTerms, setShowRealTerms] = useState(false);
   const [impacts, setImpacts] = useState({
     income_tax_basic_uplift: 0,
@@ -66,8 +66,11 @@ function HouseholdCalculator() {
     total: 0,
   });
   const [yearlyData, setYearlyData] = useState([]);
+  const [byIncomeData, setByIncomeData] = useState([]);
   const yearlyChartRef = useRef(null);
   const yearlyChartContainerRef = useRef(null);
+  const incomeChartRef = useRef(null);
+  const incomeChartContainerRef = useRef(null);
 
   const years = [2026, 2027, 2028, 2029, 2030];
 
@@ -120,13 +123,18 @@ function HouseholdCalculator() {
     }));
   }, []);
 
-  // Combined calculate function - single API request for all data
+  // State for loading income chart separately
+  const [loadingIncomeChart, setLoadingIncomeChart] = useState(false);
+
+  // Calculate function - uses single year endpoint for faster response
   const calculateAll = useCallback(async () => {
     setLoading(true);
     setError(null);
+    setByIncomeData([]); // Clear previous income data
 
     try {
-      const response = await fetch(`${API_BASE_URL}/calculate-all`, {
+      // First, get single year data (faster ~26s instead of ~2min)
+      const response = await fetch(`${API_BASE_URL}/calculate`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...inputs, year: selectedYear }),
@@ -137,49 +145,64 @@ function HouseholdCalculator() {
         throw new Error(result.error);
       }
 
-      // Process yearly data
-      setYearlyData(result.yearly);
+      // Set impacts from single year response
+      setImpacts({
+        income_tax_basic_uplift: result.impacts.income_tax_basic_uplift,
+        income_tax_intermediate_uplift: result.impacts.income_tax_intermediate_uplift,
+        higher_rate_freeze: result.impacts.higher_rate_freeze,
+        advanced_rate_freeze: result.impacts.advanced_rate_freeze,
+        top_rate_freeze: result.impacts.top_rate_freeze,
+        scp_inflation: result.impacts.scp_inflation,
+        scp_baby_boost: result.impacts.scp_baby_boost,
+        total: result.total,
+      });
 
-      // Set current year impacts
-      const currentYearData = result.yearly.find((d) => d.year === selectedYear);
-      if (currentYearData) {
-        setImpacts({
-          income_tax_basic_uplift: currentYearData.income_tax_basic_uplift,
-          income_tax_intermediate_uplift: currentYearData.income_tax_intermediate_uplift,
-          higher_rate_freeze: currentYearData.higher_rate_freeze,
-          advanced_rate_freeze: currentYearData.advanced_rate_freeze,
-          top_rate_freeze: currentYearData.top_rate_freeze,
-          scp_inflation: currentYearData.scp_inflation,
-          scp_baby_boost: currentYearData.scp_baby_boost,
-          total: currentYearData.total,
-        });
+      // Create yearly data from single year (for now, just show selected year)
+      setYearlyData([{
+        year: selectedYear,
+        ...result.impacts,
+        total: result.total,
+      }]);
+
+      setLoading(false);
+
+      // Then fetch by_income data in background
+      setLoadingIncomeChart(true);
+      const incomeResponse = await fetch(`${API_BASE_URL}/calculate-by-income`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...inputs, year: selectedYear }),
+      });
+      const incomeResult = await incomeResponse.json();
+
+      if (incomeResult.by_income) {
+        setByIncomeData(incomeResult.by_income);
       }
     } catch (err) {
       console.error("Error calculating:", err);
       setError(err.message);
     } finally {
       setLoading(false);
+      setLoadingIncomeChart(false);
     }
   }, [inputs, selectedYear]);
 
-  // Update impacts when year changes
+  // Track if we've calculated before (to know when to auto-recalculate on year change)
+  const hasCalculated = useRef(false);
+
+  // Update hasCalculated when we get results
   useEffect(() => {
     if (yearlyData.length > 0) {
-      const currentYearData = yearlyData.find((d) => d.year === selectedYear);
-      if (currentYearData) {
-        setImpacts({
-          income_tax_basic_uplift: currentYearData.income_tax_basic_uplift,
-          income_tax_intermediate_uplift: currentYearData.income_tax_intermediate_uplift,
-          higher_rate_freeze: currentYearData.higher_rate_freeze,
-          advanced_rate_freeze: currentYearData.advanced_rate_freeze,
-          top_rate_freeze: currentYearData.top_rate_freeze,
-          scp_inflation: currentYearData.scp_inflation,
-          scp_baby_boost: currentYearData.scp_baby_boost,
-          total: currentYearData.total,
-        });
-      }
+      hasCalculated.current = true;
     }
-  }, [selectedYear, yearlyData]);
+  }, [yearlyData]);
+
+  // Re-run calculation when year changes (if we've already calculated once)
+  useEffect(() => {
+    if (hasCalculated.current && !loading) {
+      calculateAll();
+    }
+  }, [selectedYear]); // Only trigger on year change, not on calculateAll change
 
   // Draw yearly projection chart
   useEffect(() => {
@@ -481,6 +504,256 @@ function HouseholdCalculator() {
     };
   }, [yearlyData, selectedYear, showRealTerms, toRealTerms]);
 
+  // Draw income level chart
+  useEffect(() => {
+    if (
+      !byIncomeData.length ||
+      !incomeChartRef.current ||
+      !incomeChartContainerRef.current
+    )
+      return;
+
+    const svg = d3.select(incomeChartRef.current);
+    svg.selectAll("*").remove();
+
+    const containerWidth = incomeChartContainerRef.current.clientWidth;
+    const margin = { top: 20, right: 24, bottom: 50, left: 70 };
+    const width = containerWidth - margin.left - margin.right;
+    const height = 220 - margin.top - margin.bottom;
+
+    svg.attr("width", containerWidth).attr("height", 220);
+
+    const g = svg
+      .append("g")
+      .attr("transform", `translate(${margin.left},${margin.top})`);
+
+    // Scales
+    const x = d3
+      .scaleLinear()
+      .domain([0, 200000])
+      .range([0, width]);
+
+    const yMin = d3.min(byIncomeData, (d) => d.total);
+    const yMax = d3.max(byIncomeData, (d) => d.total);
+    const yPadding = Math.max(Math.abs(yMin), Math.abs(yMax)) * 0.1;
+    const y = d3
+      .scaleLinear()
+      .domain([Math.min(yMin - yPadding, 0), Math.max(yMax + yPadding, 0)])
+      .range([height, 0])
+      .nice();
+
+    // Grid lines
+    g.append("g")
+      .attr("class", "grid-lines")
+      .selectAll("line")
+      .data(y.ticks(5))
+      .enter()
+      .append("line")
+      .attr("x1", 0)
+      .attr("x2", width)
+      .attr("y1", (d) => y(d))
+      .attr("y2", (d) => y(d))
+      .attr("stroke", "#E2E8F0")
+      .attr("stroke-dasharray", "2,2");
+
+    // Zero line
+    g.append("line")
+      .attr("x1", 0)
+      .attr("x2", width)
+      .attr("y1", y(0))
+      .attr("y2", y(0))
+      .attr("stroke", "#94a3b8")
+      .attr("stroke-width", 1);
+
+    // X axis
+    g.append("g")
+      .attr("transform", `translate(0,${height})`)
+      .call(
+        d3
+          .axisBottom(x)
+          .ticks(5)
+          .tickFormat((d) => `£${d / 1000}k`)
+          .tickSize(0)
+          .tickPadding(10)
+      )
+      .call((g) => g.select(".domain").attr("stroke", "#D1D5DB"))
+      .selectAll("text")
+      .attr("fill", "#6B7280")
+      .attr("font-size", "11px");
+
+    // X axis label
+    g.append("text")
+      .attr("x", width / 2)
+      .attr("y", height + 40)
+      .attr("text-anchor", "middle")
+      .attr("fill", "#6B7280")
+      .attr("font-size", "12px")
+      .text("Employment income");
+
+    // Y axis
+    g.append("g")
+      .call(
+        d3
+          .axisLeft(y)
+          .ticks(5)
+          .tickFormat((d) => `£${d}`)
+          .tickSize(0)
+          .tickPadding(10)
+      )
+      .call((g) => g.select(".domain").remove())
+      .selectAll("text")
+      .attr("fill", "#6B7280")
+      .attr("font-size", "11px");
+
+    // Area fill
+    const area = d3
+      .area()
+      .x((d) => x(d.income))
+      .y0(y(0))
+      .y1((d) => y(d.total))
+      .curve(d3.curveMonotoneX);
+
+    // Split data into positive and negative areas
+    const positiveData = byIncomeData.map((d) => ({
+      income: d.income,
+      total: Math.max(0, d.total),
+    }));
+    const negativeData = byIncomeData.map((d) => ({
+      income: d.income,
+      total: Math.min(0, d.total),
+    }));
+
+    // Positive area (teal)
+    g.append("path")
+      .datum(positiveData)
+      .attr("fill", "rgba(13, 148, 136, 0.2)")
+      .attr("d", area);
+
+    // Negative area (amber)
+    g.append("path")
+      .datum(negativeData)
+      .attr("fill", "rgba(180, 83, 9, 0.2)")
+      .attr("d", area);
+
+    // Line
+    const line = d3
+      .line()
+      .x((d) => x(d.income))
+      .y((d) => y(d.total))
+      .curve(d3.curveMonotoneX);
+
+    g.append("path")
+      .datum(byIncomeData)
+      .attr("fill", "none")
+      .attr("stroke", CHART_COLORS.total)
+      .attr("stroke-width", 2)
+      .attr("d", line);
+
+
+    // Vertical hover line
+    const hoverLine = g.append("line")
+      .attr("class", "hover-line")
+      .attr("y1", 0)
+      .attr("y2", height)
+      .attr("stroke", "#94a3b8")
+      .attr("stroke-width", 1)
+      .attr("stroke-dasharray", "4,4")
+      .style("opacity", 0)
+      .style("pointer-events", "none");
+
+    // Tooltip
+    d3.select(incomeChartContainerRef.current).style("position", "relative");
+    const tooltip = d3
+      .select(incomeChartContainerRef.current)
+      .append("div")
+      .attr("class", "income-chart-tooltip")
+      .style("position", "absolute")
+      .style("background", "white")
+      .style("border", "1px solid #e2e8f0")
+      .style("border-radius", "8px")
+      .style("padding", "10px")
+      .style("font-size", "11px")
+      .style("box-shadow", "0 4px 12px rgba(0,0,0,0.1)")
+      .style("pointer-events", "none")
+      .style("opacity", 0)
+      .style("z-index", 10);
+
+    // Hover area
+    g.append("rect")
+      .attr("width", width)
+      .attr("height", height)
+      .attr("fill", "transparent")
+      .on("mousemove", (event) => {
+        const [mouseX] = d3.pointer(event);
+        const income = x.invert(mouseX);
+        const closest = byIncomeData.reduce((prev, curr) =>
+          Math.abs(curr.income - income) < Math.abs(prev.income - income) ? curr : prev
+        );
+
+        // Update vertical line position
+        hoverLine
+          .attr("x1", x(closest.income))
+          .attr("x2", x(closest.income))
+          .style("opacity", 1);
+
+        const formatVal = (v) => {
+          if (Math.abs(v) < 0.01) return "£0";
+          const sign = v < 0 ? "-" : "+";
+          return `${sign}£${Math.abs(v).toFixed(0)}`;
+        };
+
+        tooltip
+          .html(`
+            <div style="font-weight:600;margin-bottom:8px;color:#1e293b;font-size:12px">
+              £${closest.income.toLocaleString()} income
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+              <span style="color:#0D9488">Basic rate uplift</span>
+              <span style="font-weight:500">${formatVal(closest.income_tax_basic_uplift)}</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+              <span style="color:#0F766E">Intermediate uplift</span>
+              <span style="font-weight:500">${formatVal(closest.income_tax_intermediate_uplift)}</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+              <span style="color:#78350F">Higher freeze</span>
+              <span style="font-weight:500">${formatVal(closest.higher_rate_freeze)}</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+              <span style="color:#92400E">Advanced freeze</span>
+              <span style="font-weight:500">${formatVal(closest.advanced_rate_freeze)}</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+              <span style="color:#B45309">Top rate freeze</span>
+              <span style="font-weight:500">${formatVal(closest.top_rate_freeze)}</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+              <span style="color:#14B8A6">SCP inflation</span>
+              <span style="font-weight:500">${formatVal(closest.scp_inflation)}</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+              <span style="color:#2DD4BF">SCP baby boost</span>
+              <span style="font-weight:500">${formatVal(closest.scp_baby_boost)}</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding-top:6px;border-top:1px solid #e2e8f0">
+              <span style="font-weight:600;color:#0F766E">Total</span>
+              <span style="font-weight:600;color:${closest.total >= 0 ? '#16a34a' : '#dc2626'}">${formatVal(closest.total)}</span>
+            </div>
+          `)
+          .style("opacity", 1)
+          .style("left", `${x(closest.income) + margin.left - 90}px`)
+          .style("top", `${y(closest.total) + margin.top - 180}px`);
+      })
+      .on("mouseout", () => {
+        tooltip.style("opacity", 0);
+        hoverLine.style("opacity", 0);
+      });
+
+    return () => {
+      tooltip.remove();
+    };
+  }, [byIncomeData, inputs.employment_income]);
+
   // Format currency
   const formatCurrency = useCallback(
     (value, showSign = true) => {
@@ -734,19 +1007,27 @@ function HouseholdCalculator() {
             </div>
           )}
 
-          {/* Yearly projection chart */}
-          {!loading && yearlyData.length > 0 && (
+          {/* Impact by income level chart */}
+          {!loading && (loadingIncomeChart || byIncomeData.length > 0) && (
             <div className="yearly-chart-section">
-              <h4>Impact over time</h4>
+              <h4>Impact by income level</h4>
               <p className="chart-subtitle">
-                Click a year to see detailed breakdown
+                How the budget affects households at different income levels in {selectedYear}-{(selectedYear + 1).toString().slice(-2)}
               </p>
-              <div
-                ref={yearlyChartContainerRef}
-                className="yearly-chart-container"
-              >
-                <svg ref={yearlyChartRef}></svg>
-              </div>
+              {loadingIncomeChart && byIncomeData.length === 0 ? (
+                <div className="loading-indicator" style={{ minHeight: "220px" }}>
+                  <div className="spinner"></div>
+                  <span>Loading income chart...</span>
+                </div>
+              ) : (
+                <div
+                  ref={incomeChartContainerRef}
+                  className="yearly-chart-container"
+                  style={{ minHeight: "220px" }}
+                >
+                  <svg ref={incomeChartRef}></svg>
+                </div>
+              )}
             </div>
           )}
 
