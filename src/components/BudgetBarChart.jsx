@@ -81,7 +81,7 @@ export default function BudgetBarChart({ data, title, description, stacked = fal
   // Check if we should show net impact line (only when multiple policies have data)
   const showNetImpact = stacked && activePolicies.length > 1;
 
-  // Calculate Y-axis domain with padding (only for active/selected policies)
+  // Calculate symmetric Y-axis domain with round number increments
   const calculateYDomain = () => {
     let minVal = 0, maxVal = 0;
     data.forEach(d => {
@@ -94,11 +94,28 @@ export default function BudgetBarChart({ data, title, description, stacked = fal
       minVal = Math.min(minVal, negSum);
       maxVal = Math.max(maxVal, posSum);
     });
-    // Add 15% padding
-    const padding = Math.max(Math.abs(minVal), Math.abs(maxVal)) * 0.15;
-    return [Math.floor((minVal - padding) / 20) * 20, Math.ceil((maxVal + padding) / 20) * 20];
+    // Find the max absolute value and round up to nice number for symmetric axis
+    const maxAbs = Math.max(Math.abs(minVal), Math.abs(maxVal));
+    // Choose a nice round interval (50, 100, 150, etc.)
+    const interval = maxAbs <= 100 ? 50 : maxAbs <= 200 ? 50 : maxAbs <= 400 ? 100 : 150;
+    const roundedMax = Math.ceil((maxAbs * 1.1) / interval) * interval;
+    return [-roundedMax, roundedMax];
   };
+
+  // Generate symmetric ticks including 0
+  const generateTicks = (domain) => {
+    const [min, max] = domain;
+    const range = max - min;
+    const interval = range <= 200 ? 50 : range <= 400 ? 100 : 150;
+    const ticks = [];
+    for (let i = min; i <= max; i += interval) {
+      ticks.push(i);
+    }
+    return ticks;
+  };
+
   const yDomain = stacked ? calculateYDomain() : ['auto', 'auto'];
+  const yTicks = stacked ? generateTicks(yDomain) : undefined;
 
   return (
     <div className="budget-bar-chart">
@@ -119,6 +136,7 @@ export default function BudgetBarChart({ data, title, description, stacked = fal
           />
           <YAxis
             domain={yDomain}
+            ticks={yTicks}
             tickFormatter={formatValue}
             tick={{ fontSize: 12 }}
           />
