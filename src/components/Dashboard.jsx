@@ -6,7 +6,7 @@ import LocalAreaSection from "./LocalAreaSection";
 import SFCComparisonTable from "./SFCComparisonTable";
 import MansionTaxMap from "./MansionTaxMap";
 import "./Dashboard.css";
-import { POLICY_NAMES, ALL_POLICY_IDS } from "../utils/policyConfig";
+import { POLICY_NAMES, ALL_POLICY_IDS, REVENUE_POLICIES } from "../utils/policyConfig";
 
 // Section definitions for navigation
 const SECTIONS = [
@@ -464,6 +464,56 @@ export default function Dashboard({ selectedPolicies = [] }) {
     });
   }, [isStacked, rawDistributionalData, selectedYear, selectedPolicies]);
 
+  // Calculate decile chart y-axis domain across ALL years for consistent axis
+  const decileYAxisDomain = useMemo(() => {
+    if (!isStacked || rawDistributionalData.length === 0) return null;
+
+    const deciles = ["1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th"];
+    let maxAbsRelative = 0;
+    let maxAbsAbsolute = 0;
+
+    // Check all years to find max values
+    AVAILABLE_YEARS.forEach(year => {
+      deciles.forEach(decile => {
+        let posRelative = 0, negRelative = 0;
+        let posAbsolute = 0, negAbsolute = 0;
+
+        selectedPolicies.forEach(policyId => {
+          const policyName = POLICY_NAMES[policyId];
+          const row = rawDistributionalData.find(
+            r => r.reform_id === policyId && r.year === String(year) && r.decile === decile
+          );
+          const relValue = row ? parseFloat(row.value) || 0 : 0;
+          const absValue = row ? parseFloat(row.absolute_change) || 0 : 0;
+
+          // Check if this is a revenue policy (values should be negative)
+          const isRevenue = REVENUE_POLICIES.includes(policyId);
+          const adjustedRel = isRevenue ? -Math.abs(relValue) : relValue;
+          const adjustedAbs = isRevenue ? -Math.abs(absValue) : absValue;
+
+          if (adjustedRel > 0) posRelative += adjustedRel;
+          else negRelative += adjustedRel;
+          if (adjustedAbs > 0) posAbsolute += adjustedAbs;
+          else negAbsolute += adjustedAbs;
+        });
+
+        maxAbsRelative = Math.max(maxAbsRelative, Math.abs(posRelative), Math.abs(negRelative));
+        maxAbsAbsolute = Math.max(maxAbsAbsolute, Math.abs(posAbsolute), Math.abs(negAbsolute));
+      });
+    });
+
+    // Round up to nice numbers
+    const relInterval = maxAbsRelative <= 1 ? 0.5 : maxAbsRelative <= 3 ? 1 : 2;
+    const absInterval = maxAbsAbsolute <= 50 ? 10 : maxAbsAbsolute <= 100 ? 20 : 50;
+    const roundedRelative = Math.ceil((maxAbsRelative * 1.1) / relInterval) * relInterval || 1;
+    const roundedAbsolute = Math.ceil((maxAbsAbsolute * 1.1) / absInterval) * absInterval || 40;
+
+    return {
+      relative: [-roundedRelative, roundedRelative],
+      absolute: [-roundedAbsolute, roundedAbsolute],
+    };
+  }, [isStacked, rawDistributionalData, selectedPolicies]);
+
   // Get decile data filtered by selected year - aggregate selected policies
   const decileDataForYear = useMemo(() => {
     if (rawDistributionalData.length === 0) return [];
@@ -621,6 +671,7 @@ export default function Dashboard({ selectedPolicies = [] }) {
           onYearChange={setSelectedYear}
           availableYears={AVAILABLE_YEARS}
           selectedPolicies={selectedPolicies}
+          fixedYAxisDomain={decileYAxisDomain}
         />
       ) : null}
 

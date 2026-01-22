@@ -66,6 +66,7 @@ export default function DecileChart({
   onYearChange = null,
   availableYears = [2026, 2027, 2028, 2029, 2030],
   selectedPolicies = [],
+  fixedYAxisDomain = null,
 }) {
   const [viewMode, setViewMode] = useState("absolute"); // "absolute" or "relative"
   const formatYearRange = (year) => `${year}-${(year + 1).toString().slice(-2)}`;
@@ -201,7 +202,10 @@ export default function DecileChart({
     return ticks;
   };
 
-  const [yMin, yMax] = calculateSymmetricDomain();
+  // Use fixed domain if provided (for consistent axis across years), otherwise calculate
+  const [yMin, yMax] = fixedYAxisDomain
+    ? (viewMode === "relative" ? fixedYAxisDomain.relative : fixedYAxisDomain.absolute)
+    : calculateSymmetricDomain();
   const yTicks = generateTicks([yMin, yMax]);
 
   return (
