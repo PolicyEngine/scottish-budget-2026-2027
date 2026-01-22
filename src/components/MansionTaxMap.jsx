@@ -138,10 +138,9 @@ export default function MansionTaxMap() {
       .clamp(true);
 
     const colorScale = (pct) => {
-      if (pct === 0 || pct < 0.01) return "#E0F2F1"; // Light green for zero
+      if (pct === 0) return "#77C3BC";
       const t = logScale(Math.max(pct, minPct));
-      // Light green to dark green (same as local authority map)
-      return d3.interpolate("#E0F2F1", "#0D9488")(t);
+      return d3.interpolate("#77C3BC", "#0D9488")(t);
     };
 
     // Draw paths
@@ -153,7 +152,7 @@ export default function MansionTaxMap() {
       .attr("fill", d => {
         const name = d.properties.SPC21NM;
         const data = impactData[name];
-        return data ? colorScale(data.pct) : "#E0F2F1"; // Light green for missing data
+        return data ? colorScale(data.pct) : colorScale(0);
       })
       .attr("stroke", "#fff")
       .attr("stroke-width", 0.3)
@@ -308,10 +307,9 @@ export default function MansionTaxMap() {
       <div className="map-header">
         <div className="chart-header">
           <div>
-            <h3 className="chart-title">Mansion tax by parliament constituency</h3>
+            <h3 className="chart-title">Mansion tax impact by constituency</h3>
             <p className="chart-description">
-              This map shows each constituency's share of estimated yearly revenue
-              from the mansion tax. Darker green indicates a higher share.
+              Number of high-value property sales by Scotland parliamentary constituency
             </p>
           </div>
         </div>
@@ -352,7 +350,7 @@ export default function MansionTaxMap() {
             <div
               className="legend-gradient-horizontal"
               style={{
-                background: "linear-gradient(to right, #E0F2F1, #0D9488)"
+                background: "linear-gradient(to right, #77C3BC, #0D9488)"
               }}
             />
             <div className="legend-labels-horizontal">
