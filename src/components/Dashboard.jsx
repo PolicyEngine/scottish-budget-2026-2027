@@ -735,7 +735,7 @@ export default function Dashboard({ selectedPolicies = [] }) {
               </div>
               <div style={{ display: "flex", gap: "10px" }}>
                 <span style={{ color: "#0F766E", fontWeight: 600 }}>2.</span>
-                <span>The £1,607 rate is derived from UK benchmark council tax rates: the UK government's proposed 100% surcharge on properties £2m+ and 50% surcharge on properties £1-2m above Band H, applied to average Scottish Band H rates (~£3,200/year).</span>
+                <span>The £1,607 average rate is calculated as (89% × £1,500) + (11% × £2,500), where £1,500 and £2,500 are estimated rates for £1-2m and £2m+ bands respectively. The 89%/11% split comes from <a href="https://github.com/PolicyEngine/scotland-mansion-tax" target="_blank" rel="noopener noreferrer" style={{ color: "#0F766E" }}>Savills 2024 data</a> (416 sales £1m-£2m, 50 sales £2m+).</span>
               </div>
               <div style={{ display: "flex", gap: "10px" }}>
                 <span style={{ color: "#0F766E", fontWeight: 600 }}>3.</span>
