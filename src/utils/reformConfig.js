@@ -22,7 +22,7 @@ export const REFORMS = [
     id: "income_tax_intermediate_uplift",
     name: "Intermediate rate threshold uplift",
     description: "Intermediate rate threshold raised from £27,492 to £29,527 (+7.4%)",
-    color: "#14B8A6",  // Teal 500
+    color: "#0F766E",  // Teal 700
     type: "positive",
   },
   // Income tax threshold freezes (cost households - revenue raising)
@@ -30,21 +30,21 @@ export const REFORMS = [
     id: "higher_rate_freeze",
     name: "Higher rate threshold freeze",
     description: "Higher rate threshold frozen at £43,662 until 2028-29",
-    color: "#F97316",  // Orange 500
+    color: "#78350F",  // Amber 900
     type: "negative",
   },
   {
     id: "advanced_rate_freeze",
     name: "Advanced rate threshold freeze",
     description: "Advanced rate threshold frozen at £75,000 until 2028-29",
-    color: "#FB923C",  // Orange 400
+    color: "#92400E",  // Amber 800
     type: "negative",
   },
   {
     id: "top_rate_freeze",
     name: "Top rate threshold freeze",
     description: "Top rate threshold frozen at £125,140 until 2028-29",
-    color: "#FDBA74",  // Orange 300
+    color: "#B45309",  // Amber 700
     type: "negative",
   },
   // Scottish Child Payment
@@ -52,14 +52,14 @@ export const REFORMS = [
     id: "scp_inflation",
     name: "SCP inflation adjustment",
     description: "Scottish Child Payment uprated from £27.15 to £28.20/week",
-    color: "#2DD4BF",  // Teal 400
+    color: "#14B8A6",  // Teal 500
     type: "positive",
   },
   {
     id: "scp_baby_boost",
     name: "SCP Premium for under-ones",
     description: "Scottish Child Payment raised to £40/week for babies under 1",
-    color: "#5EEAD4",  // Teal 300
+    color: "#2DD4BF",  // Teal 400
     type: "positive",
   },
 ];

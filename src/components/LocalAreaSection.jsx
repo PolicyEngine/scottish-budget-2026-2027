@@ -152,6 +152,50 @@ export default function LocalAreaSection({
     }));
   }, [localAuthorityData]);
 
+  // Calculate fixed color extent across ALL years for consistent map coloring
+  const fixedColorExtent = useMemo(() => {
+    if (!rawLocalAuthorityData.length || !selectedPolicies.length) return null;
+
+    let globalMin = Infinity;
+    let globalMax = -Infinity;
+
+    // Check all years
+    availableYears.forEach(year => {
+      // Group by local authority for this year
+      const laMap = new Map();
+
+      rawLocalAuthorityData.forEach((row) => {
+        if (!selectedPolicies.includes(row.reform_id)) return;
+        if (row.year !== year) return;
+
+        const key = row.code;
+        if (!laMap.has(key)) {
+          laMap.set(key, 0);
+        }
+        laMap.set(key, laMap.get(key) + row.avgGain);
+      });
+
+      // Find min/max for this year
+      laMap.forEach(value => {
+        globalMin = Math.min(globalMin, value);
+        globalMax = Math.max(globalMax, value);
+      });
+    });
+
+    if (globalMin === Infinity || globalMax === -Infinity) return null;
+
+    // Determine type
+    let type = 'mixed';
+    if (globalMin >= 0) type = 'positive';
+    else if (globalMax <= 0) type = 'negative';
+
+    return {
+      min: Math.floor(globalMin),
+      max: Math.ceil(globalMax),
+      type
+    };
+  }, [rawLocalAuthorityData, selectedPolicies, availableYears]);
+
   // Handle local authority selection from map
   const handleLocalAuthoritySelect = (laData) => {
     if (laData) {
@@ -219,6 +263,7 @@ export default function LocalAreaSection({
           onLocalAuthoritySelect={handleLocalAuthoritySelect}
           policyName={policyName}
           selectedPolicies={selectedPolicies}
+          fixedColorExtent={fixedColorExtent}
         />
       </div>
 

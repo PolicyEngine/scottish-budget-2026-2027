@@ -139,7 +139,7 @@ function SFCComparisonTable() {
 
   return (
     <div className="sfc-comparison-section">
-      <h2>PolicyEngine vs SFC comparison</h2>
+      <h3 className="section-title" style={{ fontSize: "1.4rem", fontWeight: 600, color: "#374151", borderBottom: "none", marginTop: 0, marginBottom: "12px", padding: 0 }}>PolicyEngine vs SFC comparison</h3>
       <p className="comparison-description">
         This table compares PolicyEngine's static microsimulation estimates with
         the <a href="https://fiscalcommission.scot/wp-content/uploads/2026/01/Scotlands-Economic-and-Fiscal-Forecasts-January-2026-revised-13-01-2026.pdf" target="_blank" rel="noopener noreferrer">Scottish Fiscal Commission's</a> official costings from the January 2026
@@ -234,38 +234,44 @@ function SFCComparisonTable() {
         </span>
       </div>
 
-      <p className="comparison-note">
-        <strong>Note:</strong> PolicyEngine produces static microsimulation
-        estimates that do not include behavioural responses.{" "}
-        {showBehavioural
-          ? "Post-behavioural costings include effects like tax avoidance, reduced consumption, and migration. SFC assumes behavioural responses reduce yields by ~8% for higher-rate freezes, ~25% for advanced-rate, and ~85% for top-rate."
-          : "Static costings assume no change in taxpayer behaviour. Static values shown here are derived from post-behavioural figures using SFC's published behavioural adjustment rates."}{" "}
-        Each provision is costed independently against baseline (not stacked).
-      </p>
-      <p className="comparison-note">
-        <strong>Data notes:</strong> Threshold freezes show 2026-27 as empty because
-        the freeze was already in Budget 2025-26; SFC only costs the incremental
-        extension through 2027-28/2028-29. SCP baby boost starts mid-2027-28.
-        SFC reports combined basic + intermediate thresholds (~£50m total); we
-        apportion using PolicyEngine microsimulation. SCP inflation uprating has
-        no SFC costing as it's included in their baseline. See{" "}
-        <a
-          href="https://fiscalcommission.scot/wp-content/uploads/2026/01/Scotlands-Economic-and-Fiscal-Forecasts-January-2026-revised-13-01-2026.pdf"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          SFC January 2026 Forecasts
-        </a>{" "}
-        and{" "}
-        <a
-          href="https://ifs.org.uk/publications/assessing-scottish-tax-strategy-and-policy"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          IFS analysis
-        </a>{" "}
-        for methodology.
-      </p>
+      <details className="comparison-note-details" style={{ marginTop: "12px" }}>
+        <summary style={{ cursor: "pointer", color: "#2c6e49", fontWeight: "500" }}>Note</summary>
+        <p className="comparison-note" style={{ marginTop: "8px" }}>
+          PolicyEngine produces static microsimulation
+          estimates that do not include behavioural responses.{" "}
+          {showBehavioural
+            ? "Post-behavioural costings include effects like tax avoidance, reduced consumption, and migration. SFC assumes behavioural responses reduce yields by ~8% for higher-rate freezes, ~25% for advanced-rate, and ~85% for top-rate."
+            : "Static costings assume no change in taxpayer behaviour. Static values shown here are derived from post-behavioural figures using SFC's published behavioural adjustment rates."}{" "}
+          Each provision is costed independently against baseline (not stacked).
+        </p>
+      </details>
+      <details className="comparison-note-details" style={{ marginTop: "8px" }}>
+        <summary style={{ cursor: "pointer", color: "#2c6e49", fontWeight: "500" }}>Data notes</summary>
+        <p className="comparison-note" style={{ marginTop: "8px" }}>
+          Threshold freezes show 2026-27 as empty because
+          the freeze was already in Budget 2025-26; SFC only costs the incremental
+          extension through 2027-28/2028-29. SCP baby boost starts mid-2027-28.
+          SFC reports combined basic + intermediate thresholds (~£50m total); we
+          apportion using PolicyEngine microsimulation. SCP inflation uprating has
+          no SFC costing as it's included in their baseline. See{" "}
+          <a
+            href="https://fiscalcommission.scot/wp-content/uploads/2026/01/Scotlands-Economic-and-Fiscal-Forecasts-January-2026-revised-13-01-2026.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            SFC January 2026 Forecasts
+          </a>{" "}
+          and{" "}
+          <a
+            href="https://ifs.org.uk/publications/assessing-scottish-tax-strategy-and-policy"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            IFS analysis
+          </a>{" "}
+          for methodology.
+        </p>
+      </details>
     </div>
   );
 }

@@ -81,8 +81,8 @@ export default function BudgetBarChart({ data, title, description, stacked = fal
   // Check if we should show net impact line (only when multiple policies have data)
   const showNetImpact = stacked && activePolicies.length > 1;
 
-  // Calculate Y-axis domain with padding (only for active/selected policies)
-  const calculateYDomain = () => {
+  // Calculate symmetric Y-axis domain with round number increments
+  const calculateYAxisConfig = () => {
     let minVal = 0, maxVal = 0;
     data.forEach(d => {
       let negSum = 0, posSum = 0;
@@ -94,11 +94,35 @@ export default function BudgetBarChart({ data, title, description, stacked = fal
       minVal = Math.min(minVal, negSum);
       maxVal = Math.max(maxVal, posSum);
     });
-    // Add 15% padding
-    const padding = Math.max(Math.abs(minVal), Math.abs(maxVal)) * 0.15;
-    return [Math.floor((minVal - padding) / 20) * 20, Math.ceil((maxVal + padding) / 20) * 20];
+
+    // Find the max absolute value
+    const maxAbs = Math.max(Math.abs(minVal), Math.abs(maxVal));
+
+    // Choose a nice round interval based on data range
+    let interval;
+    if (maxAbs <= 100) interval = 50;
+    else if (maxAbs <= 200) interval = 50;
+    else if (maxAbs <= 400) interval = 100;
+    else interval = 150;
+
+    // Round up to nice number for symmetric axis
+    const roundedMax = Math.ceil((maxAbs * 1.1) / interval) * interval || interval;
+
+    // Generate ticks from -roundedMax to +roundedMax, always including 0
+    const ticks = [];
+    for (let i = -roundedMax; i <= roundedMax; i += interval) {
+      ticks.push(i);
+    }
+
+    return {
+      domain: [-roundedMax, roundedMax],
+      ticks: ticks
+    };
   };
-  const yDomain = stacked ? calculateYDomain() : ['auto', 'auto'];
+
+  const yAxisConfig = stacked ? calculateYAxisConfig() : { domain: ['auto', 'auto'], ticks: undefined };
+  const yDomain = yAxisConfig.domain;
+  const yTicks = yAxisConfig.ticks;
 
   return (
     <div className="budget-bar-chart">
@@ -119,13 +143,14 @@ export default function BudgetBarChart({ data, title, description, stacked = fal
           />
           <YAxis
             domain={yDomain}
+            ticks={yTicks}
             tickFormatter={formatValue}
             tick={{ fontSize: 12 }}
           />
           <Tooltip
             formatter={(value, name) => [
               formatValue(value),
-              name === "netImpact" ? "Net impact" : name
+              name === "Net impact" ? "Net impact" : name
             ]}
             labelFormatter={formatYear}
           />
@@ -171,7 +196,7 @@ export default function BudgetBarChart({ data, title, description, stacked = fal
               stroke="#000000"
               strokeWidth={2}
               dot={{ fill: "#000000", stroke: "#000000", strokeWidth: 1, r: 4 }}
-              name="netImpact"
+              name="Net impact"
               label={<NetImpactLabel />}
             />
           )}

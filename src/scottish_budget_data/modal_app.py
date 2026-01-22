@@ -107,6 +107,170 @@ def flask_app():
             },
         }
 
+    def create_vectorized_situation(inputs: dict, year: int, income_levels: list) -> dict:
+        """Create a vectorized situation with multiple households at different income levels.
+
+        This allows computing impacts for 100 income levels in a single simulation.
+        """
+        import numpy as np
+
+        is_married = inputs.get("is_married", False)
+        partner_income = inputs.get("partner_income", 0)
+        children_ages = inputs.get("children_ages", [])
+        n_households = len(income_levels)
+
+        people = {}
+        benunits = {}
+        households = {}
+
+        for i, income in enumerate(income_levels):
+            hh_id = f"hh{i}"
+            adult1_id = f"adult1_{i}"
+
+            people[adult1_id] = {
+                "age": {year: 35},
+                "employment_income": {year: float(income)},
+            }
+            members = [adult1_id]
+
+            if is_married:
+                adult2_id = f"adult2_{i}"
+                people[adult2_id] = {
+                    "age": {year: 33},
+                    "employment_income": {year: float(partner_income)},
+                }
+                members.append(adult2_id)
+
+            for j, age in enumerate(children_ages):
+                child_id = f"child{j}_{i}"
+                people[child_id] = {"age": {year: int(age)}}
+                members.append(child_id)
+
+            benunits[f"benunit_{i}"] = {"members": members}
+            households[hh_id] = {"members": members, "region": {year: "SCOTLAND"}}
+
+        return {
+            "people": people,
+            "benunits": benunits,
+            "households": households,
+        }
+
+    def calculate_vectorized_by_income(inputs: dict, year: int, receives_uc: bool) -> list:
+        """Calculate impacts for 100 income levels using vectorization.
+
+        Returns list of {income, total, ...impacts} dicts.
+        """
+        import numpy as np
+
+        # 50 income levels from £0 to £200k (faster computation)
+        income_levels = list(range(0, 200001, 4000))  # 0, 4000, 8000, ..., 200000
+        n = len(income_levels)
+
+        situation = create_vectorized_situation(inputs, year, income_levels)
+
+        # Baseline simulation
+        baseline_sim = Simulation(situation=situation)
+        set_scp_baseline_rate(baseline_sim, year)
+        disable_scp_baby_boost(baseline_sim, year)
+        baseline_sim.calculate("scottish_child_payment", year)
+        baseline_nets = baseline_sim.calculate("household_net_income", year)
+
+        results = {
+            "income_tax_basic_uplift": np.zeros(n),
+            "income_tax_intermediate_uplift": np.zeros(n),
+            "higher_rate_freeze": np.zeros(n),
+            "advanced_rate_freeze": np.zeros(n),
+            "top_rate_freeze": np.zeros(n),
+            "scp_inflation": np.zeros(n),
+            "scp_baby_boost": np.zeros(n),
+        }
+
+        # 1. Basic rate uplift
+        basic_sim = Simulation(situation=situation)
+        set_scp_baseline_rate(basic_sim, year)
+        disable_scp_baby_boost(basic_sim, year)
+        apply_basic_rate_uplift(basic_sim, year)
+        basic_sim.calculate("scottish_child_payment", year)
+        basic_nets = basic_sim.calculate("household_net_income", year)
+        results["income_tax_basic_uplift"] = basic_nets - baseline_nets
+
+        # 2. Intermediate rate uplift
+        intermediate_sim = Simulation(situation=situation)
+        set_scp_baseline_rate(intermediate_sim, year)
+        disable_scp_baby_boost(intermediate_sim, year)
+        apply_intermediate_rate_uplift(intermediate_sim, year)
+        intermediate_sim.calculate("scottish_child_payment", year)
+        intermediate_nets = intermediate_sim.calculate("household_net_income", year)
+        results["income_tax_intermediate_uplift"] = intermediate_nets - baseline_nets
+
+        # 3. Higher rate freeze
+        higher_sim = Simulation(situation=situation)
+        set_scp_baseline_rate(higher_sim, year)
+        disable_scp_baby_boost(higher_sim, year)
+        apply_higher_rate_freeze(higher_sim, year)
+        higher_sim.calculate("scottish_child_payment", year)
+        higher_nets = higher_sim.calculate("household_net_income", year)
+        results["higher_rate_freeze"] = higher_nets - baseline_nets
+
+        # 4. Advanced rate freeze
+        advanced_sim = Simulation(situation=situation)
+        set_scp_baseline_rate(advanced_sim, year)
+        disable_scp_baby_boost(advanced_sim, year)
+        apply_advanced_rate_freeze(advanced_sim, year)
+        advanced_sim.calculate("scottish_child_payment", year)
+        advanced_nets = advanced_sim.calculate("household_net_income", year)
+        results["advanced_rate_freeze"] = advanced_nets - baseline_nets
+
+        # 5. Top rate freeze
+        top_sim = Simulation(situation=situation)
+        set_scp_baseline_rate(top_sim, year)
+        disable_scp_baby_boost(top_sim, year)
+        apply_top_rate_freeze(top_sim, year)
+        top_sim.calculate("scottish_child_payment", year)
+        top_nets = top_sim.calculate("household_net_income", year)
+        results["top_rate_freeze"] = top_nets - baseline_nets
+
+        # 6. SCP inflation (only if receives UC)
+        if receives_uc:
+            scp_inf_sim = Simulation(situation=situation)
+            apply_scp_inflation(scp_inf_sim, year)
+            disable_scp_baby_boost(scp_inf_sim, year)
+            scp_inf_sim.calculate("scottish_child_payment", year)
+            scp_inf_nets = scp_inf_sim.calculate("household_net_income", year)
+            results["scp_inflation"] = scp_inf_nets - baseline_nets
+
+        # 7. SCP baby boost (only if receives UC and year >= 2027)
+        if receives_uc and year >= 2027:
+            baby_sim = Simulation(situation=situation)
+            apply_scp_inflation(baby_sim, year)
+            apply_scp_baby_boost(baby_sim, year)
+            baby_sim.calculate("scottish_child_payment", year)
+            baby_nets = baby_sim.calculate("household_net_income", year)
+            no_baby_sim = Simulation(situation=situation)
+            apply_scp_inflation(no_baby_sim, year)
+            disable_scp_baby_boost(no_baby_sim, year)
+            no_baby_sim.calculate("scottish_child_payment", year)
+            no_baby_nets = no_baby_sim.calculate("household_net_income", year)
+            results["scp_baby_boost"] = baby_nets - no_baby_nets
+
+        # Build output list
+        output = []
+        for i, income in enumerate(income_levels):
+            total = sum(float(results[k][i]) for k in results)
+            output.append({
+                "income": income,
+                "income_tax_basic_uplift": round(float(results["income_tax_basic_uplift"][i]), 2),
+                "income_tax_intermediate_uplift": round(float(results["income_tax_intermediate_uplift"][i]), 2),
+                "higher_rate_freeze": round(float(results["higher_rate_freeze"][i]), 2),
+                "advanced_rate_freeze": round(float(results["advanced_rate_freeze"][i]), 2),
+                "top_rate_freeze": round(float(results["top_rate_freeze"][i]), 2),
+                "scp_inflation": round(float(results["scp_inflation"][i]), 2),
+                "scp_baby_boost": round(float(results["scp_baby_boost"][i]), 2),
+                "total": round(total, 2),
+            })
+
+        return output
+
     def apply_basic_rate_uplift(sim, year: int) -> None:
         """Apply basic rate threshold uplift (7.4% in 2026, then CPI uprated)."""
         scotland_rates = sim.tax_benefit_system.parameters.gov.hmrc.income_tax.rates.scotland.rates
@@ -371,17 +535,38 @@ def flask_app():
 
     @flask_app.route("/calculate-all", methods=["POST"])
     def calculate_all():
-        """Combined endpoint: returns yearly data (2026-2030) in one request."""
+        """Combined endpoint: returns yearly data (2026-2030) in one request.
+
+        by_income is now a separate endpoint to keep this fast.
+        """
         try:
             inputs = request.get_json()
             receives_uc = inputs.get("receives_uc", True)
 
-            # Calculate for all years
+            # Calculate for all years (sequential - each year is fast)
             years = [2026, 2027, 2028, 2029, 2030]
             yearly_data = [calculate_for_year(inputs, year, receives_uc) for year in years]
 
             return jsonify({
                 "yearly": yearly_data,
+            })
+        except Exception as e:
+            import traceback
+            traceback.print_exc()
+            return jsonify({"error": str(e)}), 500
+
+    @flask_app.route("/calculate-by-income", methods=["POST"])
+    def calculate_by_income():
+        """Separate endpoint for by_income data (vectorized 50 income levels)."""
+        try:
+            inputs = request.get_json()
+            receives_uc = inputs.get("receives_uc", True)
+            year = inputs.get("year", 2027)
+
+            by_income_data = calculate_vectorized_by_income(inputs, year, receives_uc)
+
+            return jsonify({
+                "by_income": by_income_data,
             })
         except Exception as e:
             import traceback

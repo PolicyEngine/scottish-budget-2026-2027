@@ -10,8 +10,11 @@ const formatYearRange = (year) => `${year}-${(year + 1).toString().slice(-2)}`;
 const POLICY_DISPLAY_NAMES = {
   scp_baby_boost: "SCP Premium for under-ones",
   scp_inflation: "SCP inflation adjustment",
-  income_tax_basic_uplift: "Basic rate +7.4%",
-  income_tax_intermediate_uplift: "Intermediate rate +7.4%",
+  income_tax_basic_uplift: "Basic rate threshold uplift",
+  income_tax_intermediate_uplift: "Intermediate rate threshold uplift",
+  higher_rate_freeze: "Higher rate threshold freeze",
+  advanced_rate_freeze: "Advanced rate threshold freeze",
+  top_rate_freeze: "Top rate threshold freeze",
 };
 
 export default function ScotlandMap({
@@ -23,6 +26,7 @@ export default function ScotlandMap({
   onLocalAuthoritySelect = null,
   policyName = "SCP Premium for under-ones",
   selectedPolicies = [],
+  fixedColorExtent = null,
 }) {
   const svgRef = useRef(null);
   const [internalSelectedLocalAuthority, setInternalSelectedLocalAuthority] = useState(null);
@@ -75,7 +79,10 @@ export default function ScotlandMap({
   }, [localAuthorityData]);
 
   // Compute color scale extent from data (min/max of average_gain)
+  // Use fixedColorExtent if provided for consistent coloring across years
   const colorExtent = useMemo(() => {
+    if (fixedColorExtent) return fixedColorExtent;
+
     if (localAuthorityData.length === 0) return { min: 0, max: 35, type: 'positive' };
     const gains = localAuthorityData.map((d) => d.average_gain || 0);
     const min = Math.floor(Math.min(...gains));
@@ -87,7 +94,7 @@ export default function ScotlandMap({
     else if (max <= 0) type = 'negative';
 
     return { min, max, type };
-  }, [localAuthorityData]);
+  }, [localAuthorityData, fixedColorExtent]);
 
   // Highlight and zoom to controlled local authority when it changes
   useEffect(() => {
@@ -452,7 +459,7 @@ export default function ScotlandMap({
           <div>
             <h3 className="chart-title">Local authority impacts, {formatYearRange(selectedYear)}</h3>
             <p className="chart-description">
-              This map shows the average annual household gain from the {policyName}
+              This map shows the average annual household impact from the {policyName}
               across Scottish local authorities. Darker green indicates larger gains.
             </p>
           </div>
@@ -622,7 +629,7 @@ export default function ScotlandMap({
                 })}
                 <span style={{ fontSize: "0.75rem", fontWeight: "normal", color: "#6b7280" }}>/year</span>
               </p>
-              <p className="tooltip-label">Average household gain</p>
+              <p className="tooltip-label">Average household impact</p>
 
               {/* Policy breakdown - only show if multiple policies selected */}
               {tooltipData.policyBreakdown &&
@@ -635,7 +642,7 @@ export default function ScotlandMap({
                       .map(([reformId, data]) => (
                         <div key={reformId} className="tooltip-breakdown-row">
                           <span className="tooltip-breakdown-name">
-                            {POLICY_DISPLAY_NAMES[reformId] || reformId}
+                            {POLICY_DISPLAY_NAMES[reformId]}
                           </span>
                           <span
                             className="tooltip-breakdown-value"
@@ -651,17 +658,6 @@ export default function ScotlandMap({
                   </div>
                 )}
 
-              {tooltipData.povertyReduction !== undefined && (
-                <>
-                  <p
-                    className="tooltip-value-secondary"
-                    style={{ color: "#16a34a" }}
-                  >
-                    -{parseFloat(tooltipData.povertyReduction).toFixed(2)}pp
-                  </p>
-                  <p className="tooltip-label">Poverty rate reduction</p>
-                </>
-              )}
             </div>
           )}
         </div>

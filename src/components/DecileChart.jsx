@@ -66,6 +66,7 @@ export default function DecileChart({
   onYearChange = null,
   availableYears = [2026, 2027, 2028, 2029, 2030],
   selectedPolicies = [],
+  fixedYAxisDomain = null,
 }) {
   const [viewMode, setViewMode] = useState("absolute"); // "absolute" or "relative"
   const formatYearRange = (year) => `${year}-${(year + 1).toString().slice(-2)}`;
@@ -148,37 +149,64 @@ export default function DecileChart({
   // Show net change line when multiple policies are active
   const showNetChange = stacked && activePolicies.length > 1;
 
-  // Calculate y-axis domain with padding
-  let yMin = 0, yMax = 10;
-  if (stacked) {
+  // Calculate symmetric y-axis domain with round number increments
+  const calculateSymmetricDomain = () => {
     let minSum = 0, maxSum = 0;
-    chartData.forEach(d => {
-      let positiveSum = 0, negativeSum = 0;
-      activePolicies.forEach(name => {
-        const val = d[name] || 0;
-        if (val > 0) positiveSum += val;
-        else negativeSum += val;
+    if (stacked) {
+      chartData.forEach(d => {
+        let positiveSum = 0, negativeSum = 0;
+        activePolicies.forEach(name => {
+          const val = d[name] || 0;
+          if (val > 0) positiveSum += val;
+          else negativeSum += val;
+        });
+        minSum = Math.min(minSum, negativeSum);
+        maxSum = Math.max(maxSum, positiveSum);
       });
-      minSum = Math.min(minSum, negativeSum);
-      maxSum = Math.max(maxSum, positiveSum);
-    });
-    // Add 15% padding
-    const padding = Math.max(Math.abs(minSum), Math.abs(maxSum)) * 0.15;
-    if (viewMode === "relative") {
-      yMin = Math.floor((minSum - padding) * 10) / 10;
-      yMax = Math.ceil((maxSum + padding) * 10) / 10;
     } else {
-      yMin = Math.floor((minSum - padding) / 10) * 10;
-      yMax = Math.ceil((maxSum + padding) / 10) * 10 || 40;
+      const values = chartData.map(d => d.value || 0);
+      maxSum = Math.max(...values, 0);
+      minSum = Math.min(...values, 0);
     }
-  } else {
-    const values = chartData.map(d => d.value || 0);
-    const maxVal = Math.max(...values);
-    yMin = 0;
-    yMax = viewMode === "relative"
-      ? Math.ceil(maxVal * 10) / 10
-      : Math.max(40, Math.ceil(maxVal / 10) * 10);
-  }
+
+    // Find the max absolute value and round up to nice number for symmetric axis
+    const maxAbs = Math.max(Math.abs(minSum), Math.abs(maxSum));
+
+    if (viewMode === "relative") {
+      // For percentages: use intervals of 0.5, 1, or 2
+      const interval = maxAbs <= 1 ? 0.5 : maxAbs <= 3 ? 1 : 2;
+      const roundedMax = Math.ceil((maxAbs * 1.1) / interval) * interval;
+      return [-roundedMax, roundedMax];
+    } else {
+      // For absolute £: use intervals of 10, 20, or 50
+      const interval = maxAbs <= 50 ? 10 : maxAbs <= 100 ? 20 : 50;
+      const roundedMax = Math.ceil((maxAbs * 1.1) / interval) * interval || 40;
+      return [-roundedMax, roundedMax];
+    }
+  };
+
+  // Generate symmetric ticks including 0
+  const generateTicks = (domain) => {
+    const [min, max] = domain;
+    const range = max - min;
+    let interval;
+    if (viewMode === "relative") {
+      interval = range <= 2 ? 0.5 : range <= 6 ? 1 : 2;
+    } else {
+      interval = range <= 100 ? 10 : range <= 200 ? 20 : 50;
+    }
+    const ticks = [];
+    for (let i = min; i <= max + 0.001; i += interval) {
+      ticks.push(Math.round(i * 100) / 100); // Avoid floating point issues
+    }
+    return ticks;
+  };
+
+  // Use fixed domain if provided (for consistent axis across years), otherwise calculate
+  const [yMin, yMax] = fixedYAxisDomain
+    ? (viewMode === "relative" ? fixedYAxisDomain.relative : fixedYAxisDomain.absolute)
+    : calculateSymmetricDomain();
+  const yTicks = generateTicks([yMin, yMax]);
 
   return (
     <div className="decile-chart">
@@ -239,9 +267,9 @@ export default function DecileChart({
           />
           <YAxis
             domain={[yMin, yMax]}
+            ticks={yTicks}
             tickFormatter={formatValue}
             tick={{ fontSize: 12, fill: "#666" }}
-            tickCount={5}
             label={{
               value: viewMode === "relative"
                 ? "Change in net income (%)"
@@ -276,7 +304,7 @@ export default function DecileChart({
           <Tooltip
             formatter={(value, name) => [
               formatValue(value),
-              name === "netChange" ? "Net change" : name
+              name === "Net change" ? "Net change" : name
             ]}
             labelFormatter={(label) => `${label} decile`}
             contentStyle={{
@@ -314,7 +342,7 @@ export default function DecileChart({
               stroke="#000000"
               strokeWidth={2}
               dot={{ fill: "#000000", stroke: "#000000", strokeWidth: 1, r: 4 }}
-              name="netChange"
+              name="Net change"
             />
           )}
         </ComposedChart>

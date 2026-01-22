@@ -6,15 +6,117 @@ import LocalAreaSection from "./LocalAreaSection";
 import SFCComparisonTable from "./SFCComparisonTable";
 import MansionTaxMap from "./MansionTaxMap";
 import "./Dashboard.css";
-import { POLICY_NAMES, ALL_POLICY_IDS } from "../utils/policyConfig";
+import { POLICY_NAMES, ALL_POLICY_IDS, REVENUE_POLICIES } from "../utils/policyConfig";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
+
+// Small chart component for threshold comparisons
+const ThresholdChart = ({ data, baselineLabel = "Baseline", reformLabel = "Reform" }) => (
+  <div style={{
+    maxWidth: "450px",
+    margin: "16px auto 8px auto",
+    background: "#fafbfc",
+    borderRadius: "8px",
+    padding: "12px"
+  }}>
+    <ResponsiveContainer width="100%" height={300}>
+      <LineChart data={data} margin={{ top: 5, right: 20, left: 10, bottom: 5 }}>
+        <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+        <XAxis dataKey="year" tick={{ fontSize: 10 }} tickLine={false} />
+        <YAxis
+          tickFormatter={(v) => `£${(v / 1000).toFixed(0)}k`}
+          tick={{ fontSize: 10 }}
+          tickLine={false}
+          axisLine={false}
+          domain={['auto', 'auto']}
+          width={45}
+        />
+        <Tooltip
+          formatter={(value, name) => [`£${value.toLocaleString()}`, name]}
+          labelFormatter={(label) => label}
+          contentStyle={{ fontSize: "12px", borderRadius: "6px" }}
+        />
+        <Legend wrapperStyle={{ fontSize: "11px", paddingTop: "8px" }} />
+        <Line
+          type="monotone"
+          dataKey="baseline"
+          stroke="#9CA3AF"
+          strokeWidth={2}
+          strokeDasharray="5 5"
+          dot={{ r: 3, fill: "#9CA3AF" }}
+          name={baselineLabel}
+        />
+        <Line
+          type="monotone"
+          dataKey="reform"
+          stroke="#0D9488"
+          strokeWidth={2}
+          dot={{ r: 3, fill: "#0D9488" }}
+          name={reformLabel}
+        />
+      </LineChart>
+    </ResponsiveContainer>
+  </div>
+);
+
+// Data for threshold charts
+const BASIC_RATE_THRESHOLD_DATA = [
+  { year: "2025-26", baseline: 15398, reform: 15398 },
+  { year: "2026-27", baseline: 15706, reform: 16538 },
+  { year: "2027-28", baseline: 16020, reform: 16872 },
+  { year: "2028-29", baseline: 16341, reform: 17216 },
+  { year: "2029-30", baseline: 16667, reform: 17567 },
+  { year: "2030-31", baseline: 17001, reform: 17918 },
+];
+
+const INTERMEDIATE_RATE_THRESHOLD_DATA = [
+  { year: "2025-26", baseline: 27492, reform: 27492 },
+  { year: "2026-27", baseline: 28042, reform: 29527 },
+  { year: "2027-28", baseline: 28603, reform: 30123 },
+  { year: "2028-29", baseline: 29175, reform: 30738 },
+  { year: "2029-30", baseline: 29758, reform: 31365 },
+  { year: "2030-31", baseline: 30354, reform: 31992 },
+];
+
+const HIGHER_RATE_THRESHOLD_DATA = [
+  { year: "2025-26", baseline: 43662, reform: 43662 },
+  { year: "2026-27", baseline: 43662, reform: 43662 },
+  { year: "2027-28", baseline: 44544, reform: 43662 },
+  { year: "2028-29", baseline: 45453, reform: 43662 },
+  { year: "2029-30", baseline: 46380, reform: 44553 },
+  { year: "2030-31", baseline: 47308, reform: 45444 },
+];
+
+const ADVANCED_RATE_THRESHOLD_DATA = [
+  { year: "2025-26", baseline: 75000, reform: 75000 },
+  { year: "2026-27", baseline: 75000, reform: 75000 },
+  { year: "2027-28", baseline: 76515, reform: 75000 },
+  { year: "2028-29", baseline: 78076, reform: 75000 },
+  { year: "2029-30", baseline: 79669, reform: 76530 },
+  { year: "2030-31", baseline: 81262, reform: 78061 },
+];
+
+const TOP_RATE_THRESHOLD_DATA = [
+  { year: "2025-26", baseline: 125140, reform: 125140 },
+  { year: "2026-27", baseline: 125140, reform: 125140 },
+  { year: "2027-28", baseline: 127668, reform: 125140 },
+  { year: "2028-29", baseline: 130273, reform: 125140 },
+  { year: "2029-30", baseline: 132930, reform: 127693 },
+  { year: "2030-31", baseline: 135589, reform: 130247 },
+];
 
 // Section definitions for navigation
 const SECTIONS = [
   { id: "introduction", label: "Introduction" },
-  { id: "budgetary-impact", label: "Budgetary impact" },
-  { id: "living-standards", label: "Living standards" },
-  { id: "poverty", label: "Poverty rate" },
-  { id: "local-authorities", label: "Impact by local authority" },
+  { id: "income-tax-benefits", label: "Income tax and benefits" },
   { id: "mansion-tax", label: "Mansion tax" },
 ];
 
@@ -114,24 +216,8 @@ const POLICY_INFO = {
         the 20% basic rate instead of the 19% starter rate.
         <details className="policy-table-details" style={{ marginTop: "12px" }}>
           <summary style={summaryStyle}>View basic rate threshold by year</summary>
-          <table style={tableStyle}>
-            <thead>
-              <tr>
-                <th style={thStyle}>Year</th>
-                <th style={thRightStyle}>Basic rate starts at</th>
-                <th style={thCenterStyle}>Change from prior year</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td style={tdStyle}>2025-26</td><td style={tdRightStyle}>£15,398</td><td style={tdCenterStyle}>—</td></tr>
-              <tr><td style={tdStyle}>2026-27</td><td style={tdRightStyle}>£16,538</td><td style={{...tdCenterStyle, color: "#2e7d32"}}>+7.4%</td></tr>
-              <tr><td style={tdStyle}>2027-28</td><td style={tdRightStyle}>£16,872</td><td style={tdCenterStyle}>CPI</td></tr>
-              <tr><td style={tdStyle}>2028-29</td><td style={tdRightStyle}>£17,216</td><td style={tdCenterStyle}>CPI</td></tr>
-              <tr><td style={tdStyle}>2029-30</td><td style={tdRightStyle}>£17,567</td><td style={tdCenterStyle}>CPI</td></tr>
-              <tr><td style={{...tdStyle, borderBottom: "none"}}>2030-31</td><td style={{...tdRightStyle, borderBottom: "none"}}>£17,918</td><td style={{...tdCenterStyle, borderBottom: "none"}}>CPI</td></tr>
-            </tbody>
-          </table>
-          <p style={noteStyle}>Note: From 2027-28, thresholds projected using OBR CPI forecasts (~2% annually). Source: <a href="https://www.gov.scot/publications/scottish-income-tax-rates-and-bands/pages/2026-to-2027/" target="_blank" rel="noopener noreferrer">Scottish Government</a> | <a href="https://obr.uk/efo/economic-and-fiscal-outlook-november-2025/" target="_blank" rel="noopener noreferrer">OBR EFO November 2025</a></p>
+          <ThresholdChart data={BASIC_RATE_THRESHOLD_DATA} />
+          <p style={noteStyle}>Note: Baseline shows CPI-only growth . Reform shows 7.4% uplift in 2026-27, then CPI growth. Source: <a href="https://www.gov.scot/publications/scottish-income-tax-rates-and-bands/pages/2026-to-2027/" target="_blank" rel="noopener noreferrer">Scottish Government</a> | <a href="https://obr.uk/efo/economic-and-fiscal-outlook-november-2025/" target="_blank" rel="noopener noreferrer">OBR EFO November 2025</a></p>
         </details>
       </li>
     ),
@@ -146,24 +232,8 @@ const POLICY_INFO = {
         paying the 21% intermediate rate instead of the 20% basic rate.
         <details className="policy-table-details" style={{ marginTop: "12px" }}>
           <summary style={summaryStyle}>View intermediate rate threshold by year</summary>
-          <table style={tableStyle}>
-            <thead>
-              <tr>
-                <th style={thStyle}>Year</th>
-                <th style={thRightStyle}>Intermediate rate starts at</th>
-                <th style={thCenterStyle}>Change from prior year</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td style={tdStyle}>2025-26</td><td style={tdRightStyle}>£27,492</td><td style={tdCenterStyle}>—</td></tr>
-              <tr><td style={tdStyle}>2026-27</td><td style={tdRightStyle}>£29,527</td><td style={{...tdCenterStyle, color: "#2e7d32"}}>+7.4%</td></tr>
-              <tr><td style={tdStyle}>2027-28</td><td style={tdRightStyle}>£30,123</td><td style={tdCenterStyle}>CPI</td></tr>
-              <tr><td style={tdStyle}>2028-29</td><td style={tdRightStyle}>£30,738</td><td style={tdCenterStyle}>CPI</td></tr>
-              <tr><td style={tdStyle}>2029-30</td><td style={tdRightStyle}>£31,365</td><td style={tdCenterStyle}>CPI</td></tr>
-              <tr><td style={{...tdStyle, borderBottom: "none"}}>2030-31</td><td style={{...tdRightStyle, borderBottom: "none"}}>£31,992</td><td style={{...tdCenterStyle, borderBottom: "none"}}>CPI</td></tr>
-            </tbody>
-          </table>
-          <p style={noteStyle}>Note: From 2027-28, thresholds projected using OBR CPI forecasts (~2% annually). Source: <a href="https://www.gov.scot/publications/scottish-income-tax-rates-and-bands/pages/2026-to-2027/" target="_blank" rel="noopener noreferrer">Scottish Government</a> | <a href="https://obr.uk/efo/economic-and-fiscal-outlook-november-2025/" target="_blank" rel="noopener noreferrer">OBR EFO November 2025</a></p>
+          <ThresholdChart data={INTERMEDIATE_RATE_THRESHOLD_DATA} />
+          <p style={noteStyle}>Note: Baseline shows CPI-only growth . Reform shows 7.4% uplift in 2026-27, then CPI growth. Source: <a href="https://www.gov.scot/publications/scottish-income-tax-rates-and-bands/pages/2026-to-2027/" target="_blank" rel="noopener noreferrer">Scottish Government</a> | <a href="https://obr.uk/efo/economic-and-fiscal-outlook-november-2025/" target="_blank" rel="noopener noreferrer">OBR EFO November 2025</a></p>
         </details>
       </li>
     ),
@@ -174,28 +244,12 @@ const POLICY_INFO = {
     explanation: (
       <li>
         <strong>Higher rate threshold freeze</strong>: The higher rate (42%) threshold remains frozen
-        at £43,662 until 2028-29. Without the freeze, this threshold would increase with inflation,
-        meaning fewer taxpayers would pay the higher rate. The freeze raises revenue for the Scottish Government.
+        at £43,662 from 2025-26 through 2028-29, then resumes CPI uprating (£44,553 in 2029-30, £45,444 in 2030-31).
+        Without the freeze, the threshold would reach ~£47k by 2030-31. The freeze raises revenue by bringing more taxpayers into the higher rate band.
         <details className="policy-table-details" style={{ marginTop: "12px" }}>
           <summary style={summaryStyle}>View higher rate threshold by year</summary>
-          <table style={tableStyle}>
-            <thead>
-              <tr>
-                <th style={thStyle}>Year</th>
-                <th style={thRightStyle}>Higher rate (42%) starts at</th>
-                <th style={thCenterStyle}>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td style={tdStyle}>2025-26</td><td style={tdRightStyle}>£43,662</td><td style={{...tdCenterStyle, color: "#c62828"}}>Frozen</td></tr>
-              <tr><td style={tdStyle}>2026-27</td><td style={tdRightStyle}>£43,662</td><td style={{...tdCenterStyle, color: "#c62828"}}>Frozen</td></tr>
-              <tr><td style={tdStyle}>2027-28</td><td style={tdRightStyle}>£43,662</td><td style={{...tdCenterStyle, color: "#c62828"}}>Frozen</td></tr>
-              <tr><td style={tdStyle}>2028-29</td><td style={tdRightStyle}>£43,662</td><td style={{...tdCenterStyle, color: "#c62828"}}>Frozen</td></tr>
-              <tr><td style={tdStyle}>2029-30*</td><td style={tdRightStyle}>£44,553</td><td style={tdCenterStyle}>CPI</td></tr>
-              <tr><td style={{...tdStyle, borderBottom: "none"}}>2030-31*</td><td style={{...tdRightStyle, borderBottom: "none"}}>£45,444</td><td style={{...tdCenterStyle, borderBottom: "none"}}>CPI</td></tr>
-            </tbody>
-          </table>
-          <p style={noteStyle}>Note: Freeze confirmed until 2028-29. *2029-30 onwards: PolicyEngine assumption (CPI uprating). Source: <a href="https://www.gov.scot/publications/scottish-budget-2026-2027/pages/3/" target="_blank" rel="noopener noreferrer">Scottish Budget Chapter 2</a> | <a href="https://fiscalcommission.scot/publications/scotlands-economic-and-fiscal-forecasts-january-2026/" target="_blank" rel="noopener noreferrer">SFC January 2026</a></p>
+          <ThresholdChart data={HIGHER_RATE_THRESHOLD_DATA} />
+          <p style={noteStyle}>Note: Baseline assumes CPI growth after 2026-27. Freeze confirmed until 2028-29; 2029-30 onwards assumes CPI uprating. Source: <a href="https://www.gov.scot/publications/scottish-budget-2026-2027/pages/3/" target="_blank" rel="noopener noreferrer">Scottish Budget Chapter 2</a> | <a href="https://fiscalcommission.scot/publications/scotlands-economic-and-fiscal-forecasts-january-2026/" target="_blank" rel="noopener noreferrer">SFC January 2026</a></p>
         </details>
       </li>
     ),
@@ -206,28 +260,12 @@ const POLICY_INFO = {
     explanation: (
       <li>
         <strong>Advanced rate threshold freeze</strong>: The advanced rate (45%) threshold remains frozen
-        at £75,000 until 2028-29. Without the freeze, this threshold would increase with inflation.
-        The freeze raises revenue from higher earners.
+        at £75,000 from 2025-26 through 2028-29, then resumes CPI uprating (£76,530 in 2029-30, £78,061 in 2030-31).
+        Without the freeze, the threshold would reach ~£81k by 2030-31. The freeze raises revenue from higher earners.
         <details className="policy-table-details" style={{ marginTop: "12px" }}>
           <summary style={summaryStyle}>View advanced rate threshold by year</summary>
-          <table style={tableStyle}>
-            <thead>
-              <tr>
-                <th style={thStyle}>Year</th>
-                <th style={thRightStyle}>Advanced rate (45%) starts at</th>
-                <th style={thCenterStyle}>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td style={tdStyle}>2025-26</td><td style={tdRightStyle}>£75,000</td><td style={{...tdCenterStyle, color: "#c62828"}}>Frozen</td></tr>
-              <tr><td style={tdStyle}>2026-27</td><td style={tdRightStyle}>£75,000</td><td style={{...tdCenterStyle, color: "#c62828"}}>Frozen</td></tr>
-              <tr><td style={tdStyle}>2027-28</td><td style={tdRightStyle}>£75,000</td><td style={{...tdCenterStyle, color: "#c62828"}}>Frozen</td></tr>
-              <tr><td style={tdStyle}>2028-29</td><td style={tdRightStyle}>£75,000</td><td style={{...tdCenterStyle, color: "#c62828"}}>Frozen</td></tr>
-              <tr><td style={tdStyle}>2029-30*</td><td style={tdRightStyle}>£76,530</td><td style={tdCenterStyle}>CPI</td></tr>
-              <tr><td style={{...tdStyle, borderBottom: "none"}}>2030-31*</td><td style={{...tdRightStyle, borderBottom: "none"}}>£78,061</td><td style={{...tdCenterStyle, borderBottom: "none"}}>CPI</td></tr>
-            </tbody>
-          </table>
-          <p style={noteStyle}>Note: Freeze confirmed until 2028-29. *2029-30 onwards: PolicyEngine assumption (CPI uprating). Source: <a href="https://www.gov.scot/publications/scottish-budget-2026-2027/pages/3/" target="_blank" rel="noopener noreferrer">Scottish Budget Chapter 2</a></p>
+          <ThresholdChart data={ADVANCED_RATE_THRESHOLD_DATA} />
+          <p style={noteStyle}>Note: Baseline assumes CPI growth after 2026-27. Freeze confirmed until 2028-29; 2029-30 onwards assumes CPI uprating. Source: <a href="https://www.gov.scot/publications/scottish-budget-2026-2027/pages/3/" target="_blank" rel="noopener noreferrer">Scottish Budget Chapter 2</a> | <a href="https://fiscalcommission.scot/publications/scotlands-economic-and-fiscal-forecasts-january-2026/" target="_blank" rel="noopener noreferrer">SFC January 2026</a></p>
         </details>
       </li>
     ),
@@ -238,28 +276,12 @@ const POLICY_INFO = {
     explanation: (
       <li>
         <strong>Top rate threshold freeze</strong>: The top rate (48%) threshold remains frozen
-        at £125,140 until 2028-29. Without the freeze, this threshold would increase with inflation.
-        The freeze raises revenue from the highest earners.
+        at £125,140 from 2025-26 through 2028-29, then resumes CPI uprating (£127,693 in 2029-30, £130,247 in 2030-31).
+        Without the freeze, the threshold would reach ~£136k by 2030-31. The freeze raises revenue from the highest earners.
         <details className="policy-table-details" style={{ marginTop: "12px" }}>
           <summary style={summaryStyle}>View top rate threshold by year</summary>
-          <table style={tableStyle}>
-            <thead>
-              <tr>
-                <th style={thStyle}>Year</th>
-                <th style={thRightStyle}>Top rate (48%) starts at</th>
-                <th style={thCenterStyle}>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td style={tdStyle}>2025-26</td><td style={tdRightStyle}>£125,140</td><td style={{...tdCenterStyle, color: "#c62828"}}>Frozen</td></tr>
-              <tr><td style={tdStyle}>2026-27</td><td style={tdRightStyle}>£125,140</td><td style={{...tdCenterStyle, color: "#c62828"}}>Frozen</td></tr>
-              <tr><td style={tdStyle}>2027-28</td><td style={tdRightStyle}>£125,140</td><td style={{...tdCenterStyle, color: "#c62828"}}>Frozen</td></tr>
-              <tr><td style={tdStyle}>2028-29</td><td style={tdRightStyle}>£125,140</td><td style={{...tdCenterStyle, color: "#c62828"}}>Frozen</td></tr>
-              <tr><td style={tdStyle}>2029-30*</td><td style={tdRightStyle}>£127,693</td><td style={tdCenterStyle}>CPI</td></tr>
-              <tr><td style={{...tdStyle, borderBottom: "none"}}>2030-31*</td><td style={{...tdRightStyle, borderBottom: "none"}}>£130,247</td><td style={{...tdCenterStyle, borderBottom: "none"}}>CPI</td></tr>
-            </tbody>
-          </table>
-          <p style={noteStyle}>Note: Freeze confirmed until 2028-29. *2029-30 onwards: PolicyEngine assumption (CPI uprating). £125,140 aligns with UK Personal Allowance taper. Source: <a href="https://www.gov.scot/publications/scottish-budget-2026-2027/pages/3/" target="_blank" rel="noopener noreferrer">Scottish Budget Chapter 2</a></p>
+          <ThresholdChart data={TOP_RATE_THRESHOLD_DATA} />
+          <p style={noteStyle}>Note: Baseline assumes CPI growth after 2026-27. Freeze confirmed until 2028-29; 2029-30 onwards assumes CPI uprating. £125,140 aligns with UK Personal Allowance taper. Source: <a href="https://www.gov.scot/publications/scottish-budget-2026-2027/pages/3/" target="_blank" rel="noopener noreferrer">Scottish Budget Chapter 2</a> | <a href="https://fiscalcommission.scot/publications/scotlands-economic-and-fiscal-forecasts-january-2026/" target="_blank" rel="noopener noreferrer">SFC January 2026</a></p>
         </details>
       </li>
     ),
@@ -286,7 +308,7 @@ export default function Dashboard({ selectedPolicies = [] }) {
   const [rawBudgetaryData, setRawBudgetaryData] = useState([]);
   const [rawDistributionalData, setRawDistributionalData] = useState([]);
   const [activeSection, setActiveSection] = useState("introduction");
-  const [selectedYear, setSelectedYear] = useState(2026);
+  const [selectedYear, setSelectedYear] = useState(2028);
 
   const AVAILABLE_YEARS = [2026, 2027, 2028, 2029, 2030];
 
@@ -464,6 +486,56 @@ export default function Dashboard({ selectedPolicies = [] }) {
     });
   }, [isStacked, rawDistributionalData, selectedYear, selectedPolicies]);
 
+  // Calculate decile chart y-axis domain across ALL years for consistent axis
+  const decileYAxisDomain = useMemo(() => {
+    if (!isStacked || rawDistributionalData.length === 0) return null;
+
+    const deciles = ["1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th"];
+    let maxAbsRelative = 0;
+    let maxAbsAbsolute = 0;
+
+    // Check all years to find max values
+    AVAILABLE_YEARS.forEach(year => {
+      deciles.forEach(decile => {
+        let posRelative = 0, negRelative = 0;
+        let posAbsolute = 0, negAbsolute = 0;
+
+        selectedPolicies.forEach(policyId => {
+          const policyName = POLICY_NAMES[policyId];
+          const row = rawDistributionalData.find(
+            r => r.reform_id === policyId && r.year === String(year) && r.decile === decile
+          );
+          const relValue = row ? parseFloat(row.value) || 0 : 0;
+          const absValue = row ? parseFloat(row.absolute_change) || 0 : 0;
+
+          // Check if this is a revenue policy (values should be negative)
+          const isRevenue = REVENUE_POLICIES.includes(policyId);
+          const adjustedRel = isRevenue ? -Math.abs(relValue) : relValue;
+          const adjustedAbs = isRevenue ? -Math.abs(absValue) : absValue;
+
+          if (adjustedRel > 0) posRelative += adjustedRel;
+          else negRelative += adjustedRel;
+          if (adjustedAbs > 0) posAbsolute += adjustedAbs;
+          else negAbsolute += adjustedAbs;
+        });
+
+        maxAbsRelative = Math.max(maxAbsRelative, Math.abs(posRelative), Math.abs(negRelative));
+        maxAbsAbsolute = Math.max(maxAbsAbsolute, Math.abs(posAbsolute), Math.abs(negAbsolute));
+      });
+    });
+
+    // Round up to nice numbers
+    const relInterval = maxAbsRelative <= 1 ? 0.5 : maxAbsRelative <= 3 ? 1 : 2;
+    const absInterval = maxAbsAbsolute <= 50 ? 10 : maxAbsAbsolute <= 100 ? 20 : 50;
+    const roundedRelative = Math.ceil((maxAbsRelative * 1.1) / relInterval) * relInterval || 1;
+    const roundedAbsolute = Math.ceil((maxAbsAbsolute * 1.1) / absInterval) * absInterval || 40;
+
+    return {
+      relative: [-roundedRelative, roundedRelative],
+      absolute: [-roundedAbsolute, roundedAbsolute],
+    };
+  }, [isStacked, rawDistributionalData, selectedPolicies]);
+
   // Get decile data filtered by selected year - aggregate selected policies
   const decileDataForYear = useMemo(() => {
     if (rawDistributionalData.length === 0) return [];
@@ -541,37 +613,42 @@ export default function Dashboard({ selectedPolicies = [] }) {
         </a>
         {" "}on high-value properties from April 2028, detailed in the last section.
       </p>
-      <p className="chart-description" style={{ marginTop: "12px" }}>
-        The Budget includes the following measures:
-      </p>
-      <ul className="policy-list">
-        {isStacked ? (
-          <>
-            {POLICY_INFO.income_tax_basic_uplift.explanation}
-            {POLICY_INFO.income_tax_intermediate_uplift.explanation}
-            {POLICY_INFO.scp_inflation.explanation}
-            {POLICY_INFO.scp_baby_boost.explanation}
-            {POLICY_INFO.higher_rate_freeze.explanation}
-            {POLICY_INFO.advanced_rate_freeze.explanation}
-            {POLICY_INFO.top_rate_freeze.explanation}
-          </>
-        ) : (
-          policyInfo.explanation
-        )}
-      </ul>
-      <details className="methodology-details">
-        <summary>Methodology</summary>
-        <p>
-          This analysis uses the <a href="https://github.com/PolicyEngine/scottish-budget-2026-2027" target="_blank" rel="noopener noreferrer">PolicyEngine microsimulation model</a>, which{" "}
-          <a href="https://github.com/PolicyEngine/policyengine-uk-data" target="_blank" rel="noopener noreferrer">reweights</a>{" "}
-          the Family Resources Survey to match Scottish demographics. See also:{" "}
-          <a href="https://www.policyengine.org/uk/scottish-budget-2026-27" target="_blank" rel="noopener noreferrer">pre-budget dashboard</a>{" "}
-          | <a href="https://policyengine.org/uk/research/uk-poverty-analysis" target="_blank" rel="noopener noreferrer">poverty methodology</a>.
-        </p>
+      <details className="budget-measures-details" style={{ marginTop: "12px" }}>
+        <summary style={{ cursor: "pointer", color: "#2c6e49", fontWeight: "500" }}>
+          Click to see what the Budget includes
+        </summary>
+        <ul className="policy-list">
+          {isStacked ? (
+            <>
+              {POLICY_INFO.income_tax_basic_uplift.explanation}
+              {POLICY_INFO.income_tax_intermediate_uplift.explanation}
+              {POLICY_INFO.scp_inflation.explanation}
+              {POLICY_INFO.scp_baby_boost.explanation}
+              {POLICY_INFO.higher_rate_freeze.explanation}
+              {POLICY_INFO.advanced_rate_freeze.explanation}
+              {POLICY_INFO.top_rate_freeze.explanation}
+            </>
+          ) : (
+            policyInfo.explanation
+          )}
+        </ul>
+        <details className="methodology-details" style={{ marginTop: "12px" }}>
+          <summary>Methodology</summary>
+          <p>
+            This analysis uses the <a href="https://github.com/PolicyEngine/scottish-budget-2026-2027" target="_blank" rel="noopener noreferrer">PolicyEngine microsimulation model</a>, which{" "}
+            <a href="https://github.com/PolicyEngine/policyengine-uk-data" target="_blank" rel="noopener noreferrer">reweights</a>{" "}
+            the Family Resources Survey to match Scottish demographics. See also:{" "}
+            <a href="https://www.policyengine.org/uk/scottish-budget-2026-27" target="_blank" rel="noopener noreferrer">pre-budget dashboard</a>{" "}
+            | <a href="https://policyengine.org/uk/research/uk-poverty-analysis" target="_blank" rel="noopener noreferrer">poverty methodology</a>.
+          </p>
+        </details>
       </details>
 
+      {/* Income Tax and Benefits Section */}
+      <h2 className="section-title" id="income-tax-benefits" ref={(el) => (sectionRefs.current["income-tax-benefits"] = el)} style={{ marginTop: "32px" }}>Income tax and benefits</h2>
+
       {/* Budgetary Impact Section */}
-      <h2 className="section-title" id="budgetary-impact" ref={(el) => (sectionRefs.current["budgetary-impact"] = el)}>Budgetary impact</h2>
+      <h3 className="section-title" id="budgetary-impact" ref={(el) => (sectionRefs.current["budgetary-impact"] = el)} style={{ fontSize: "1.4rem", fontWeight: 600, color: "#374151", borderBottom: "none", marginTop: "24px", marginBottom: "12px", padding: "0" }}>Budgetary impact</h3>
       <p className="chart-description">
         This section shows the estimated fiscal cost of the budget measures to the Scottish Government.
       </p>
@@ -600,7 +677,7 @@ export default function Dashboard({ selectedPolicies = [] }) {
       <SFCComparisonTable />
 
       {/* Living Standards Section */}
-      <h2 className="section-title" id="living-standards" ref={(el) => (sectionRefs.current["living-standards"] = el)}>Living standards</h2>
+      <h3 className="section-title" id="living-standards" ref={(el) => (sectionRefs.current["living-standards"] = el)} style={{ fontSize: "1.4rem", fontWeight: 600, color: "#374151", borderBottom: "none", marginTop: "48px", paddingTop: "32px", borderTop: "1px solid #e5e7eb", marginBottom: "12px", padding: "32px 0 0 0" }}>Living standards</h3>
       <p className="chart-description">
         This section shows how household incomes in Scotland change as a result of the {policyInfo.name} policy.
       </p>
@@ -621,11 +698,12 @@ export default function Dashboard({ selectedPolicies = [] }) {
           onYearChange={setSelectedYear}
           availableYears={AVAILABLE_YEARS}
           selectedPolicies={selectedPolicies}
+          fixedYAxisDomain={decileYAxisDomain}
         />
       ) : null}
 
       {/* Poverty Section */}
-      <h2 className="section-title" id="poverty" ref={(el) => (sectionRefs.current["poverty"] = el)}>Poverty rate</h2>
+      <h3 className="section-title" id="poverty" ref={(el) => (sectionRefs.current["poverty"] = el)} style={{ fontSize: "1.4rem", fontWeight: 600, color: "#374151", borderBottom: "none", marginTop: "48px", paddingTop: "32px", borderTop: "1px solid #e5e7eb", marginBottom: "12px", padding: "32px 0 0 0" }}>Poverty rate</h3>
       <p className="chart-description">
         This section shows how poverty rates change under the budget measures.
         The UK uses four poverty measures: absolute vs relative poverty, each measured before or after housing costs.
@@ -643,7 +721,7 @@ export default function Dashboard({ selectedPolicies = [] }) {
       )}
 
       {/* Local Authority Impact Section */}
-      <h2 className="section-title" id="local-authorities" ref={(el) => (sectionRefs.current["local-authorities"] = el)}>Impact by local authority</h2>
+      <h3 className="section-title" id="local-authorities" ref={(el) => (sectionRefs.current["local-authorities"] = el)} style={{ fontSize: "1.4rem", fontWeight: 600, color: "#374151", borderBottom: "none", marginTop: "48px", paddingTop: "32px", borderTop: "1px solid #e5e7eb", marginBottom: "12px", padding: "32px 0 0 0" }}>Impact by local authority</h3>
       <p className="chart-description">
         This section shows how the budget measures affect different local authorities across Scotland.
         Select a local authority to see the estimated impact on households in that area.
@@ -657,15 +735,16 @@ export default function Dashboard({ selectedPolicies = [] }) {
       />
 
       {/* Mansion Tax Section */}
-      <details className="mansion-tax-section" id="mansion-tax" ref={(el) => (sectionRefs.current["mansion-tax"] = el)}>
-        <summary className="section-title expandable-section" style={{ cursor: "pointer", display: "flex", alignItems: "center", gap: "8px" }}>
-          <span className="expand-icon" style={{ fontSize: "12px", transition: "transform 0.2s" }}>▶</span>
+      <details className="mansion-tax-section" id="mansion-tax" ref={(el) => (sectionRefs.current["mansion-tax"] = el)} style={{ marginTop: "32px" }}>
+        <summary className="section-title" style={{ cursor: "pointer", display: "flex", alignItems: "center", gap: "8px" }}>
+          <span className="expand-icon" style={{ fontSize: "12px" }}>▶</span>
           Mansion tax
         </summary>
         <p className="chart-description" style={{ marginTop: "12px" }}>
-          The Scottish Budget 2026-27 <a href="https://www.bbc.co.uk/news/live/c0lxn7e7rlpt" target="_blank" rel="noopener noreferrer">introduced</a> new council tax bands for properties valued at £1 million or more,
-          effective from April 2028. The Finance Secretary <a href="https://www.lbc.co.uk/article/wealthy-scots-in-snp-sights-as-budget-proposes-mansion-house-tax-and-a-tax-on-pr-5HjdQg9_2/" target="_blank" rel="noopener noreferrer">estimated £16m</a> in annual revenue; using UK benchmark rates, we estimate £18.5m.
-          The map below shows each constituency's share. Edinburgh constituencies account for ~47% of total revenue.
+          The Scottish Budget 2026-27 <a href="https://www.gov.scot/publications/scottish-budget-2026-2027/pages/5/" target="_blank" rel="noopener noreferrer">introduced</a> two new council tax bands for properties with a 2026 market value above £1 million,
+          effective from April 2028. The Finance Secretary <a href="https://www.lbc.co.uk/article/wealthy-scots-in-snp-sights-as-budget-proposes-mansion-house-tax-and-a-tax-on-pr-5HjdQg9_2/" target="_blank" rel="noopener noreferrer">estimated £16m</a> in annual revenue.
+          The <a href="https://fiscalcommission.scot/publications/scotlands-economic-and-fiscal-forecasts-january-2026/" target="_blank" rel="noopener noreferrer">SFC</a> does not cost this policy as Council Tax is a local tax outside their remit.
+          Using UK benchmark rates, we estimate £18.5m in annual revenue. The map below shows each constituency's share. Edinburgh constituencies account for ~47% of total revenue.
         </p>
         <details className="methodology-details" style={{ marginTop: "12px", marginBottom: "16px" }}>
           <summary style={{ cursor: "pointer", fontSize: "0.85rem", color: "#0F766E", fontWeight: 600 }}>How we calculate</summary>
@@ -679,23 +758,19 @@ export default function Dashboard({ selectedPolicies = [] }) {
             <div style={{ display: "flex", flexDirection: "column", gap: "10px", fontSize: "0.85rem", color: "#475569", lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: "10px" }}>
                 <span style={{ color: "#0F766E", fontWeight: 600 }}>1.</span>
-                <span>We estimate total revenue by multiplying <strong>11,481 £1m+ properties</strong> (from <a href="https://www.savills.com/insight-and-opinion/savills-news/339380/" target="_blank" rel="noopener noreferrer" style={{ color: "#0F766E" }}>Savills</a>) by the <strong>£1,607 average annual rate</strong> based on UK benchmark rates.</span>
+                <span>We estimate total revenue of £18.5m by multiplying 11,481 £1m+ properties in Scotland (from <a href="https://www.savills.com/insight-and-opinion/savills-news/339380/" target="_blank" rel="noopener noreferrer" style={{ color: "#0F766E" }}>Savills</a>) by a £1,607 average annual rate. This rate is based on the UK's <a href="https://www.gov.uk/government/publications/high-value-council-tax-surcharge/high-value-council-tax-surcharge" target="_blank" rel="noopener noreferrer" style={{ color: "#0F766E" }}>High Value Council Tax Surcharge</a> of £2,500/year for properties over £2m, from which we extrapolate £1,500/year for the Scottish £1-2m band. Using <a href="https://github.com/PolicyEngine/scotland-mansion-tax" target="_blank" rel="noopener noreferrer" style={{ color: "#0F766E" }}>Savills 2024 sales data</a> (89% of sales £1-2m, 11% over £2m), we calculate the weighted average of £1,607/year.</span>
               </div>
               <div style={{ display: "flex", gap: "10px" }}>
                 <span style={{ color: "#0F766E", fontWeight: 600 }}>2.</span>
-                <span>We use council-level £1m+ sales data from <a href="https://www.ros.gov.uk/data-and-statistics/property-market-statistics/property-market-report-2024-25" target="_blank" rel="noopener noreferrer" style={{ color: "#0F766E" }}><strong>Registers of Scotland</strong></a> to determine geographic distribution across Scotland.</span>
+                <span>We use council-level £1m+ sales data from <a href="https://www.ros.gov.uk/data-and-statistics/property-market-statistics/property-market-report-2024-25" target="_blank" rel="noopener noreferrer" style={{ color: "#0F766E" }}>Registers of Scotland</a> to allocate revenue geographically across Scotland.</span>
               </div>
               <div style={{ display: "flex", gap: "10px" }}>
                 <span style={{ color: "#0F766E", fontWeight: 600 }}>3.</span>
-                <span>Within each council, we allocate sales to constituencies based on population weighted by <a href="https://www.gov.uk/government/statistical-data-sets/uk-house-price-index-data-downloads-april-2025" target="_blank" rel="noopener noreferrer" style={{ color: "#0F766E" }}><strong>Band H property concentration</strong></a>.</span>
+                <span>Within each council, we allocate to constituencies based on population weighted by <a href="https://www.gov.uk/government/statistical-data-sets/uk-house-price-index-data-downloads-april-2025" target="_blank" rel="noopener noreferrer" style={{ color: "#0F766E" }}>Band H property concentration</a>. Band H threshold (&gt;£212k in 1991) equals ~£1.06m today, closely matching the £1m threshold.</span>
               </div>
               <div style={{ display: "flex", gap: "10px" }}>
                 <span style={{ color: "#0F766E", fontWeight: 600 }}>4.</span>
-                <span>We use Band H as a proxy because its threshold (&gt;£212k in 1991) equals approximately <strong>£1.06m today</strong>, closely matching the mansion tax's £1m threshold.</span>
-              </div>
-              <div style={{ display: "flex", gap: "10px" }}>
-                <span style={{ color: "#0F766E", fontWeight: 600 }}>5.</span>
-                <span>Each constituency's revenue is calculated by multiplying its share of total sales by the <strong>£18.5m total revenue</strong>.</span>
+                <span>Each constituency's revenue is calculated as its share of total sales multiplied by the £18.5m total revenue.</span>
               </div>
             </div>
             <div style={{ marginTop: "12px", paddingTop: "12px", borderTop: "1px solid #e2e8f0" }}>
