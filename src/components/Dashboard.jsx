@@ -525,7 +525,7 @@ export default function Dashboard({ selectedPolicies = [] }) {
       <p className="chart-description">
         Finance Secretary Shona Robison <a href="https://www.gov.scot/publications/scottish-budget-2026-2027/documents/" target="_blank" rel="noopener noreferrer">announced</a> the Scottish Budget 2026–27 on 13 January 2026.
         This dashboard estimates how the budget affects household incomes, poverty rates, and different areas across Scotland.
-        The budget also announces a{" "}
+        The government also announced a{" "}
         <a
           href="#mansion-tax"
           onClick={(e) => {
