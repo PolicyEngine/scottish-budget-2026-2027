@@ -1,7 +1,8 @@
 import { useState } from "react";
 import {
-  BarChart,
+  ComposedChart,
   Bar,
+  Line,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -11,6 +12,44 @@ import {
 } from "recharts";
 import "./DecileChart.css";
 import { POLICY_COLORS, ALL_POLICY_NAMES, REVENUE_POLICIES, POLICY_NAMES } from "../utils/policyConfig";
+
+// Custom label component for net change values
+const NetChangeLabel = ({ x, y, value, viewMode }) => {
+  if (value === undefined || value === null) return null;
+
+  const formattedValue = viewMode === "relative"
+    ? `${value >= 0 ? "+" : ""}${value.toFixed(2)}%`
+    : (value < 0 ? `-£${Math.abs(value).toFixed(0)}` : `+£${value.toFixed(0)}`);
+
+  const yOffset = value >= 0 ? -18 : 22;
+
+  return (
+    <g>
+      <rect
+        x={x - 28}
+        y={y + yOffset - 9}
+        width={56}
+        height={16}
+        fill="white"
+        rx={3}
+        ry={3}
+        stroke="#000000"
+        strokeWidth={1}
+      />
+      <text
+        x={x}
+        y={y + yOffset}
+        fill="#000000"
+        fontSize={11}
+        fontWeight={700}
+        textAnchor="middle"
+        dominantBaseline="middle"
+      >
+        {formattedValue}
+      </text>
+    </g>
+  );
+};
 
 /**
  * Decile impact chart showing relative or absolute change by income decile.
@@ -105,7 +144,10 @@ export default function DecileChart({
       )
     : [];
 
-  // Calculate y-axis domain - symmetric around zero for stacked charts (only for active policies)
+  // Show net change line when multiple policies are active
+  const showNetChange = stacked && activePolicies.length > 1;
+
+  // Calculate y-axis domain with padding
   let yMin = 0, yMax = 10;
   if (stacked) {
     let minSum = 0, maxSum = 0;
@@ -119,16 +161,14 @@ export default function DecileChart({
       minSum = Math.min(minSum, negativeSum);
       maxSum = Math.max(maxSum, positiveSum);
     });
-    // Make symmetric around zero
-    const absMax = Math.max(Math.abs(minSum), Math.abs(maxSum));
+    // Add 15% padding
+    const padding = Math.max(Math.abs(minSum), Math.abs(maxSum)) * 0.15;
     if (viewMode === "relative") {
-      const rounded = Math.ceil(absMax * 10) / 10;
-      yMin = -rounded;
-      yMax = rounded;
+      yMin = Math.floor((minSum - padding) * 10) / 10;
+      yMax = Math.ceil((maxSum + padding) * 10) / 10;
     } else {
-      const rounded = Math.ceil(absMax / 20) * 20;
-      yMin = -rounded;
-      yMax = rounded || 40;
+      yMin = Math.floor((minSum - padding) / 10) * 10;
+      yMax = Math.ceil((maxSum + padding) / 10) * 10 || 40;
     }
   } else {
     const values = chartData.map(d => d.value || 0);
@@ -200,11 +240,22 @@ export default function DecileChart({
               <span style={{ fontSize: "13px", color: "#374151" }}>{name}</span>
             </div>
           ))}
+          {showNetChange && (
+            <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+              <span style={{
+                width: "16px",
+                height: "2px",
+                backgroundColor: "#000000",
+                display: "inline-block"
+              }}></span>
+              <span style={{ fontSize: "13px", color: "#374151" }}>Net change</span>
+            </div>
+          )}
         </div>
       )}
 
       <ResponsiveContainer width="100%" height={350}>
-        <BarChart
+        <ComposedChart
           data={chartData}
           margin={{ top: 20, right: 30, left: 60, bottom: 40 }}
           stackOffset="sign"
@@ -243,7 +294,10 @@ export default function DecileChart({
           />
           <ReferenceLine y={0} stroke="#666" strokeWidth={1} />
           <Tooltip
-            formatter={(value, name) => [formatValue(value), name]}
+            formatter={(value, name) => [
+              formatValue(value),
+              name === "netChange" ? "Net change" : name
+            ]}
             labelFormatter={(label) => `${label} decile`}
             contentStyle={{
               background: "white",
@@ -271,7 +325,19 @@ export default function DecileChart({
               name="Change"
             />
           )}
-        </BarChart>
+
+          {/* Net change line with dots only */}
+          {showNetChange && (
+            <Line
+              type="monotone"
+              dataKey="netChange"
+              stroke="#000000"
+              strokeWidth={2}
+              dot={{ fill: "#000000", stroke: "#000000", strokeWidth: 1, r: 4 }}
+              name="netChange"
+            />
+          )}
+        </ComposedChart>
       </ResponsiveContainer>
 
       <p className="chart-note">

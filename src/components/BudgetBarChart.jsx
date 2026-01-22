@@ -1,6 +1,7 @@
 import {
-  BarChart,
+  ComposedChart,
   Bar,
+  Line,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -8,9 +9,48 @@ import {
   Legend,
   ResponsiveContainer,
   ReferenceLine,
+  LabelList,
 } from "recharts";
 import "./BudgetBarChart.css";
 import { POLICY_COLORS, ALL_POLICY_NAMES } from "../utils/policyConfig";
+
+// Custom label component for net impact values
+const NetImpactLabel = (props) => {
+  const { x, y, value } = props;
+  if (value === undefined || value === null) return null;
+
+  const formattedValue =
+    value < 0 ? `-£${Math.abs(value).toFixed(0)}m` : `+£${value.toFixed(0)}m`;
+  const yOffset = value >= 0 ? -20 : 28;
+
+  return (
+    <g>
+      {/* White background for readability */}
+      <rect
+        x={x - 32}
+        y={y + yOffset - 10}
+        width={64}
+        height={18}
+        fill="white"
+        rx={3}
+        ry={3}
+        stroke="#000000"
+        strokeWidth={1}
+      />
+      <text
+        x={x}
+        y={y + yOffset}
+        fill="#000000"
+        fontSize={12}
+        fontWeight={700}
+        textAnchor="middle"
+        dominantBaseline="middle"
+      >
+        {formattedValue}
+      </text>
+    </g>
+  );
+};
 
 export default function BudgetBarChart({ data, title, description, stacked = false }) {
   if (!data || data.length === 0) {
@@ -31,13 +71,35 @@ export default function BudgetBarChart({ data, title, description, stacked = fal
 
   const activePolicies = ALL_POLICY_NAMES.filter(hasNonZeroValues);
 
+  // Check if we should show net impact line (only when multiple policies have data)
+  const showNetImpact = stacked && activePolicies.length > 1;
+
+  // Calculate Y-axis domain with padding
+  const calculateYDomain = () => {
+    let minVal = 0, maxVal = 0;
+    data.forEach(d => {
+      let negSum = 0, posSum = 0;
+      ALL_POLICY_NAMES.forEach(name => {
+        const val = d[name] || 0;
+        if (val < 0) negSum += val;
+        else posSum += val;
+      });
+      minVal = Math.min(minVal, negSum);
+      maxVal = Math.max(maxVal, posSum);
+    });
+    // Add 15% padding
+    const padding = Math.max(Math.abs(minVal), Math.abs(maxVal)) * 0.15;
+    return [Math.floor((minVal - padding) / 20) * 20, Math.ceil((maxVal + padding) / 20) * 20];
+  };
+  const yDomain = stacked ? calculateYDomain() : ['auto', 'auto'];
+
   return (
     <div className="budget-bar-chart">
       {title && <h3 className="chart-title">{title}</h3>}
       {description && <p className="chart-description">{description}</p>}
 
       <ResponsiveContainer width="100%" height={400}>
-        <BarChart
+        <ComposedChart
           data={data}
           margin={{ top: 20, right: 30, left: 60, bottom: 20 }}
           stackOffset="sign"
@@ -49,14 +111,31 @@ export default function BudgetBarChart({ data, title, description, stacked = fal
             tick={{ fontSize: 12 }}
           />
           <YAxis
+            domain={yDomain}
             tickFormatter={formatValue}
             tick={{ fontSize: 12 }}
           />
           <Tooltip
-            formatter={(value, name) => [formatValue(value), name]}
+            formatter={(value, name) => [
+              formatValue(value),
+              name === "netImpact" ? "Net impact" : name
+            ]}
             labelFormatter={formatYear}
           />
-          {stacked && <Legend />}
+          {stacked && (
+            <Legend
+              payload={[
+                ...activePolicies.map((name) => ({
+                  value: name,
+                  type: "rect",
+                  color: POLICY_COLORS[name],
+                })),
+                ...(showNetImpact
+                  ? [{ value: "Net impact", type: "line", color: "#000000" }]
+                  : []),
+              ]}
+            />
+          )}
           <ReferenceLine y={0} stroke="#374151" strokeWidth={1} />
 
           {stacked ? (
@@ -76,7 +155,20 @@ export default function BudgetBarChart({ data, title, description, stacked = fal
               name="Impact"
             />
           )}
-        </BarChart>
+
+          {/* Net impact line with dots and labels */}
+          {showNetImpact && (
+            <Line
+              type="monotone"
+              dataKey="netImpact"
+              stroke="#000000"
+              strokeWidth={2}
+              dot={{ fill: "#000000", stroke: "#000000", strokeWidth: 1, r: 4 }}
+              name="netImpact"
+              label={<NetImpactLabel />}
+            />
+          )}
+        </ComposedChart>
       </ResponsiveContainer>
     </div>
   );
