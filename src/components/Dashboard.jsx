@@ -735,7 +735,7 @@ export default function Dashboard({ selectedPolicies = [] }) {
               </div>
               <div style={{ display: "flex", gap: "10px" }}>
                 <span style={{ color: "#0F766E", fontWeight: 600 }}>2.</span>
-                <span>The UK's <a href="https://www.gov.uk/government/publications/high-value-council-tax-surcharge/high-value-council-tax-surcharge" target="_blank" rel="noopener noreferrer" style={{ color: "#0F766E" }}>High Value Council Tax Surcharge</a> sets a rate of £2,500/year for properties £2-2.5m. We extrapolate £1,500/year for the Scottish £1-2m band. Based on <a href="https://github.com/PolicyEngine/scotland-mansion-tax" target="_blank" rel="noopener noreferrer" style={{ color: "#0F766E" }}>Savills 2024 sales data</a>, 89% of £1m+ sales are in the £1-2m band and 11% are £2m+, giving a weighted average rate of £1,607/year.</span>
+                <span>The UK's <a href="https://www.gov.uk/government/publications/high-value-council-tax-surcharge/high-value-council-tax-surcharge" target="_blank" rel="noopener noreferrer" style={{ color: "#0F766E" }}>High Value Council Tax Surcharge</a> sets a rate of £2,500/year for properties over £2m. We extrapolate £1,500/year for the Scottish £1-2m band. Based on <a href="https://github.com/PolicyEngine/scotland-mansion-tax" target="_blank" rel="noopener noreferrer" style={{ color: "#0F766E" }}>Savills 2024 sales data</a>, 89% of £1m+ sales are in the £1-2m band and 11% are £2m+, giving a weighted average rate of £1,607/year.</span>
               </div>
               <div style={{ display: "flex", gap: "10px" }}>
                 <span style={{ color: "#0F766E", fontWeight: 600 }}>3.</span>
