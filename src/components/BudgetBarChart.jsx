@@ -125,7 +125,7 @@ export default function BudgetBarChart({ data, title, description, stacked = fal
           <Tooltip
             formatter={(value, name) => [
               formatValue(value),
-              name === "netImpact" ? "Net impact" : name
+              name === "Net impact" ? "Net impact" : name
             ]}
             labelFormatter={formatYear}
           />
@@ -171,7 +171,7 @@ export default function BudgetBarChart({ data, title, description, stacked = fal
               stroke="#000000"
               strokeWidth={2}
               dot={{ fill: "#000000", stroke: "#000000", strokeWidth: 1, r: 4 }}
-              name="netImpact"
+              name="Net impact"
               label={<NetImpactLabel />}
             />
           )}
