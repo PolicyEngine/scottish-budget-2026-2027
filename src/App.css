@@ -21,7 +21,7 @@
 /* Header - full width coloured bar, sticky */
 .title-row {
   background: var(--pe-teal-700);
-  padding: var(--pe-space-lg) var(--pe-space-xl);
+  padding: var(--pe-space-md) var(--pe-space-xl);
   width: 100%;
   position: sticky;
   top: 0;
@@ -40,7 +40,7 @@
 
 @media (min-width: 1400px) {
   .title-row {
-    padding: var(--pe-space-xl) var(--pe-space-3xl);
+    padding: var(--pe-space-md) var(--pe-space-3xl);
   }
 
   .title-row-inner {

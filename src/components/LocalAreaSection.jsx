@@ -164,11 +164,16 @@ export default function LocalAreaSection({
 
   // Prepare list data - Top 10 or Lowest 10 local authorities
   const chartData = useMemo(() => {
-    const sorted = [...localAuthorityData].sort((a, b) => b.avgGain - a.avgGain);
     if (showTop) {
-      return sorted.slice(0, 10);
+      // Top 10: highest values (for negatives = least negative / closest to zero)
+      return [...localAuthorityData]
+        .sort((a, b) => b.avgGain - a.avgGain)
+        .slice(0, 10);
     } else {
-      return sorted.slice(-10).reverse();
+      // Lowest 10: lowest values (for negatives = most negative / furthest from zero)
+      return [...localAuthorityData]
+        .sort((a, b) => a.avgGain - b.avgGain)
+        .slice(0, 10);
     }
   }, [localAuthorityData, showTop]);
 

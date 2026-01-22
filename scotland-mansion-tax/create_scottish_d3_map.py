@@ -42,8 +42,8 @@ def generate_d3_map_html(geojson, impact_data):
     for _, row in impact_data.iterrows():
         impact_js[row['constituency']] = {
             'pct': row['share_pct'],
-            'num': int(row['estimated_sales']),
-            'rev': int(row['allocated_revenue']),
+            'num': row['estimated_sales'],
+            'rev': row['allocated_revenue'],
             'council': row['council']
         }
 
@@ -449,14 +449,10 @@ def generate_d3_map_html(geojson, impact_data):
             tooltip.innerHTML = `
                 <h4>${name}</h4>
                 <div class="tooltip-council">${data.council}</div>
-                <div class="tooltip-value">${data.pct.toFixed(2)}%</div>
+                <div class="tooltip-value">£${(data.rev / 1000000).toFixed(2)}m</div>
                 <div class="tooltip-row">
-                    <span>Est. sales</span>
-                    <span>${data.num.toLocaleString()}</span>
-                </div>
-                <div class="tooltip-row">
-                    <span>Est. revenue</span>
-                    <span>£${(data.rev / 1000000).toFixed(2)}m</span>
+                    <span>Share of total</span>
+                    <span>${data.pct.toFixed(2)}%</span>
                 </div>
             `;
             tooltip.style.display = 'block';
@@ -497,7 +493,7 @@ def generate_d3_map_html(geojson, impact_data):
                 return `
                     <button class="search-result-item" data-name="${name}">
                         <div class="result-name">${name}</div>
-                        <div class="result-value">${data.num.toLocaleString()} sales | ${data.pct.toFixed(2)}%</div>
+                        <div class="result-value">£${(data.rev / 1000000).toFixed(2)}m | ${data.pct.toFixed(2)}%</div>
                     </button>
                 `;
             }).join('');
@@ -514,9 +510,8 @@ def generate_d3_map_html(geojson, impact_data):
                     tooltip.innerHTML = `
                         <h4>${name}</h4>
                         <div class="tooltip-council">${data.council}</div>
-                        <div class="tooltip-row"><span>Est. sales</span><span>${data.num.toLocaleString()}</span></div>
-                        <div class="tooltip-row"><span>Share</span><span>${data.pct.toFixed(2)}%</span></div>
-                        <div class="tooltip-row"><span>Est. revenue</span><span>£${(data.rev / 1000000).toFixed(2)}m</span></div>
+                        <div class="tooltip-value">£${(data.rev / 1000000).toFixed(2)}m</div>
+                        <div class="tooltip-row"><span>Share of total</span><span>${data.pct.toFixed(2)}%</span></div>
                     `;
                     tooltip.style.display = 'block';
                     tooltip.style.left = '50%';

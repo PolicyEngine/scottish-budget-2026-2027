@@ -2,15 +2,55 @@ import { useState } from "react";
 import {
   ComposedChart,
   Bar,
+  Line,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
+  Legend,
   ResponsiveContainer,
   ReferenceLine,
 } from "recharts";
 import "./DecileChart.css";
 import { POLICY_COLORS, ALL_POLICY_NAMES, REVENUE_POLICIES, POLICY_NAMES } from "../utils/policyConfig";
+
+// Custom label component for net change values
+const NetChangeLabel = ({ x, y, value, viewMode }) => {
+  if (value === undefined || value === null) return null;
+
+  const formattedValue = viewMode === "relative"
+    ? `${value >= 0 ? "+" : ""}${value.toFixed(2)}%`
+    : (value < 0 ? `-£${Math.abs(value).toFixed(0)}` : `+£${value.toFixed(0)}`);
+
+  const yOffset = value >= 0 ? -18 : 22;
+
+  return (
+    <g>
+      <rect
+        x={x - 28}
+        y={y + yOffset - 9}
+        width={56}
+        height={16}
+        fill="white"
+        rx={3}
+        ry={3}
+        stroke="#000000"
+        strokeWidth={1}
+      />
+      <text
+        x={x}
+        y={y + yOffset}
+        fill="#000000"
+        fontSize={11}
+        fontWeight={700}
+        textAnchor="middle"
+        dominantBaseline="middle"
+      >
+        {formattedValue}
+      </text>
+    </g>
+  );
+};
 
 /**
  * Decile impact chart showing relative or absolute change by income decile.
@@ -105,7 +145,10 @@ export default function DecileChart({
       )
     : [];
 
-  // Calculate y-axis domain - symmetric around zero for stacked charts (only for active policies)
+  // Show net change line when multiple policies are active
+  const showNetChange = stacked && activePolicies.length > 1;
+
+  // Calculate y-axis domain with padding
   let yMin = 0, yMax = 10;
   if (stacked) {
     let minSum = 0, maxSum = 0;
@@ -119,16 +162,14 @@ export default function DecileChart({
       minSum = Math.min(minSum, negativeSum);
       maxSum = Math.max(maxSum, positiveSum);
     });
-    // Make symmetric around zero
-    const absMax = Math.max(Math.abs(minSum), Math.abs(maxSum));
+    // Add 15% padding
+    const padding = Math.max(Math.abs(minSum), Math.abs(maxSum)) * 0.15;
     if (viewMode === "relative") {
-      const rounded = Math.ceil(absMax * 10) / 10;
-      yMin = -rounded;
-      yMax = rounded;
+      yMin = Math.floor((minSum - padding) * 10) / 10;
+      yMax = Math.ceil((maxSum + padding) * 10) / 10;
     } else {
-      const rounded = Math.ceil(absMax / 20) * 20;
-      yMin = -rounded;
-      yMax = rounded || 40;
+      yMin = Math.floor((minSum - padding) / 10) * 10;
+      yMax = Math.ceil((maxSum + padding) / 10) * 10 || 40;
     }
   } else {
     const values = chartData.map(d => d.value || 0);
@@ -178,31 +219,6 @@ export default function DecileChart({
         )}
       </div>
 
-      {/* Custom legend showing all selected policies */}
-      {stacked && legendPolicies.length > 0 && (
-        <div className="custom-legend" style={{
-          display: "flex",
-          flexWrap: "wrap",
-          justifyContent: "center",
-          gap: "16px",
-          marginBottom: "12px",
-          maxWidth: "800px",
-          margin: "0 auto 12px auto"
-        }}>
-          {legendPolicies.map(name => (
-            <div key={name} style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-              <span style={{
-                width: "12px",
-                height: "12px",
-                backgroundColor: POLICY_COLORS[name],
-                display: "inline-block"
-              }}></span>
-              <span style={{ fontSize: "13px", color: "#374151" }}>{name}</span>
-            </div>
-          ))}
-        </div>
-      )}
-
       <ResponsiveContainer width="100%" height={350}>
         <ComposedChart
           data={chartData}
@@ -242,8 +258,26 @@ export default function DecileChart({
             }}
           />
           <ReferenceLine y={0} stroke="#666" strokeWidth={1} />
+          {stacked && (
+            <Legend
+              wrapperStyle={{ paddingTop: "20px" }}
+              payload={[
+                ...legendPolicies.map((name) => ({
+                  value: name,
+                  type: "rect",
+                  color: POLICY_COLORS[name],
+                })),
+                ...(showNetChange
+                  ? [{ value: "Net change", type: "line", color: "#000000" }]
+                  : []),
+              ]}
+            />
+          )}
           <Tooltip
-            formatter={(value, name) => [formatValue(value), name]}
+            formatter={(value, name) => [
+              formatValue(value),
+              name === "netChange" ? "Net change" : name
+            ]}
             labelFormatter={(label) => `${label} decile`}
             contentStyle={{
               background: "white",
@@ -253,21 +287,15 @@ export default function DecileChart({
             }}
           />
           {stacked ? (
-            <>
-              {ALL_POLICY_NAMES.map((policyName) => (
-                <Bar
-                  key={policyName}
-                  dataKey={policyName}
-                  fill={POLICY_COLORS[policyName]}
-                  name={policyName}
-                  stackId="stack"
-                  radius={[2, 2, 0, 0]}
-                  stroke="none"
-                  hide={!activePolicies.includes(policyName)}
-                  legendType="none"
-                />
-              ))}
-            </>
+            activePolicies.map((policyName) => (
+              <Bar
+                key={policyName}
+                dataKey={policyName}
+                fill={POLICY_COLORS[policyName]}
+                name={policyName}
+                stackId="stack"
+              />
+            ))
           ) : (
             <Bar
               dataKey="value"
@@ -275,6 +303,18 @@ export default function DecileChart({
               radius={[4, 4, 0, 0]}
               stroke="none"
               name="Change"
+            />
+          )}
+
+          {/* Net change line with dots only */}
+          {showNetChange && (
+            <Line
+              type="monotone"
+              dataKey="netChange"
+              stroke="#000000"
+              strokeWidth={2}
+              dot={{ fill: "#000000", stroke: "#000000", strokeWidth: 1, r: 4 }}
+              name="netChange"
             />
           )}
         </ComposedChart>

@@ -505,18 +505,17 @@ def analyze_constituencies():
         # Calculate implied revenue from sales using UK rates
         implied_from_sales = (band_i_sales * BAND_I_SURCHARGE) + (band_j_sales * BAND_J_SURCHARGE)
 
-        rounded_sales = round(constituency_sales)
         results.append({
             "constituency": constituency,
             "council": council,
             "population": population,
             "wealth_factor": wealth_factor,
             "weight": round(weight, 4),
-            "estimated_sales": rounded_sales,
-            "band_i_sales": round(band_i_sales),
-            "band_j_sales": round(band_j_sales),
-            "share_pct": round(share * 100, 2) if rounded_sales > 0 else 0,
-            "implied_from_sales": round(implied_from_sales) if rounded_sales > 0 else 0,
+            "estimated_sales": constituency_sales,
+            "band_i_sales": band_i_sales,
+            "band_j_sales": band_j_sales,
+            "share_pct": round(share * 100, 2) if constituency_sales > 0 else 0,
+            "implied_from_sales": implied_from_sales if constituency_sales > 0 else 0,
         })
 
     df = pd.DataFrame(results)
@@ -532,7 +531,7 @@ def analyze_constituencies():
     stock_sales_ratio = ESTIMATED_STOCK / total_sales
 
     # Allocate total revenue proportionally by each constituency's share
-    df['allocated_revenue'] = (df['share_pct'] / 100 * total_stock_revenue).round(0)
+    df['allocated_revenue'] = df['share_pct'] / 100 * total_stock_revenue
 
     # Print summary
     print(f"\n📊 Total constituencies: {len(df)}")

@@ -37,8 +37,28 @@ export default function MansionTaxMap() {
           const headers = lines[0].split(",");
           const data = {};
 
+          // Parse CSV line handling quoted fields with commas
+          const parseCSVLine = (line) => {
+            const result = [];
+            let current = "";
+            let inQuotes = false;
+            for (let i = 0; i < line.length; i++) {
+              const char = line[i];
+              if (char === '"') {
+                inQuotes = !inQuotes;
+              } else if (char === "," && !inQuotes) {
+                result.push(current.trim());
+                current = "";
+              } else {
+                current += char;
+              }
+            }
+            result.push(current.trim());
+            return result;
+          };
+
           for (let i = 1; i < lines.length; i++) {
-            const values = lines[i].split(",");
+            const values = parseCSVLine(lines[i]);
             const row = {};
             headers.forEach((h, idx) => {
               row[h.trim()] = values[idx]?.trim();
@@ -46,8 +66,8 @@ export default function MansionTaxMap() {
             data[row.constituency] = {
               name: row.constituency,
               pct: parseFloat(row.share_pct) || 0,
-              num: parseInt(row.estimated_sales) || 0,
-              rev: parseInt(row.allocated_revenue) || 0,
+              num: parseFloat(row.estimated_sales) || 0,
+              rev: parseFloat(row.allocated_revenue) || 0,
               council: row.council || "Unknown",
             };
           }
@@ -138,10 +158,9 @@ export default function MansionTaxMap() {
       .clamp(true);
 
     const colorScale = (pct) => {
-      if (pct === 0 || pct < 0.01) return "#E0F2F1"; // Light green for zero
+      if (pct === 0) return "#A8DDD8";
       const t = logScale(Math.max(pct, minPct));
-      // Light green to dark green (same as local authority map)
-      return d3.interpolate("#E0F2F1", "#0D9488")(t);
+      return d3.interpolate("#A8DDD8", "#0B7D73")(t);
     };
 
     // Draw paths
@@ -153,7 +172,7 @@ export default function MansionTaxMap() {
       .attr("fill", d => {
         const name = d.properties.SPC21NM;
         const data = impactData[name];
-        return data ? colorScale(data.pct) : "#E0F2F1"; // Light green for missing data
+        return data ? colorScale(data.pct) : colorScale(0);
       })
       .attr("stroke", "#fff")
       .attr("stroke-width", 0.3)
@@ -308,10 +327,9 @@ export default function MansionTaxMap() {
       <div className="map-header">
         <div className="chart-header">
           <div>
-            <h3 className="chart-title">Mansion tax by parliament constituency</h3>
+            <h3 className="chart-title">Mansion tax revenue by constituency</h3>
             <p className="chart-description">
-              This map shows each constituency's share of estimated yearly revenue
-              from the mansion tax. Darker green indicates a higher share.
+              Estimated annual revenue from council tax reform for properties valued at £1m+
             </p>
           </div>
         </div>
@@ -338,7 +356,7 @@ export default function MansionTaxMap() {
                   >
                     <div className="result-name">{result.name}</div>
                     <div className="result-value">
-                      {result.num} sales | {result.pct.toFixed(2)}%
+                      £{(result.rev / 1000000).toFixed(2)}m | {result.pct.toFixed(2)}%
                     </div>
                   </button>
                 ))}
@@ -352,7 +370,7 @@ export default function MansionTaxMap() {
             <div
               className="legend-gradient-horizontal"
               style={{
-                background: "linear-gradient(to right, #E0F2F1, #0D9488)"
+                background: "linear-gradient(to right, #A8DDD8, #0B7D73)"
               }}
             />
             <div className="legend-labels-horizontal">
@@ -427,14 +445,14 @@ export default function MansionTaxMap() {
               </div>
               <h4>{tooltipData.name}</h4>
               <p className="tooltip-subtitle">{tooltipData.council}</p>
-              <p className="tooltip-value" style={{ color: "#0D9488" }}>
+              <p className="tooltip-value" style={{ color: "#0B7D73" }}>
                 {tooltipData.pct.toFixed(2)}%
               </p>
               <p className="tooltip-label">Share of revenue</p>
               <p className="tooltip-value-secondary" style={{ color: "#374151" }}>
                 £{(tooltipData.rev / 1000000).toFixed(2)}m
               </p>
-              <p className="tooltip-label">Est. revenue ({tooltipData.num} sales)</p>
+              <p className="tooltip-label">Est. annual revenue</p>
             </div>
           )}
         </div>

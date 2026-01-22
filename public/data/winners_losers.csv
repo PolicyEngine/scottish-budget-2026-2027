@@ -1,121 +1,121 @@
 reform_id,reform_name,year,metric,value
-combined,All policies combined,2026,winners_pct,76.66382150911737
-combined,All policies combined,2026,losers_pct,0.2628613984335181
-combined,All policies combined,2026,unchanged_pct,23.073317092449116
-combined,All policies combined,2027,winners_pct,77.23075291007822
-combined,All policies combined,2027,losers_pct,0.2628613948950807
-combined,All policies combined,2027,unchanged_pct,22.506385695026694
-combined,All policies combined,2028,winners_pct,77.25851434997844
-combined,All policies combined,2028,losers_pct,0.29558811444682953
-combined,All policies combined,2028,unchanged_pct,22.445897535574726
-combined,All policies combined,2029,winners_pct,77.30530244403134
-combined,All policies combined,2029,losers_pct,0.2955733613255321
-combined,All policies combined,2029,unchanged_pct,22.399124194643125
-combined,All policies combined,2030,winners_pct,77.34459545609992
-combined,All policies combined,2030,losers_pct,0.29557336005322815
-combined,All policies combined,2030,unchanged_pct,22.35983118384685
-scp_inflation,SCP inflation adjustment (£28.20/week),2026,winners_pct,8.372734191674065
+combined,All policies combined,2026,winners_pct,76.30010420914206
+combined,All policies combined,2026,losers_pct,0.26886443120694936
+combined,All policies combined,2026,unchanged_pct,23.431031359650987
+combined,All policies combined,2027,winners_pct,76.85047709409855
+combined,All policies combined,2027,losers_pct,0.2688644301169465
+combined,All policies combined,2027,unchanged_pct,22.8806584757845
+combined,All policies combined,2028,winners_pct,76.87932883738758
+combined,All policies combined,2028,losers_pct,0.3086249405121823
+combined,All policies combined,2028,unchanged_pct,22.81204622210024
+combined,All policies combined,2029,winners_pct,76.9278429686158
+combined,All policies combined,2029,losers_pct,0.308603580607364
+combined,All policies combined,2029,unchanged_pct,22.763553450776822
+combined,All policies combined,2030,winners_pct,76.97013076092061
+combined,All policies combined,2030,losers_pct,0.3086035796096772
+combined,All policies combined,2030,unchanged_pct,22.721265659469715
+scp_inflation,SCP inflation adjustment (£28.20/week),2026,winners_pct,8.473852156634988
 scp_inflation,SCP inflation adjustment (£28.20/week),2026,losers_pct,0.0
-scp_inflation,SCP inflation adjustment (£28.20/week),2026,unchanged_pct,91.62726580832593
-scp_inflation,SCP inflation adjustment (£28.20/week),2027,winners_pct,8.171238501034585
+scp_inflation,SCP inflation adjustment (£28.20/week),2026,unchanged_pct,91.526147843365
+scp_inflation,SCP inflation adjustment (£28.20/week),2027,winners_pct,8.267078246734753
 scp_inflation,SCP inflation adjustment (£28.20/week),2027,losers_pct,0.0
-scp_inflation,SCP inflation adjustment (£28.20/week),2027,unchanged_pct,91.82876149896543
-scp_inflation,SCP inflation adjustment (£28.20/week),2028,winners_pct,8.171238505645757
+scp_inflation,SCP inflation adjustment (£28.20/week),2027,unchanged_pct,91.73292175326525
+scp_inflation,SCP inflation adjustment (£28.20/week),2028,winners_pct,8.267078259456149
 scp_inflation,SCP inflation adjustment (£28.20/week),2028,losers_pct,0.0
-scp_inflation,SCP inflation adjustment (£28.20/week),2028,unchanged_pct,91.82876149435425
-scp_inflation,SCP inflation adjustment (£28.20/week),2029,winners_pct,8.171238507717606
+scp_inflation,SCP inflation adjustment (£28.20/week),2028,unchanged_pct,91.73292174054384
+scp_inflation,SCP inflation adjustment (£28.20/week),2029,winners_pct,8.267078222720755
 scp_inflation,SCP inflation adjustment (£28.20/week),2029,losers_pct,0.0
-scp_inflation,SCP inflation adjustment (£28.20/week),2029,unchanged_pct,91.8287614922824
-scp_inflation,SCP inflation adjustment (£28.20/week),2030,winners_pct,8.17123852236613
+scp_inflation,SCP inflation adjustment (£28.20/week),2029,unchanged_pct,91.73292177727926
+scp_inflation,SCP inflation adjustment (£28.20/week),2030,winners_pct,8.26707814901249
 scp_inflation,SCP inflation adjustment (£28.20/week),2030,losers_pct,0.0
-scp_inflation,SCP inflation adjustment (£28.20/week),2030,unchanged_pct,91.82876147763388
+scp_inflation,SCP inflation adjustment (£28.20/week),2030,unchanged_pct,91.73292185098751
 scp_baby_boost,SCP Premium for under-ones (£40/week),2026,winners_pct,0.0
 scp_baby_boost,SCP Premium for under-ones (£40/week),2026,losers_pct,0.0
 scp_baby_boost,SCP Premium for under-ones (£40/week),2026,unchanged_pct,100.0
-scp_baby_boost,SCP Premium for under-ones (£40/week),2027,winners_pct,0.8828671898244562
+scp_baby_boost,SCP Premium for under-ones (£40/week),2027,winners_pct,0.551153027092878
 scp_baby_boost,SCP Premium for under-ones (£40/week),2027,losers_pct,0.0
-scp_baby_boost,SCP Premium for under-ones (£40/week),2027,unchanged_pct,99.11713281017555
-scp_baby_boost,SCP Premium for under-ones (£40/week),2028,winners_pct,0.882867196156238
+scp_baby_boost,SCP Premium for under-ones (£40/week),2027,unchanged_pct,99.44884697290712
+scp_baby_boost,SCP Premium for under-ones (£40/week),2028,winners_pct,0.5511530316958071
 scp_baby_boost,SCP Premium for under-ones (£40/week),2028,losers_pct,0.0
-scp_baby_boost,SCP Premium for under-ones (£40/week),2028,unchanged_pct,99.11713280384376
-scp_baby_boost,SCP Premium for under-ones (£40/week),2029,winners_pct,0.8828672031246697
+scp_baby_boost,SCP Premium for under-ones (£40/week),2028,unchanged_pct,99.4488469683042
+scp_baby_boost,SCP Premium for under-ones (£40/week),2029,winners_pct,0.5511530293458775
 scp_baby_boost,SCP Premium for under-ones (£40/week),2029,losers_pct,0.0
-scp_baby_boost,SCP Premium for under-ones (£40/week),2029,unchanged_pct,99.11713279687532
-scp_baby_boost,SCP Premium for under-ones (£40/week),2030,winners_pct,0.8828672052985329
+scp_baby_boost,SCP Premium for under-ones (£40/week),2029,unchanged_pct,99.44884697065413
+scp_baby_boost,SCP Premium for under-ones (£40/week),2030,winners_pct,0.5511530291709076
 scp_baby_boost,SCP Premium for under-ones (£40/week),2030,losers_pct,0.0
-scp_baby_boost,SCP Premium for under-ones (£40/week),2030,unchanged_pct,99.11713279470146
-income_tax_basic_uplift,Basic rate threshold +7.4%,2026,winners_pct,72.39047497796878
-income_tax_basic_uplift,Basic rate threshold +7.4%,2026,losers_pct,0.2628613984335181
-income_tax_basic_uplift,Basic rate threshold +7.4%,2026,unchanged_pct,27.346663623597706
-income_tax_basic_uplift,Basic rate threshold +7.4%,2027,winners_pct,72.9574495881646
-income_tax_basic_uplift,Basic rate threshold +7.4%,2027,losers_pct,0.2628613948950807
-income_tax_basic_uplift,Basic rate threshold +7.4%,2027,unchanged_pct,26.779689016940328
-income_tax_basic_uplift,Basic rate threshold +7.4%,2028,winners_pct,72.98522576709804
-income_tax_basic_uplift,Basic rate threshold +7.4%,2028,losers_pct,0.2955733582113937
-income_tax_basic_uplift,Basic rate threshold +7.4%,2028,unchanged_pct,26.71920087469055
-income_tax_basic_uplift,Basic rate threshold +7.4%,2029,winners_pct,73.03199907699559
-income_tax_basic_uplift,Basic rate threshold +7.4%,2029,losers_pct,0.2955733613255321
-income_tax_basic_uplift,Basic rate threshold +7.4%,2029,unchanged_pct,26.672427561678873
-income_tax_basic_uplift,Basic rate threshold +7.4%,2030,winners_pct,73.071292104956
-income_tax_basic_uplift,Basic rate threshold +7.4%,2030,losers_pct,0.29557336005322815
-income_tax_basic_uplift,Basic rate threshold +7.4%,2030,unchanged_pct,26.633134534990777
-income_tax_intermediate_uplift,Intermediate rate threshold +7.4%,2026,winners_pct,51.00769357856242
+scp_baby_boost,SCP Premium for under-ones (£40/week),2030,unchanged_pct,99.4488469708291
+income_tax_basic_uplift,Basic rate threshold +7.4%,2026,winners_pct,72.08099149553277
+income_tax_basic_uplift,Basic rate threshold +7.4%,2026,losers_pct,0.26886443120694936
+income_tax_basic_uplift,Basic rate threshold +7.4%,2026,unchanged_pct,27.650144073260286
+income_tax_basic_uplift,Basic rate threshold +7.4%,2027,winners_pct,72.63141567467167
+income_tax_basic_uplift,Basic rate threshold +7.4%,2027,losers_pct,0.2688644301169465
+income_tax_basic_uplift,Basic rate threshold +7.4%,2027,unchanged_pct,27.099719895211376
+income_tax_basic_uplift,Basic rate threshold +7.4%,2028,winners_pct,72.6602887537907
+income_tax_basic_uplift,Basic rate threshold +7.4%,2028,losers_pct,0.30860358508101104
+income_tax_basic_uplift,Basic rate threshold +7.4%,2028,unchanged_pct,27.031107661128296
+income_tax_basic_uplift,Basic rate threshold +7.4%,2029,winners_pct,72.70878153097307
+income_tax_basic_uplift,Basic rate threshold +7.4%,2029,losers_pct,0.308603580607364
+income_tax_basic_uplift,Basic rate threshold +7.4%,2029,unchanged_pct,26.98261488841957
+income_tax_basic_uplift,Basic rate threshold +7.4%,2030,winners_pct,72.75106937695736
+income_tax_basic_uplift,Basic rate threshold +7.4%,2030,losers_pct,0.3086035796096772
+income_tax_basic_uplift,Basic rate threshold +7.4%,2030,unchanged_pct,26.940327043432955
+income_tax_intermediate_uplift,Intermediate rate threshold +7.4%,2026,winners_pct,51.0402029098354
 income_tax_intermediate_uplift,Intermediate rate threshold +7.4%,2026,losers_pct,0.0
-income_tax_intermediate_uplift,Intermediate rate threshold +7.4%,2026,unchanged_pct,48.99230642143758
-income_tax_intermediate_uplift,Intermediate rate threshold +7.4%,2027,winners_pct,52.78575823115903
+income_tax_intermediate_uplift,Intermediate rate threshold +7.4%,2026,unchanged_pct,48.95979709016461
+income_tax_intermediate_uplift,Intermediate rate threshold +7.4%,2027,winners_pct,52.66510427623461
 income_tax_intermediate_uplift,Intermediate rate threshold +7.4%,2027,losers_pct,0.0
-income_tax_intermediate_uplift,Intermediate rate threshold +7.4%,2027,unchanged_pct,47.21424176884097
-income_tax_intermediate_uplift,Intermediate rate threshold +7.4%,2028,winners_pct,53.10180590204543
+income_tax_intermediate_uplift,Intermediate rate threshold +7.4%,2027,unchanged_pct,47.33489572376539
+income_tax_intermediate_uplift,Intermediate rate threshold +7.4%,2028,winners_pct,52.96722429647331
 income_tax_intermediate_uplift,Intermediate rate threshold +7.4%,2028,losers_pct,0.0
-income_tax_intermediate_uplift,Intermediate rate threshold +7.4%,2028,unchanged_pct,46.89819409795458
-income_tax_intermediate_uplift,Intermediate rate threshold +7.4%,2029,winners_pct,53.532144094594415
+income_tax_intermediate_uplift,Intermediate rate threshold +7.4%,2028,unchanged_pct,47.03277570352669
+income_tax_intermediate_uplift,Intermediate rate threshold +7.4%,2029,winners_pct,53.406298602890566
 income_tax_intermediate_uplift,Intermediate rate threshold +7.4%,2029,losers_pct,0.0
-income_tax_intermediate_uplift,Intermediate rate threshold +7.4%,2029,unchanged_pct,46.46785590540559
-income_tax_intermediate_uplift,Intermediate rate threshold +7.4%,2030,winners_pct,53.676616815814604
+income_tax_intermediate_uplift,Intermediate rate threshold +7.4%,2029,unchanged_pct,46.593701397109434
+income_tax_intermediate_uplift,Intermediate rate threshold +7.4%,2030,winners_pct,53.5602445413499
 income_tax_intermediate_uplift,Intermediate rate threshold +7.4%,2030,losers_pct,0.0
-income_tax_intermediate_uplift,Intermediate rate threshold +7.4%,2030,unchanged_pct,46.3233831841854
+income_tax_intermediate_uplift,Intermediate rate threshold +7.4%,2030,unchanged_pct,46.439755458650104
 higher_rate_freeze,Higher rate threshold freeze,2026,winners_pct,0.0
 higher_rate_freeze,Higher rate threshold freeze,2026,losers_pct,0.0
 higher_rate_freeze,Higher rate threshold freeze,2026,unchanged_pct,100.0
 higher_rate_freeze,Higher rate threshold freeze,2027,winners_pct,0.0
-higher_rate_freeze,Higher rate threshold freeze,2027,losers_pct,25.415855732860937
-higher_rate_freeze,Higher rate threshold freeze,2027,unchanged_pct,74.58414426713907
+higher_rate_freeze,Higher rate threshold freeze,2027,losers_pct,25.489676458366045
+higher_rate_freeze,Higher rate threshold freeze,2027,unchanged_pct,74.51032354163397
 higher_rate_freeze,Higher rate threshold freeze,2028,winners_pct,0.0
-higher_rate_freeze,Higher rate threshold freeze,2028,losers_pct,26.22744942952564
-higher_rate_freeze,Higher rate threshold freeze,2028,unchanged_pct,73.77255057047437
+higher_rate_freeze,Higher rate threshold freeze,2028,losers_pct,26.301560952717068
+higher_rate_freeze,Higher rate threshold freeze,2028,unchanged_pct,73.69843904728293
 higher_rate_freeze,Higher rate threshold freeze,2029,winners_pct,0.0
-higher_rate_freeze,Higher rate threshold freeze,2029,losers_pct,26.639870653484856
-higher_rate_freeze,Higher rate threshold freeze,2029,unchanged_pct,73.36012934651515
+higher_rate_freeze,Higher rate threshold freeze,2029,losers_pct,26.724724913173453
+higher_rate_freeze,Higher rate threshold freeze,2029,unchanged_pct,73.27527508682655
 higher_rate_freeze,Higher rate threshold freeze,2030,winners_pct,0.0
-higher_rate_freeze,Higher rate threshold freeze,2030,losers_pct,26.837301421594713
-higher_rate_freeze,Higher rate threshold freeze,2030,unchanged_pct,73.1626985784053
+higher_rate_freeze,Higher rate threshold freeze,2030,losers_pct,26.947933720751593
+higher_rate_freeze,Higher rate threshold freeze,2030,unchanged_pct,73.05206627924841
 advanced_rate_freeze,Advanced rate threshold freeze,2026,winners_pct,0.0
 advanced_rate_freeze,Advanced rate threshold freeze,2026,losers_pct,0.0
 advanced_rate_freeze,Advanced rate threshold freeze,2026,unchanged_pct,100.0
 advanced_rate_freeze,Advanced rate threshold freeze,2027,winners_pct,0.0
-advanced_rate_freeze,Advanced rate threshold freeze,2027,losers_pct,8.048180752173165
-advanced_rate_freeze,Advanced rate threshold freeze,2027,unchanged_pct,91.95181924782683
+advanced_rate_freeze,Advanced rate threshold freeze,2027,losers_pct,8.082662985261335
+advanced_rate_freeze,Advanced rate threshold freeze,2027,unchanged_pct,91.91733701473866
 advanced_rate_freeze,Advanced rate threshold freeze,2028,winners_pct,0.0
-advanced_rate_freeze,Advanced rate threshold freeze,2028,losers_pct,8.220343553450254
-advanced_rate_freeze,Advanced rate threshold freeze,2028,unchanged_pct,91.77965644654974
+advanced_rate_freeze,Advanced rate threshold freeze,2028,losers_pct,8.261146379963936
+advanced_rate_freeze,Advanced rate threshold freeze,2028,unchanged_pct,91.73885362003605
 advanced_rate_freeze,Advanced rate threshold freeze,2029,winners_pct,0.0
-advanced_rate_freeze,Advanced rate threshold freeze,2029,losers_pct,8.291868454949789
-advanced_rate_freeze,Advanced rate threshold freeze,2029,unchanged_pct,91.70813154505021
+advanced_rate_freeze,Advanced rate threshold freeze,2029,losers_pct,8.33345086090616
+advanced_rate_freeze,Advanced rate threshold freeze,2029,unchanged_pct,91.66654913909385
 advanced_rate_freeze,Advanced rate threshold freeze,2030,winners_pct,0.0
-advanced_rate_freeze,Advanced rate threshold freeze,2030,losers_pct,8.467562417050239
-advanced_rate_freeze,Advanced rate threshold freeze,2030,unchanged_pct,91.53243758294977
+advanced_rate_freeze,Advanced rate threshold freeze,2030,losers_pct,8.501212515741937
+advanced_rate_freeze,Advanced rate threshold freeze,2030,unchanged_pct,91.49878748425806
 top_rate_freeze,Top rate threshold freeze,2026,winners_pct,0.0
 top_rate_freeze,Top rate threshold freeze,2026,losers_pct,0.0
 top_rate_freeze,Top rate threshold freeze,2026,unchanged_pct,100.0
 top_rate_freeze,Top rate threshold freeze,2027,winners_pct,0.0
-top_rate_freeze,Top rate threshold freeze,2027,losers_pct,1.022485421835262
-top_rate_freeze,Top rate threshold freeze,2027,unchanged_pct,98.97751457816474
+top_rate_freeze,Top rate threshold freeze,2027,losers_pct,1.055528658238143
+top_rate_freeze,Top rate threshold freeze,2027,unchanged_pct,98.94447134176185
 top_rate_freeze,Top rate threshold freeze,2028,winners_pct,0.0
-top_rate_freeze,Top rate threshold freeze,2028,losers_pct,1.2006308060010926
-top_rate_freeze,Top rate threshold freeze,2028,unchanged_pct,98.79936919399891
+top_rate_freeze,Top rate threshold freeze,2028,losers_pct,1.2522646192445515
+top_rate_freeze,Top rate threshold freeze,2028,unchanged_pct,98.74773538075546
 top_rate_freeze,Top rate threshold freeze,2029,winners_pct,0.0
-top_rate_freeze,Top rate threshold freeze,2029,losers_pct,1.2558203608921883
-top_rate_freeze,Top rate threshold freeze,2029,unchanged_pct,98.74417963910781
+top_rate_freeze,Top rate threshold freeze,2029,losers_pct,1.3053000764830598
+top_rate_freeze,Top rate threshold freeze,2029,unchanged_pct,98.69469992351694
 top_rate_freeze,Top rate threshold freeze,2030,winners_pct,0.0
-top_rate_freeze,Top rate threshold freeze,2030,losers_pct,1.3133694256096426
-top_rate_freeze,Top rate threshold freeze,2030,unchanged_pct,98.68663057439035
+top_rate_freeze,Top rate threshold freeze,2030,losers_pct,1.3612099274118437
+top_rate_freeze,Top rate threshold freeze,2030,unchanged_pct,98.63879007258815

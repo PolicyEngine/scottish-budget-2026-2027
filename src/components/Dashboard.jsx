@@ -421,13 +421,16 @@ export default function Dashboard({ selectedPolicies = [] }) {
         );
         const value = row ? parseFloat(row.value) || 0 : 0;
         dataPoint[policyName] = value;
-        netImpact += value;
+        // Only include in netImpact if policy is selected
+        if (selectedPolicies.includes(policyId)) {
+          netImpact += value;
+        }
       });
 
       dataPoint.netImpact = netImpact;
       return dataPoint;
     });
-  }, [isStacked, rawBudgetaryData]);
+  }, [isStacked, rawBudgetaryData, selectedPolicies]);
 
   // Transform distributional data for stacked decile chart
   const stackedDecileData = useMemo(() => {
@@ -448,15 +451,18 @@ export default function Dashboard({ selectedPolicies = [] }) {
         const absValue = row ? parseFloat(row.absolute_change) || 0 : 0;
         dataPoint[`${policyName}_relative`] = relValue;
         dataPoint[`${policyName}_absolute`] = absValue;
-        netRelative += relValue;
-        netAbsolute += absValue;
+        // Only include in net if policy is selected
+        if (selectedPolicies.includes(policyId)) {
+          netRelative += relValue;
+          netAbsolute += absValue;
+        }
       });
 
       dataPoint.netRelative = netRelative;
       dataPoint.netAbsolute = netAbsolute;
       return dataPoint;
     });
-  }, [isStacked, rawDistributionalData, selectedYear]);
+  }, [isStacked, rawDistributionalData, selectedYear, selectedPolicies]);
 
   // Get decile data filtered by selected year - aggregate selected policies
   const decileDataForYear = useMemo(() => {
@@ -673,15 +679,15 @@ export default function Dashboard({ selectedPolicies = [] }) {
             <div style={{ display: "flex", flexDirection: "column", gap: "10px", fontSize: "0.85rem", color: "#475569", lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: "10px" }}>
                 <span style={{ color: "#0F766E", fontWeight: 600 }}>1.</span>
-                <span>We estimate total revenue by multiplying <strong>11,481 £1m+ properties</strong> (from Savills) by the <strong>£1,607 average annual rate</strong> based on UK benchmark rates.</span>
+                <span>We estimate total revenue by multiplying <strong>11,481 £1m+ properties</strong> (from <a href="https://www.savills.com/insight-and-opinion/savills-news/339380/" target="_blank" rel="noopener noreferrer" style={{ color: "#0F766E" }}>Savills</a>) by the <strong>£1,607 average annual rate</strong> based on UK benchmark rates.</span>
               </div>
               <div style={{ display: "flex", gap: "10px" }}>
                 <span style={{ color: "#0F766E", fontWeight: 600 }}>2.</span>
-                <span>We use council-level £1m+ sales data from <strong>Registers of Scotland</strong> to determine geographic distribution across Scotland.</span>
+                <span>We use council-level £1m+ sales data from <a href="https://www.ros.gov.uk/data-and-statistics/property-market-statistics/property-market-report-2024-25" target="_blank" rel="noopener noreferrer" style={{ color: "#0F766E" }}><strong>Registers of Scotland</strong></a> to determine geographic distribution across Scotland.</span>
               </div>
               <div style={{ display: "flex", gap: "10px" }}>
                 <span style={{ color: "#0F766E", fontWeight: 600 }}>3.</span>
-                <span>Within each council, we allocate sales to constituencies based on population weighted by <strong>Band H property concentration</strong>.</span>
+                <span>Within each council, we allocate sales to constituencies based on population weighted by <a href="https://www.gov.uk/government/statistical-data-sets/uk-house-price-index-data-downloads-april-2025" target="_blank" rel="noopener noreferrer" style={{ color: "#0F766E" }}><strong>Band H property concentration</strong></a>.</span>
               </div>
               <div style={{ display: "flex", gap: "10px" }}>
                 <span style={{ color: "#0F766E", fontWeight: 600 }}>4.</span>
@@ -693,7 +699,7 @@ export default function Dashboard({ selectedPolicies = [] }) {
               </div>
             </div>
             <div style={{ marginTop: "12px", paddingTop: "12px", borderTop: "1px solid #e2e8f0" }}>
-              <a href="https://github.com/PolicyEngine/scottish-budget-2026-2027" target="_blank" rel="noopener noreferrer" style={{ color: "#0F766E", fontWeight: 500, fontSize: "0.85rem" }}>
+              <a href="https://github.com/PolicyEngine/scottish-budget-2026-2027/tree/main/scotland-mansion-tax" target="_blank" rel="noopener noreferrer" style={{ color: "#0F766E", fontWeight: 500, fontSize: "0.85rem" }}>
                 View full methodology on GitHub →
               </a>
             </div>
