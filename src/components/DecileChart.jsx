@@ -276,7 +276,7 @@ export default function DecileChart({
           <Tooltip
             formatter={(value, name) => [
               formatValue(value),
-              name === "netChange" ? "Net change" : name
+              name === "Net change" ? "Net change" : name
             ]}
             labelFormatter={(label) => `${label} decile`}
             contentStyle={{
@@ -314,7 +314,7 @@ export default function DecileChart({
               stroke="#000000"
               strokeWidth={2}
               dot={{ fill: "#000000", stroke: "#000000", strokeWidth: 1, r: 4 }}
-              name="netChange"
+              name="Net change"
             />
           )}
         </ComposedChart>
