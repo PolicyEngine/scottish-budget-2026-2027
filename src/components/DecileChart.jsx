@@ -260,6 +260,7 @@ export default function DecileChart({
           <ReferenceLine y={0} stroke="#666" strokeWidth={1} />
           {stacked && (
             <Legend
+              wrapperStyle={{ paddingTop: "20px" }}
               payload={[
                 ...legendPolicies.map((name) => ({
                   value: name,
