@@ -329,7 +329,7 @@ export default function MansionTaxMap() {
           <div>
             <h3 className="chart-title">Mansion tax revenue by constituency</h3>
             <p className="chart-description">
-              Estimated annual revenue from council tax reform for properties valued at £1m+
+              Estimated annual revenue from council tax reform for properties valued more than £1m
             </p>
           </div>
         </div>
@@ -448,7 +448,7 @@ export default function MansionTaxMap() {
               <p className="tooltip-value" style={{ color: "#0B7D73" }}>
                 {tooltipData.pct.toFixed(2)}%
               </p>
-              <p className="tooltip-label">Share of revenue</p>
+              <p className="tooltip-label">Share of total revenue</p>
               <p className="tooltip-value-secondary" style={{ color: "#374151" }}>
                 £{(tooltipData.rev / 1000000).toFixed(2)}m
               </p>

@@ -88,6 +88,17 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+a {
+  color: var(--pe-teal-600);
+  text-decoration: none;
+  border-bottom: 1px solid var(--pe-teal-300);
+  transition: border-color var(--pe-transition-fast);
+}
+
+a:hover {
+  border-bottom-color: var(--pe-teal-600);
+}
+
 code {
   font-family: var(--pe-font-mono);
 }

@@ -142,7 +142,7 @@ function SFCComparisonTable() {
       <h2>PolicyEngine vs SFC comparison</h2>
       <p className="comparison-description">
         This table compares PolicyEngine's static microsimulation estimates with
-        the Scottish Fiscal Commission's official costings from the December 2024
+        the <a href="https://fiscalcommission.scot/wp-content/uploads/2026/01/Scotlands-Economic-and-Fiscal-Forecasts-January-2026-revised-13-01-2026.pdf" target="_blank" rel="noopener noreferrer">Scottish Fiscal Commission's</a> official costings from the January 2026
         Economic and Fiscal Forecasts. Values show annual budgetary impact in
         millions of pounds. Positive values indicate revenue for the Government;
         negative values indicate costs.
@@ -250,11 +250,11 @@ function SFCComparisonTable() {
         apportion using PolicyEngine microsimulation. SCP inflation uprating has
         no SFC costing as it's included in their baseline. See{" "}
         <a
-          href="https://fiscalcommission.scot/publications/scotlands-economic-and-fiscal-forecasts-december-2024/"
+          href="https://fiscalcommission.scot/wp-content/uploads/2026/01/Scotlands-Economic-and-Fiscal-Forecasts-January-2026-revised-13-01-2026.pdf"
           target="_blank"
           rel="noopener noreferrer"
         >
-          SFC December 2024 Forecasts
+          SFC January 2026 Forecasts
         </a>{" "}
         and{" "}
         <a

@@ -523,9 +523,9 @@ export default function Dashboard({ selectedPolicies = [] }) {
       {/* Introduction */}
       <h2 className="section-title" id="introduction" ref={(el) => (sectionRefs.current["introduction"] = el)}>Introduction</h2>
       <p className="chart-description">
-        <a href="https://www.gov.scot/publications/scottish-budget-2026-2027/documents/" target="_blank" rel="noopener noreferrer">Finance Secretary Shona Robison announced the Scottish Budget 2026–27</a> on 13 January 2026.
+        Finance Secretary Shona Robison <a href="https://www.gov.scot/publications/scottish-budget-2026-2027/documents/" target="_blank" rel="noopener noreferrer">announced</a> the Scottish Budget 2026–27 on 13 January 2026.
         This dashboard estimates how the budget affects household incomes, poverty rates, and different areas across Scotland.
-        The budget also announces a{" "}
+        The government also announced a{" "}
         <a
           href="#mansion-tax"
           onClick={(e) => {
@@ -562,7 +562,7 @@ export default function Dashboard({ selectedPolicies = [] }) {
       <details className="methodology-details">
         <summary>Methodology</summary>
         <p>
-          This analysis uses the PolicyEngine microsimulation model, which{" "}
+          This analysis uses the <a href="https://github.com/PolicyEngine/scottish-budget-2026-2027" target="_blank" rel="noopener noreferrer">PolicyEngine microsimulation model</a>, which{" "}
           <a href="https://github.com/PolicyEngine/policyengine-uk-data" target="_blank" rel="noopener noreferrer">reweights</a>{" "}
           the Family Resources Survey to match Scottish demographics. See also:{" "}
           <a href="https://www.policyengine.org/uk/scottish-budget-2026-27" target="_blank" rel="noopener noreferrer">pre-budget dashboard</a>{" "}
@@ -663,7 +663,7 @@ export default function Dashboard({ selectedPolicies = [] }) {
           Mansion tax
         </summary>
         <p className="chart-description" style={{ marginTop: "12px" }}>
-          The Scottish Budget 2026-27 <a href="https://www.bbc.co.uk/news/live/c0lxn7e7rlpt" target="_blank" rel="noopener noreferrer">introduces</a> new council tax bands for properties valued at £1 million or more,
+          The Scottish Budget 2026-27 <a href="https://www.bbc.co.uk/news/live/c0lxn7e7rlpt" target="_blank" rel="noopener noreferrer">introduced</a> new council tax bands for properties valued at £1 million or more,
           effective from April 2028. The Finance Secretary <a href="https://www.lbc.co.uk/article/wealthy-scots-in-snp-sights-as-budget-proposes-mansion-house-tax-and-a-tax-on-pr-5HjdQg9_2/" target="_blank" rel="noopener noreferrer">estimated £16m</a> in annual revenue; using UK benchmark rates, we estimate £18.5m.
           The map below shows each constituency's share. Edinburgh constituencies account for ~47% of total revenue.
         </p>
