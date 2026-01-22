@@ -7,6 +7,74 @@ import SFCComparisonTable from "./SFCComparisonTable";
 import MansionTaxMap from "./MansionTaxMap";
 import "./Dashboard.css";
 import { POLICY_NAMES, ALL_POLICY_IDS, REVENUE_POLICIES } from "../utils/policyConfig";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
+
+// Small chart component for threshold comparisons
+const ThresholdChart = ({ data, title, baselineLabel = "Baseline", reformLabel = "Reform" }) => (
+  <div style={{ marginTop: "16px", marginBottom: "8px" }}>
+    <ResponsiveContainer width="100%" height={200}>
+      <LineChart data={data} margin={{ top: 10, right: 30, left: 20, bottom: 5 }}>
+        <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+        <XAxis dataKey="year" tick={{ fontSize: 11 }} />
+        <YAxis
+          tickFormatter={(v) => `£${(v / 1000).toFixed(0)}k`}
+          tick={{ fontSize: 11 }}
+          domain={['auto', 'auto']}
+        />
+        <Tooltip
+          formatter={(value) => [`£${value.toLocaleString()}`, null]}
+          labelFormatter={(label) => `${label}`}
+        />
+        <Legend wrapperStyle={{ fontSize: "12px" }} />
+        <Line
+          type="monotone"
+          dataKey="baseline"
+          stroke="#9CA3AF"
+          strokeWidth={2}
+          strokeDasharray="5 5"
+          dot={{ r: 3 }}
+          name={baselineLabel}
+        />
+        <Line
+          type="monotone"
+          dataKey="reform"
+          stroke="#0D9488"
+          strokeWidth={2}
+          dot={{ r: 3 }}
+          name={reformLabel}
+        />
+      </LineChart>
+    </ResponsiveContainer>
+  </div>
+);
+
+// Data for threshold charts
+const BASIC_RATE_THRESHOLD_DATA = [
+  { year: "2025-26", baseline: 15398, reform: 15398 },
+  { year: "2026-27", baseline: 15706, reform: 16538 },
+  { year: "2027-28", baseline: 16020, reform: 16872 },
+  { year: "2028-29", baseline: 16341, reform: 17216 },
+  { year: "2029-30", baseline: 16667, reform: 17567 },
+  { year: "2030-31", baseline: 17001, reform: 17918 },
+];
+
+const INTERMEDIATE_RATE_THRESHOLD_DATA = [
+  { year: "2025-26", baseline: 27492, reform: 27492 },
+  { year: "2026-27", baseline: 28042, reform: 29527 },
+  { year: "2027-28", baseline: 28603, reform: 30123 },
+  { year: "2028-29", baseline: 29175, reform: 30738 },
+  { year: "2029-30", baseline: 29758, reform: 31365 },
+  { year: "2030-31", baseline: 30354, reform: 31992 },
+];
 
 // Section definitions for navigation
 const SECTIONS = [
@@ -131,7 +199,8 @@ const POLICY_INFO = {
               <tr><td style={{...tdStyle, borderBottom: "none"}}>2030-31</td><td style={{...tdRightStyle, borderBottom: "none"}}>£17,918</td><td style={{...tdCenterStyle, borderBottom: "none"}}>CPI</td></tr>
             </tbody>
           </table>
-          <p style={noteStyle}>Note: From 2027-28, thresholds projected using OBR CPI forecasts (~2% annually). Source: <a href="https://www.gov.scot/publications/scottish-income-tax-rates-and-bands/pages/2026-to-2027/" target="_blank" rel="noopener noreferrer">Scottish Government</a> | <a href="https://obr.uk/efo/economic-and-fiscal-outlook-november-2025/" target="_blank" rel="noopener noreferrer">OBR EFO November 2025</a></p>
+          <ThresholdChart data={BASIC_RATE_THRESHOLD_DATA} />
+          <p style={noteStyle}>Note: Baseline assumes CPI growth (~2% annually) from 2025-26. Reform values from 2027-28 projected using OBR CPI forecasts. Source: <a href="https://www.gov.scot/publications/scottish-income-tax-rates-and-bands/pages/2026-to-2027/" target="_blank" rel="noopener noreferrer">Scottish Government</a> | <a href="https://obr.uk/efo/economic-and-fiscal-outlook-november-2025/" target="_blank" rel="noopener noreferrer">OBR EFO November 2025</a></p>
         </details>
       </li>
     ),
@@ -163,7 +232,8 @@ const POLICY_INFO = {
               <tr><td style={{...tdStyle, borderBottom: "none"}}>2030-31</td><td style={{...tdRightStyle, borderBottom: "none"}}>£31,992</td><td style={{...tdCenterStyle, borderBottom: "none"}}>CPI</td></tr>
             </tbody>
           </table>
-          <p style={noteStyle}>Note: From 2027-28, thresholds projected using OBR CPI forecasts (~2% annually). Source: <a href="https://www.gov.scot/publications/scottish-income-tax-rates-and-bands/pages/2026-to-2027/" target="_blank" rel="noopener noreferrer">Scottish Government</a> | <a href="https://obr.uk/efo/economic-and-fiscal-outlook-november-2025/" target="_blank" rel="noopener noreferrer">OBR EFO November 2025</a></p>
+          <ThresholdChart data={INTERMEDIATE_RATE_THRESHOLD_DATA} />
+          <p style={noteStyle}>Note: Baseline assumes CPI growth (~2% annually) from 2025-26. Reform values from 2027-28 projected using OBR CPI forecasts. Source: <a href="https://www.gov.scot/publications/scottish-income-tax-rates-and-bands/pages/2026-to-2027/" target="_blank" rel="noopener noreferrer">Scottish Government</a> | <a href="https://obr.uk/efo/economic-and-fiscal-outlook-november-2025/" target="_blank" rel="noopener noreferrer">OBR EFO November 2025</a></p>
         </details>
       </li>
     ),
