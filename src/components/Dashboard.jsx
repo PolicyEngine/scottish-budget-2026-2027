@@ -19,29 +19,39 @@ import {
 } from "recharts";
 
 // Small chart component for threshold comparisons
-const ThresholdChart = ({ data, title, baselineLabel = "Baseline", reformLabel = "Reform" }) => (
-  <div style={{ marginTop: "16px", marginBottom: "8px" }}>
-    <ResponsiveContainer width="100%" height={200}>
-      <LineChart data={data} margin={{ top: 10, right: 30, left: 20, bottom: 5 }}>
+const ThresholdChart = ({ data, baselineLabel = "Baseline", reformLabel = "Reform" }) => (
+  <div style={{
+    maxWidth: "450px",
+    margin: "16px auto 8px auto",
+    background: "#fafbfc",
+    borderRadius: "8px",
+    padding: "12px"
+  }}>
+    <ResponsiveContainer width="100%" height={300}>
+      <LineChart data={data} margin={{ top: 5, right: 20, left: 10, bottom: 5 }}>
         <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-        <XAxis dataKey="year" tick={{ fontSize: 11 }} />
+        <XAxis dataKey="year" tick={{ fontSize: 10 }} tickLine={false} />
         <YAxis
           tickFormatter={(v) => `£${(v / 1000).toFixed(0)}k`}
-          tick={{ fontSize: 11 }}
+          tick={{ fontSize: 10 }}
+          tickLine={false}
+          axisLine={false}
           domain={['auto', 'auto']}
+          width={45}
         />
         <Tooltip
-          formatter={(value) => [`£${value.toLocaleString()}`, null]}
-          labelFormatter={(label) => `${label}`}
+          formatter={(value, name) => [`£${value.toLocaleString()}`, name]}
+          labelFormatter={(label) => label}
+          contentStyle={{ fontSize: "12px", borderRadius: "6px" }}
         />
-        <Legend wrapperStyle={{ fontSize: "12px" }} />
+        <Legend wrapperStyle={{ fontSize: "11px", paddingTop: "8px" }} />
         <Line
           type="monotone"
           dataKey="baseline"
           stroke="#9CA3AF"
           strokeWidth={2}
           strokeDasharray="5 5"
-          dot={{ r: 3 }}
+          dot={{ r: 3, fill: "#9CA3AF" }}
           name={baselineLabel}
         />
         <Line
@@ -49,7 +59,7 @@ const ThresholdChart = ({ data, title, baselineLabel = "Baseline", reformLabel =
           dataKey="reform"
           stroke="#0D9488"
           strokeWidth={2}
-          dot={{ r: 3 }}
+          dot={{ r: 3, fill: "#0D9488" }}
           name={reformLabel}
         />
       </LineChart>
@@ -78,29 +88,29 @@ const INTERMEDIATE_RATE_THRESHOLD_DATA = [
 
 const HIGHER_RATE_THRESHOLD_DATA = [
   { year: "2025-26", baseline: 43662, reform: 43662 },
-  { year: "2026-27", baseline: 44535, reform: 43662 },
-  { year: "2027-28", baseline: 45426, reform: 43662 },
-  { year: "2028-29", baseline: 46334, reform: 43662 },
-  { year: "2029-30", baseline: 47261, reform: 44553 },
-  { year: "2030-31", baseline: 48206, reform: 45444 },
+  { year: "2026-27", baseline: 43662, reform: 43662 },
+  { year: "2027-28", baseline: 44544, reform: 43662 },
+  { year: "2028-29", baseline: 45453, reform: 43662 },
+  { year: "2029-30", baseline: 46380, reform: 44553 },
+  { year: "2030-31", baseline: 47308, reform: 45444 },
 ];
 
 const ADVANCED_RATE_THRESHOLD_DATA = [
   { year: "2025-26", baseline: 75000, reform: 75000 },
-  { year: "2026-27", baseline: 76500, reform: 75000 },
-  { year: "2027-28", baseline: 78030, reform: 75000 },
-  { year: "2028-29", baseline: 79591, reform: 75000 },
-  { year: "2029-30", baseline: 81182, reform: 76530 },
-  { year: "2030-31", baseline: 82806, reform: 78061 },
+  { year: "2026-27", baseline: 75000, reform: 75000 },
+  { year: "2027-28", baseline: 76515, reform: 75000 },
+  { year: "2028-29", baseline: 78076, reform: 75000 },
+  { year: "2029-30", baseline: 79669, reform: 76530 },
+  { year: "2030-31", baseline: 81262, reform: 78061 },
 ];
 
 const TOP_RATE_THRESHOLD_DATA = [
   { year: "2025-26", baseline: 125140, reform: 125140 },
-  { year: "2026-27", baseline: 127643, reform: 125140 },
-  { year: "2027-28", baseline: 130196, reform: 125140 },
-  { year: "2028-29", baseline: 132800, reform: 125140 },
-  { year: "2029-30", baseline: 135456, reform: 127693 },
-  { year: "2030-31", baseline: 138165, reform: 130247 },
+  { year: "2026-27", baseline: 125140, reform: 125140 },
+  { year: "2027-28", baseline: 127668, reform: 125140 },
+  { year: "2028-29", baseline: 130273, reform: 125140 },
+  { year: "2029-30", baseline: 132930, reform: 127693 },
+  { year: "2030-31", baseline: 135589, reform: 130247 },
 ];
 
 // Section definitions for navigation
@@ -209,25 +219,8 @@ const POLICY_INFO = {
         the 20% basic rate instead of the 19% starter rate.
         <details className="policy-table-details" style={{ marginTop: "12px" }}>
           <summary style={summaryStyle}>View basic rate threshold by year</summary>
-          <table style={tableStyle}>
-            <thead>
-              <tr>
-                <th style={thStyle}>Year</th>
-                <th style={thRightStyle}>Basic rate starts at</th>
-                <th style={thCenterStyle}>Change from prior year</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td style={tdStyle}>2025-26</td><td style={tdRightStyle}>£15,398</td><td style={tdCenterStyle}>—</td></tr>
-              <tr><td style={tdStyle}>2026-27</td><td style={tdRightStyle}>£16,538</td><td style={{...tdCenterStyle, color: "#2e7d32"}}>+7.4%</td></tr>
-              <tr><td style={tdStyle}>2027-28</td><td style={tdRightStyle}>£16,872</td><td style={tdCenterStyle}>CPI</td></tr>
-              <tr><td style={tdStyle}>2028-29</td><td style={tdRightStyle}>£17,216</td><td style={tdCenterStyle}>CPI</td></tr>
-              <tr><td style={tdStyle}>2029-30</td><td style={tdRightStyle}>£17,567</td><td style={tdCenterStyle}>CPI</td></tr>
-              <tr><td style={{...tdStyle, borderBottom: "none"}}>2030-31</td><td style={{...tdRightStyle, borderBottom: "none"}}>£17,918</td><td style={{...tdCenterStyle, borderBottom: "none"}}>CPI</td></tr>
-            </tbody>
-          </table>
           <ThresholdChart data={BASIC_RATE_THRESHOLD_DATA} />
-          <p style={noteStyle}>Note: Baseline assumes CPI growth (~2% annually) from 2025-26. Reform values from 2027-28 projected using OBR CPI forecasts. Source: <a href="https://www.gov.scot/publications/scottish-income-tax-rates-and-bands/pages/2026-to-2027/" target="_blank" rel="noopener noreferrer">Scottish Government</a> | <a href="https://obr.uk/efo/economic-and-fiscal-outlook-november-2025/" target="_blank" rel="noopener noreferrer">OBR EFO November 2025</a></p>
+          <p style={noteStyle}>Note: Baseline shows CPI-only growth . Reform shows 7.4% uplift in 2026-27, then CPI growth. Source: <a href="https://www.gov.scot/publications/scottish-income-tax-rates-and-bands/pages/2026-to-2027/" target="_blank" rel="noopener noreferrer">Scottish Government</a> | <a href="https://obr.uk/efo/economic-and-fiscal-outlook-november-2025/" target="_blank" rel="noopener noreferrer">OBR EFO November 2025</a></p>
         </details>
       </li>
     ),
@@ -242,25 +235,8 @@ const POLICY_INFO = {
         paying the 21% intermediate rate instead of the 20% basic rate.
         <details className="policy-table-details" style={{ marginTop: "12px" }}>
           <summary style={summaryStyle}>View intermediate rate threshold by year</summary>
-          <table style={tableStyle}>
-            <thead>
-              <tr>
-                <th style={thStyle}>Year</th>
-                <th style={thRightStyle}>Intermediate rate starts at</th>
-                <th style={thCenterStyle}>Change from prior year</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td style={tdStyle}>2025-26</td><td style={tdRightStyle}>£27,492</td><td style={tdCenterStyle}>—</td></tr>
-              <tr><td style={tdStyle}>2026-27</td><td style={tdRightStyle}>£29,527</td><td style={{...tdCenterStyle, color: "#2e7d32"}}>+7.4%</td></tr>
-              <tr><td style={tdStyle}>2027-28</td><td style={tdRightStyle}>£30,123</td><td style={tdCenterStyle}>CPI</td></tr>
-              <tr><td style={tdStyle}>2028-29</td><td style={tdRightStyle}>£30,738</td><td style={tdCenterStyle}>CPI</td></tr>
-              <tr><td style={tdStyle}>2029-30</td><td style={tdRightStyle}>£31,365</td><td style={tdCenterStyle}>CPI</td></tr>
-              <tr><td style={{...tdStyle, borderBottom: "none"}}>2030-31</td><td style={{...tdRightStyle, borderBottom: "none"}}>£31,992</td><td style={{...tdCenterStyle, borderBottom: "none"}}>CPI</td></tr>
-            </tbody>
-          </table>
           <ThresholdChart data={INTERMEDIATE_RATE_THRESHOLD_DATA} />
-          <p style={noteStyle}>Note: Baseline assumes CPI growth (~2% annually) from 2025-26. Reform values from 2027-28 projected using OBR CPI forecasts. Source: <a href="https://www.gov.scot/publications/scottish-income-tax-rates-and-bands/pages/2026-to-2027/" target="_blank" rel="noopener noreferrer">Scottish Government</a> | <a href="https://obr.uk/efo/economic-and-fiscal-outlook-november-2025/" target="_blank" rel="noopener noreferrer">OBR EFO November 2025</a></p>
+          <p style={noteStyle}>Note: Baseline shows CPI-only growth . Reform shows 7.4% uplift in 2026-27, then CPI growth. Source: <a href="https://www.gov.scot/publications/scottish-income-tax-rates-and-bands/pages/2026-to-2027/" target="_blank" rel="noopener noreferrer">Scottish Government</a> | <a href="https://obr.uk/efo/economic-and-fiscal-outlook-november-2025/" target="_blank" rel="noopener noreferrer">OBR EFO November 2025</a></p>
         </details>
       </li>
     ),
@@ -271,12 +247,12 @@ const POLICY_INFO = {
     explanation: (
       <li>
         <strong>Higher rate threshold freeze</strong>: The higher rate (42%) threshold remains frozen
-        at £43,662 until 2028-29. Without the freeze, this threshold would increase with inflation,
-        meaning fewer taxpayers would pay the higher rate. The freeze raises revenue for the Scottish Government.
+        at £43,662 from 2025-26 through 2028-29, then resumes CPI uprating (£44,553 in 2029-30, £45,444 in 2030-31).
+        Without the freeze, the threshold would reach ~£47k by 2030-31. The freeze raises revenue by bringing more taxpayers into the higher rate band.
         <details className="policy-table-details" style={{ marginTop: "12px" }}>
           <summary style={summaryStyle}>View higher rate threshold by year</summary>
           <ThresholdChart data={HIGHER_RATE_THRESHOLD_DATA} />
-          <p style={noteStyle}>Note: Baseline assumes CPI growth (~2% annually). Freeze confirmed until 2028-29; 2029-30 onwards assumes CPI uprating. Source: <a href="https://www.gov.scot/publications/scottish-budget-2026-2027/pages/3/" target="_blank" rel="noopener noreferrer">Scottish Budget Chapter 2</a> | <a href="https://fiscalcommission.scot/publications/scotlands-economic-and-fiscal-forecasts-january-2026/" target="_blank" rel="noopener noreferrer">SFC January 2026</a></p>
+          <p style={noteStyle}>Note: Baseline assumes CPI growth after 2026-27. Freeze confirmed until 2028-29; 2029-30 onwards assumes CPI uprating. Source: <a href="https://www.gov.scot/publications/scottish-budget-2026-2027/pages/3/" target="_blank" rel="noopener noreferrer">Scottish Budget Chapter 2</a> | <a href="https://fiscalcommission.scot/publications/scotlands-economic-and-fiscal-forecasts-january-2026/" target="_blank" rel="noopener noreferrer">SFC January 2026</a></p>
         </details>
       </li>
     ),
@@ -287,12 +263,12 @@ const POLICY_INFO = {
     explanation: (
       <li>
         <strong>Advanced rate threshold freeze</strong>: The advanced rate (45%) threshold remains frozen
-        at £75,000 until 2028-29. Without the freeze, this threshold would increase with inflation.
-        The freeze raises revenue from higher earners.
+        at £75,000 from 2025-26 through 2028-29, then resumes CPI uprating (£76,530 in 2029-30, £78,061 in 2030-31).
+        Without the freeze, the threshold would reach ~£81k by 2030-31. The freeze raises revenue from higher earners.
         <details className="policy-table-details" style={{ marginTop: "12px" }}>
           <summary style={summaryStyle}>View advanced rate threshold by year</summary>
           <ThresholdChart data={ADVANCED_RATE_THRESHOLD_DATA} />
-          <p style={noteStyle}>Note: Baseline assumes CPI growth (~2% annually). Freeze confirmed until 2028-29; 2029-30 onwards assumes CPI uprating. Source: <a href="https://www.gov.scot/publications/scottish-budget-2026-2027/pages/3/" target="_blank" rel="noopener noreferrer">Scottish Budget Chapter 2</a></p>
+          <p style={noteStyle}>Note: Baseline assumes CPI growth after 2026-27. Freeze confirmed until 2028-29; 2029-30 onwards assumes CPI uprating. Source: <a href="https://www.gov.scot/publications/scottish-budget-2026-2027/pages/3/" target="_blank" rel="noopener noreferrer">Scottish Budget Chapter 2</a> | <a href="https://fiscalcommission.scot/publications/scotlands-economic-and-fiscal-forecasts-january-2026/" target="_blank" rel="noopener noreferrer">SFC January 2026</a></p>
         </details>
       </li>
     ),
@@ -303,12 +279,12 @@ const POLICY_INFO = {
     explanation: (
       <li>
         <strong>Top rate threshold freeze</strong>: The top rate (48%) threshold remains frozen
-        at £125,140 until 2028-29. Without the freeze, this threshold would increase with inflation.
-        The freeze raises revenue from the highest earners.
+        at £125,140 from 2025-26 through 2028-29, then resumes CPI uprating (£127,693 in 2029-30, £130,247 in 2030-31).
+        Without the freeze, the threshold would reach ~£136k by 2030-31. The freeze raises revenue from the highest earners.
         <details className="policy-table-details" style={{ marginTop: "12px" }}>
           <summary style={summaryStyle}>View top rate threshold by year</summary>
           <ThresholdChart data={TOP_RATE_THRESHOLD_DATA} />
-          <p style={noteStyle}>Note: Baseline assumes CPI growth (~2% annually). Freeze confirmed until 2028-29; 2029-30 onwards assumes CPI uprating. £125,140 aligns with UK Personal Allowance taper. Source: <a href="https://www.gov.scot/publications/scottish-budget-2026-2027/pages/3/" target="_blank" rel="noopener noreferrer">Scottish Budget Chapter 2</a></p>
+          <p style={noteStyle}>Note: Baseline assumes CPI growth after 2026-27. Freeze confirmed until 2028-29; 2029-30 onwards assumes CPI uprating. £125,140 aligns with UK Personal Allowance taper. Source: <a href="https://www.gov.scot/publications/scottish-budget-2026-2027/pages/3/" target="_blank" rel="noopener noreferrer">Scottish Budget Chapter 2</a> | <a href="https://fiscalcommission.scot/publications/scotlands-economic-and-fiscal-forecasts-january-2026/" target="_blank" rel="noopener noreferrer">SFC January 2026</a></p>
         </details>
       </li>
     ),
@@ -640,33 +616,35 @@ export default function Dashboard({ selectedPolicies = [] }) {
         </a>
         {" "}on high-value properties from April 2028, detailed in the last section.
       </p>
-      <p className="chart-description" style={{ marginTop: "12px" }}>
-        The Budget includes the following measures:
-      </p>
-      <ul className="policy-list">
-        {isStacked ? (
-          <>
-            {POLICY_INFO.income_tax_basic_uplift.explanation}
-            {POLICY_INFO.income_tax_intermediate_uplift.explanation}
-            {POLICY_INFO.scp_inflation.explanation}
-            {POLICY_INFO.scp_baby_boost.explanation}
-            {POLICY_INFO.higher_rate_freeze.explanation}
-            {POLICY_INFO.advanced_rate_freeze.explanation}
-            {POLICY_INFO.top_rate_freeze.explanation}
-          </>
-        ) : (
-          policyInfo.explanation
-        )}
-      </ul>
-      <details className="methodology-details">
-        <summary>Methodology</summary>
-        <p>
-          This analysis uses the <a href="https://github.com/PolicyEngine/scottish-budget-2026-2027" target="_blank" rel="noopener noreferrer">PolicyEngine microsimulation model</a>, which{" "}
-          <a href="https://github.com/PolicyEngine/policyengine-uk-data" target="_blank" rel="noopener noreferrer">reweights</a>{" "}
-          the Family Resources Survey to match Scottish demographics. See also:{" "}
-          <a href="https://www.policyengine.org/uk/scottish-budget-2026-27" target="_blank" rel="noopener noreferrer">pre-budget dashboard</a>{" "}
-          | <a href="https://policyengine.org/uk/research/uk-poverty-analysis" target="_blank" rel="noopener noreferrer">poverty methodology</a>.
-        </p>
+      <details className="budget-measures-details" style={{ marginTop: "12px" }}>
+        <summary style={{ cursor: "pointer", color: "#2c6e49", fontWeight: "500" }}>
+          Click to see what the Budget includes
+        </summary>
+        <ul className="policy-list">
+          {isStacked ? (
+            <>
+              {POLICY_INFO.income_tax_basic_uplift.explanation}
+              {POLICY_INFO.income_tax_intermediate_uplift.explanation}
+              {POLICY_INFO.scp_inflation.explanation}
+              {POLICY_INFO.scp_baby_boost.explanation}
+              {POLICY_INFO.higher_rate_freeze.explanation}
+              {POLICY_INFO.advanced_rate_freeze.explanation}
+              {POLICY_INFO.top_rate_freeze.explanation}
+            </>
+          ) : (
+            policyInfo.explanation
+          )}
+        </ul>
+        <details className="methodology-details" style={{ marginTop: "12px" }}>
+          <summary>Methodology</summary>
+          <p>
+            This analysis uses the <a href="https://github.com/PolicyEngine/scottish-budget-2026-2027" target="_blank" rel="noopener noreferrer">PolicyEngine microsimulation model</a>, which{" "}
+            <a href="https://github.com/PolicyEngine/policyengine-uk-data" target="_blank" rel="noopener noreferrer">reweights</a>{" "}
+            the Family Resources Survey to match Scottish demographics. See also:{" "}
+            <a href="https://www.policyengine.org/uk/scottish-budget-2026-27" target="_blank" rel="noopener noreferrer">pre-budget dashboard</a>{" "}
+            | <a href="https://policyengine.org/uk/research/uk-poverty-analysis" target="_blank" rel="noopener noreferrer">poverty methodology</a>.
+          </p>
+        </details>
       </details>
 
       {/* Budgetary Impact Section */}
