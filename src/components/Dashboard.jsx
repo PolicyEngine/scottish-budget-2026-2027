@@ -141,38 +141,6 @@ const summaryStyle = { cursor: "pointer", color: "#2c6e49", fontWeight: "500" };
 
 // Policy descriptions (active voice, clear impacts)
 const POLICY_INFO = {
-  scp_inflation: {
-    name: "SCP inflation adjustment",
-    description: "Scottish Child Payment uprated from £27.15 to £28.20/week",
-    explanation: (
-      <li>
-        <strong>SCP inflation adjustment</strong>: The Budget uprates the Scottish Child Payment
-        from £27.15 to £28.20 per week (+3.9% for inflation). This benefits all families receiving
-        SCP, providing approximately £55 extra per child per year.
-        <details className="policy-table-details" style={{ marginTop: "12px" }}>
-          <summary style={summaryStyle}>View SCP rates by year</summary>
-          <table style={tableStyle}>
-            <thead>
-              <tr>
-                <th style={thStyle}>Year</th>
-                <th style={thRightStyle}>Weekly rate</th>
-                <th style={thRightStyle}>Annual (per child)</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td style={tdStyle}>2025-26</td><td style={tdRightStyle}>£27.15</td><td style={tdRightStyle}>£1,412</td></tr>
-              <tr><td style={tdStyle}>2026-27</td><td style={tdRightStyle}>£28.20</td><td style={tdRightStyle}>£1,466</td></tr>
-              <tr><td style={tdStyle}>2027-28</td><td style={tdRightStyle}>£28.85</td><td style={tdRightStyle}>£1,500</td></tr>
-              <tr><td style={tdStyle}>2028-29</td><td style={tdRightStyle}>£29.45</td><td style={tdRightStyle}>£1,531</td></tr>
-              <tr><td style={tdStyle}>2029-30</td><td style={tdRightStyle}>£30.05</td><td style={tdRightStyle}>£1,563</td></tr>
-              <tr><td style={{...tdStyle, borderBottom: "none"}}>2030-31</td><td style={{...tdRightStyle, borderBottom: "none"}}>£30.65</td><td style={{...tdRightStyle, borderBottom: "none"}}>£1,594</td></tr>
-            </tbody>
-          </table>
-          <p style={noteStyle}>Note: Uprated annually by CPI (September of prior year). Source: <a href="https://www.gov.scot/publications/scottish-budget-2026-2027/" target="_blank" rel="noopener noreferrer">Scottish Budget 2026-27</a> | <a href="https://fiscalcommission.scot/publications/scotlands-economic-and-fiscal-forecasts-january-2026/" target="_blank" rel="noopener noreferrer">SFC January 2026</a></p>
-        </details>
-      </li>
-    ),
-  },
   scp_baby_boost: {
     name: "SCP Premium for under-ones",
     description: "Scottish Child Payment raised to £40/week for babies under 1",
@@ -622,7 +590,6 @@ export default function Dashboard({ selectedPolicies = [] }) {
             <>
               {POLICY_INFO.income_tax_basic_uplift.explanation}
               {POLICY_INFO.income_tax_intermediate_uplift.explanation}
-              {POLICY_INFO.scp_inflation.explanation}
               {POLICY_INFO.scp_baby_boost.explanation}
               {POLICY_INFO.higher_rate_freeze.explanation}
               {POLICY_INFO.advanced_rate_freeze.explanation}

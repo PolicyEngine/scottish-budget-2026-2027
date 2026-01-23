@@ -49,13 +49,6 @@ export const REFORMS = [
   },
   // Scottish Child Payment
   {
-    id: "scp_inflation",
-    name: "SCP inflation adjustment",
-    description: "Scottish Child Payment uprated from £27.15 to £28.20/week",
-    color: "#14B8A6",  // Teal 500
-    type: "positive",
-  },
-  {
     id: "scp_baby_boost",
     name: "SCP Premium for under-ones",
     description: "Scottish Child Payment raised to £40/week for babies under 1",

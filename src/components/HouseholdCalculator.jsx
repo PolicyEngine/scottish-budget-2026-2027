@@ -28,7 +28,6 @@ const CHART_COLORS = {
   total: "#0F766E", // Teal 700
   income_tax_basic_uplift: "#0D9488", // Teal 600
   income_tax_intermediate_uplift: "#0F766E", // Teal 700
-  scp_inflation: "#14B8A6", // Teal 500
   scp_baby_boost: "#2DD4BF", // Teal 400
   higher_rate_freeze: "#78350F", // Amber 900 (darkest)
   advanced_rate_freeze: "#92400E", // Amber 800
@@ -61,7 +60,6 @@ function HouseholdCalculator() {
     higher_rate_freeze: 0,
     advanced_rate_freeze: 0,
     top_rate_freeze: 0,
-    scp_inflation: 0,
     scp_baby_boost: 0,
     total: 0,
   });
@@ -152,7 +150,6 @@ function HouseholdCalculator() {
         higher_rate_freeze: result.impacts.higher_rate_freeze,
         advanced_rate_freeze: result.impacts.advanced_rate_freeze,
         top_rate_freeze: result.impacts.top_rate_freeze,
-        scp_inflation: result.impacts.scp_inflation,
         scp_baby_boost: result.impacts.scp_baby_boost,
         total: result.total,
       });
@@ -234,7 +231,7 @@ function HouseholdCalculator() {
         (d.income_tax_basic_uplift || 0) + (d.income_tax_intermediate_uplift || 0),
         d.year
       ),
-      scp: toRealTerms((d.scp_inflation || 0) + (d.scp_baby_boost || 0), d.year),
+      scp: toRealTerms(d.scp_baby_boost || 0, d.year),
       total: toRealTerms(d.total, d.year),
       // Keep individual reform values for tooltip
       income_tax_basic_uplift: toRealTerms(d.income_tax_basic_uplift || 0, d.year),
@@ -242,7 +239,6 @@ function HouseholdCalculator() {
       higher_rate_freeze: toRealTerms(d.higher_rate_freeze || 0, d.year),
       advanced_rate_freeze: toRealTerms(d.advanced_rate_freeze || 0, d.year),
       top_rate_freeze: toRealTerms(d.top_rate_freeze || 0, d.year),
-      scp_inflation: toRealTerms(d.scp_inflation || 0, d.year),
       scp_baby_boost: toRealTerms(d.scp_baby_boost || 0, d.year),
     }));
 
@@ -254,7 +250,7 @@ function HouseholdCalculator() {
       .padding(0.3);
 
     // Dynamic Y scale based on stacked values (sum positives and negatives separately)
-    const policyKeysForScale = ['income_tax_basic_uplift', 'income_tax_intermediate_uplift', 'higher_rate_freeze', 'advanced_rate_freeze', 'top_rate_freeze', 'scp_inflation', 'scp_baby_boost'];
+    const policyKeysForScale = ['income_tax_basic_uplift', 'income_tax_intermediate_uplift', 'higher_rate_freeze', 'advanced_rate_freeze', 'top_rate_freeze', 'scp_baby_boost'];
     let dataMax = 0;
     let dataMin = 0;
     processedData.forEach((d) => {
@@ -335,7 +331,6 @@ function HouseholdCalculator() {
       { key: 'higher_rate_freeze', color: CHART_COLORS.higher_rate_freeze },
       { key: 'advanced_rate_freeze', color: CHART_COLORS.advanced_rate_freeze },
       { key: 'top_rate_freeze', color: CHART_COLORS.top_rate_freeze },
-      { key: 'scp_inflation', color: CHART_COLORS.scp_inflation },
       { key: 'scp_baby_boost', color: CHART_COLORS.scp_baby_boost },
     ];
 
@@ -477,10 +472,6 @@ function HouseholdCalculator() {
             <div style="display:flex;justify-content:space-between;margin-bottom:4px">
               <span style="color:#B45309">Top rate freeze</span>
               <span style="font-weight:500">${formatVal(d.top_rate_freeze)}</span>
-            </div>
-            <div style="display:flex;justify-content:space-between;margin-bottom:4px">
-              <span style="color:#14B8A6">SCP inflation</span>
-              <span style="font-weight:500">${formatVal(d.scp_inflation)}</span>
             </div>
             <div style="display:flex;justify-content:space-between;margin-bottom:6px">
               <span style="color:#2DD4BF">SCP baby boost</span>
@@ -726,10 +717,6 @@ function HouseholdCalculator() {
             <div style="display:flex;justify-content:space-between;margin-bottom:4px">
               <span style="color:#B45309">Top rate freeze</span>
               <span style="font-weight:500">${formatVal(closest.top_rate_freeze)}</span>
-            </div>
-            <div style="display:flex;justify-content:space-between;margin-bottom:4px">
-              <span style="color:#14B8A6">SCP inflation</span>
-              <span style="font-weight:500">${formatVal(closest.scp_inflation)}</span>
             </div>
             <div style="display:flex;justify-content:space-between;margin-bottom:6px">
               <span style="color:#2DD4BF">SCP baby boost</span>

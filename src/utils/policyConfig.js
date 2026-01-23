@@ -13,8 +13,7 @@ export const POLICY_COLORS = {
   // COSTS to treasury (good for households - teal/green spectrum)
   "Basic rate threshold uplift": "#0D9488",   // Teal 600
   "Intermediate rate threshold uplift": "#0F766E", // Teal 700
-  "SCP inflation adjustment": "#14B8A6",      // Teal 500
-  "SCP Premium for under-ones": "#2DD4BF",    // Teal 400 (lightest)
+  "SCP Premium for under-ones": "#2DD4BF",    // Teal 400
 
   // REVENUE raisers (bad for households - amber/orange spectrum)
   "Higher rate threshold freeze": "#78350F",   // Amber 900 (darkest)
@@ -23,7 +22,6 @@ export const POLICY_COLORS = {
 };
 
 export const POLICY_IDS = {
-  scp_inflation: "scp_inflation",
   scp_baby_boost: "scp_baby_boost",
   income_tax_basic_uplift: "income_tax_basic_uplift",
   income_tax_intermediate_uplift: "income_tax_intermediate_uplift",
@@ -33,7 +31,6 @@ export const POLICY_IDS = {
 };
 
 export const POLICY_NAMES = {
-  scp_inflation: "SCP inflation adjustment",
   scp_baby_boost: "SCP Premium for under-ones",
   income_tax_basic_uplift: "Basic rate threshold uplift",
   income_tax_intermediate_uplift: "Intermediate rate threshold uplift",
@@ -48,7 +45,6 @@ export const ALL_POLICY_IDS = [
   // Costs to treasury (negative, teal) - largest to smallest
   "income_tax_basic_uplift",
   "income_tax_intermediate_uplift",
-  "scp_inflation",
   "scp_baby_boost",
   // Revenue raisers (positive, amber) - largest to smallest
   "higher_rate_freeze",
@@ -59,7 +55,6 @@ export const ALL_POLICY_IDS = [
 export const ALL_POLICY_NAMES = [
   "Basic rate threshold uplift",
   "Intermediate rate threshold uplift",
-  "SCP inflation adjustment",
   "SCP Premium for under-ones",
   "Higher rate threshold freeze",
   "Advanced rate threshold freeze",
@@ -68,7 +63,6 @@ export const ALL_POLICY_NAMES = [
 
 // Policies that are costs to treasury (negative values, good for households)
 export const COST_POLICIES = [
-  "scp_inflation",
   "scp_baby_boost",
   "income_tax_basic_uplift",
   "income_tax_intermediate_uplift",

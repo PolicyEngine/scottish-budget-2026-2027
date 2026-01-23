@@ -42,7 +42,6 @@ function parseCSVLine(line) {
 
 const POLICY_DISPLAY_NAMES = {
   scp_baby_boost: "SCP Premium for under-ones",
-  scp_inflation: "SCP inflation adjustment",
   income_tax_basic_uplift: "basic rate threshold uplift",
   income_tax_intermediate_uplift: "intermediate rate threshold uplift",
 };

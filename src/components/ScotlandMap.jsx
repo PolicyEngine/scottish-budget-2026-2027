@@ -9,7 +9,6 @@ const formatYearRange = (year) => `${year}-${(year + 1).toString().slice(-2)}`;
 // Policy display names for breakdown tooltip
 const POLICY_DISPLAY_NAMES = {
   scp_baby_boost: "SCP Premium for under-ones",
-  scp_inflation: "SCP inflation adjustment",
   income_tax_basic_uplift: "Basic rate threshold uplift",
   income_tax_intermediate_uplift: "Intermediate rate threshold uplift",
   higher_rate_freeze: "Higher rate threshold freeze",

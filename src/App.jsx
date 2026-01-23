@@ -10,7 +10,6 @@ const POLICIES = [
   { id: "income_tax_basic_uplift", name: "Basic rate threshold uplift", category: "cost" },
   { id: "income_tax_intermediate_uplift", name: "Intermediate rate threshold uplift", category: "cost" },
   // SCP policies (costs to government)
-  { id: "scp_inflation", name: "SCP inflation adjustment", category: "cost" },
   { id: "scp_baby_boost", name: "SCP Premium for under-ones", category: "cost" },
   // Threshold freezes (revenue raisers)
   { id: "higher_rate_freeze", name: "Higher rate threshold freeze", category: "revenue" },
@@ -23,7 +22,6 @@ function App() {
   const [selectedPolicies, setSelectedPolicies] = useState([
     "income_tax_basic_uplift",
     "income_tax_intermediate_uplift",
-    "scp_inflation",
     "scp_baby_boost",
     "higher_rate_freeze",
     "advanced_rate_freeze",
