@@ -596,13 +596,13 @@ function HouseholdCalculator() {
       .attr("fill", "#6B7280")
       .attr("font-size", "11px");
 
-    // Area fill
+    // Area fill - use linear curve to show sharp cliffs (e.g., SCP eligibility)
     const area = d3
       .area()
       .x((d) => x(d.income))
       .y0(y(0))
       .y1((d) => y(d.total))
-      .curve(d3.curveMonotoneX);
+      .curve(d3.curveLinear);
 
     // Split data into positive and negative areas
     const positiveData = byIncomeData.map((d) => ({
@@ -626,12 +626,12 @@ function HouseholdCalculator() {
       .attr("fill", "rgba(180, 83, 9, 0.2)")
       .attr("d", area);
 
-    // Line
+    // Line - use linear curve to show sharp cliffs (e.g., SCP eligibility)
     const line = d3
       .line()
       .x((d) => x(d.income))
       .y((d) => y(d.total))
-      .curve(d3.curveMonotoneX);
+      .curve(d3.curveLinear);
 
     g.append("path")
       .datum(byIncomeData)

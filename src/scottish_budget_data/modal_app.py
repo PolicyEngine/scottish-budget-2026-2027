@@ -162,8 +162,8 @@ def flask_app():
         """
         import numpy as np
 
-        # 50 income levels from £0 to £200k (faster computation)
-        income_levels = list(range(0, 200001, 4000))  # 0, 4000, 8000, ..., 200000
+        # 201 income levels from £0 to £200k (£1k steps for sharp cliffs like SCP)
+        income_levels = list(range(0, 200001, 1000))  # 0, 1000, 2000, ..., 200000
         n = len(income_levels)
 
         situation = create_vectorized_situation(inputs, year, income_levels)
