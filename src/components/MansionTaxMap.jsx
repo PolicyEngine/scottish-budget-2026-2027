@@ -65,9 +65,9 @@ export default function MansionTaxMap() {
             });
             data[row.constituency] = {
               name: row.constituency,
-              pct: parseFloat(row.pct_local_affected) || 0,
-              num: parseFloat(row.estimated_sales) || 0,
-              dwellings: parseFloat(row.estimated_dwellings) || 0,
+              pct: parseFloat(row.pct_band_h) || 0,
+              bandH: parseInt(row.band_h_properties) || 0,
+              dwellings: parseInt(row.total_dwellings) || 0,
               council: row.council || "Unknown",
             };
           }
@@ -358,14 +358,14 @@ export default function MansionTaxMap() {
         <div className="chart-header">
           <div>
             <h3 className="chart-title">
-              Mansion tax: share of properties affected by constituency
+              Mansion tax: Band H properties by constituency
             </h3>
             <p className="chart-description">
               The Scottish Budget 2026-27 introduced two new council tax bands
-              for properties with a 2026 market value above £1 million,
-              effective from April 2028. The Finance Secretary estimated £16m in
-              annual revenue. The map shows the share of properties in each
-              constituency that would be affected.
+              for properties valued above £1 million, effective from April 2028.
+              The Finance Secretary estimated £16m in annual revenue. The map
+              shows Band H properties (valued &gt;£212k in 1991, ~£1m+ today) as
+              a share of all dwellings in each constituency.
             </p>
           </div>
         </div>
@@ -544,7 +544,7 @@ export default function MansionTaxMap() {
               <p className="tooltip-value" style={{ color: "#0B7D73" }}>
                 {tooltipData.pct.toFixed(2)}%
               </p>
-              <p className="tooltip-label">of local properties affected</p>
+              <p className="tooltip-label">of properties in Band H</p>
             </div>
           )}
         </div>

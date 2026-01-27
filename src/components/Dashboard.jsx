@@ -1155,8 +1155,8 @@ export default function Dashboard({ selectedPolicies = [] }) {
             SFC
           </a>{" "}
           does not cost this policy as Council Tax is a local tax outside their
-          remit. The map shows the share of properties in each constituency that
-          would be affected.
+          remit. The map shows Band H properties (valued &gt;£212k in 1991,
+          ~£1m+ today) as a share of all dwellings.
         </p>
         <details
           className="methodology-details"
@@ -1181,82 +1181,27 @@ export default function Dashboard({ selectedPolicies = [] }) {
               borderLeft: "3px solid #0F766E",
             }}
           >
-            <div
+            <p
               style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "10px",
                 fontSize: "0.85rem",
                 color: "#475569",
                 lineHeight: 1.6,
+                margin: 0,
               }}
             >
-              <div style={{ display: "flex", gap: "10px" }}>
-                <span style={{ color: "#0F766E", fontWeight: 600 }}>1.</span>
-                <span>
-                  We estimate 11,481 properties in Scotland valued over £1m
-                  using data from{" "}
-                  <a
-                    href="https://www.savills.com/insight-and-opinion/savills-news/339380/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ color: "#0F766E" }}
-                  >
-                    Savills
-                  </a>
-                  .
-                </span>
-              </div>
-              <div style={{ display: "flex", gap: "10px" }}>
-                <span style={{ color: "#0F766E", fontWeight: 600 }}>2.</span>
-                <span>
-                  We use council-level £1m+ sales data from{" "}
-                  <a
-                    href="https://www.ros.gov.uk/data-and-statistics/property-market-statistics/property-market-report-2024-25"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ color: "#0F766E" }}
-                  >
-                    Registers of Scotland
-                  </a>{" "}
-                  to identify affected properties geographically across
-                  Scotland.
-                </span>
-              </div>
-              <div style={{ display: "flex", gap: "10px" }}>
-                <span style={{ color: "#0F766E", fontWeight: 600 }}>3.</span>
-                <span>
-                  Within each council, we allocate to constituencies based on
-                  population weighted by{" "}
-                  <a
-                    href="https://www.gov.uk/government/statistical-data-sets/uk-house-price-index-data-downloads-april-2025"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ color: "#0F766E" }}
-                  >
-                    Band H property concentration
-                  </a>
-                  . Band H threshold (&gt;£212k in 1991) equals ~£1.06m today,
-                  closely matching the £1m threshold.
-                </span>
-              </div>
-              <div style={{ display: "flex", gap: "10px" }}>
-                <span style={{ color: "#0F766E", fontWeight: 600 }}>4.</span>
-                <span>
-                  To calculate the share of local properties affected, we divide
-                  estimated affected properties by total dwellings from{" "}
-                  <a
-                    href="https://www.nrscotland.gov.uk/statistics-and-data/statistics/statistics-by-theme/households/household-estimates/household-estimates-for-scotland-by-council-area-and-settlement-size"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ color: "#0F766E" }}
-                  >
-                    National Records of Scotland
-                  </a>{" "}
-                  (2.74 million total in 2024).
-                </span>
-              </div>
-            </div>
+              We use Council Tax Band H property counts from{" "}
+              <a
+                href="https://www.nrscotland.gov.uk/publications/small-area-statistics-on-households-and-dwellings-2024/"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: "#0F766E" }}
+              >
+                National Records of Scotland
+              </a>
+              . Band H covers properties valued over £212,000 in 1991, which
+              equals approximately £1 million today. Scotland has 16,011 Band H
+              properties across 2.83 million dwellings (0.57% average).
+            </p>
             <div
               style={{
                 marginTop: "12px",
