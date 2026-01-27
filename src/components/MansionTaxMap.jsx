@@ -65,9 +65,9 @@ export default function MansionTaxMap() {
             });
             data[row.constituency] = {
               name: row.constituency,
-              pct: parseFloat(row.share_pct) || 0,
+              pct: parseFloat(row.pct_local_affected) || 0,
               num: parseFloat(row.estimated_sales) || 0,
-              rev: parseFloat(row.allocated_revenue) || 0,
+              dwellings: parseFloat(row.estimated_dwellings) || 0,
               council: row.council || "Unknown",
             };
           }
@@ -85,11 +85,11 @@ export default function MansionTaxMap() {
 
   // Compute color scale extent
   const colorExtent = useMemo(() => {
-    if (!impactData) return { min: 0, max: 12 };
-    const values = Object.values(impactData).map(d => d.pct);
+    if (!impactData) return { min: 0, max: 0.12 };
+    const values = Object.values(impactData).map((d) => d.pct);
     return {
       min: 0,
-      max: Math.ceil(Math.max(...values) * 10) / 10,
+      max: Math.ceil(Math.max(...values) * 100) / 100,
     };
   }, [impactData]);
 
@@ -105,8 +105,11 @@ export default function MansionTaxMap() {
     const g = svg.append("g");
 
     // Calculate bounds
-    let xMin = Infinity, xMax = -Infinity, yMin = Infinity, yMax = -Infinity;
-    geoData.features.forEach(feature => {
+    let xMin = Infinity,
+      xMax = -Infinity,
+      yMin = Infinity,
+      yMax = -Infinity;
+    geoData.features.forEach((feature) => {
       const traverse = (coords) => {
         if (typeof coords[0] === "number") {
           xMin = Math.min(xMin, coords[0]);
@@ -124,23 +127,28 @@ export default function MansionTaxMap() {
     const padding = 20;
     const dataWidth = xMax - xMin;
     const dataHeight = yMax - yMin;
-    const geoScale = Math.min((width - 2 * padding) / dataWidth, (height - 2 * padding) / dataHeight) * 0.92;
+    const geoScale =
+      Math.min(
+        (width - 2 * padding) / dataWidth,
+        (height - 2 * padding) / dataHeight,
+      ) * 0.92;
     const geoOffsetX = (width - dataWidth * geoScale) / 2;
     const geoOffsetY = padding;
 
     const projection = d3.geoTransform({
-      point: function(x, y) {
+      point: function (x, y) {
         this.stream.point(
           (x - xMin) * geoScale + geoOffsetX,
-          height - ((y - yMin) * geoScale + geoOffsetY)
+          height - ((y - yMin) * geoScale + geoOffsetY),
         );
-      }
+      },
     });
 
     const pathGenerator = d3.geoPath().projection(projection);
 
     // Zoom
-    const zoom = d3.zoom()
+    const zoom = d3
+      .zoom()
       .scaleExtent([1, 8])
       .on("zoom", (event) => {
         g.attr("transform", event.transform);
@@ -150,9 +158,10 @@ export default function MansionTaxMap() {
     window.mansionTaxMapZoomBehavior = { svg, zoom, pathGenerator };
 
     // Color scale (log scale for better variation)
-    const minPct = 0.01;
+    const minPct = 0.001;
     const maxPct = colorExtent.max;
-    const logScale = d3.scaleLog()
+    const logScale = d3
+      .scaleLog()
       .domain([minPct, maxPct])
       .range([0, 1])
       .clamp(true);
@@ -169,20 +178,27 @@ export default function MansionTaxMap() {
       .join("path")
       .attr("class", "constituency-path")
       .attr("d", pathGenerator)
-      .attr("fill", d => {
+      .attr("fill", (d) => {
         const name = d.properties.SPC21NM;
         const data = impactData[name];
         return data ? colorScale(data.pct) : colorScale(0);
       })
       .attr("stroke", "#fff")
       .attr("stroke-width", 0.3)
-      .on("click", function(event, d) {
+      .on("click", function (event, d) {
         event.stopPropagation();
         const name = d.properties.SPC21NM;
-        const data = impactData[name] || { name, pct: 0, num: 0, rev: 0, council: "Unknown" };
+        const data = impactData[name] || {
+          name,
+          pct: 0,
+          num: 0,
+          rev: 0,
+          council: "Unknown",
+        };
 
         // Reset all strokes
-        svg.selectAll(".constituency-path")
+        svg
+          .selectAll(".constituency-path")
           .attr("stroke", "#fff")
           .attr("stroke-width", 0.3);
 
@@ -200,20 +216,26 @@ export default function MansionTaxMap() {
         const dx = bounds[1][0] - bounds[0][0];
         const dy = bounds[1][1] - bounds[0][1];
         const scale = Math.min(4, 0.9 / Math.max(dx / width, dy / height));
-        const translate = [width / 2 - scale * centerX, height / 2 - scale * centerY];
+        const translate = [
+          width / 2 - scale * centerX,
+          height / 2 - scale * centerY,
+        ];
 
-        svg.transition().duration(750).call(
-          zoom.transform,
-          d3.zoomIdentity.translate(translate[0], translate[1]).scale(scale)
-        );
+        svg
+          .transition()
+          .duration(750)
+          .call(
+            zoom.transform,
+            d3.zoomIdentity.translate(translate[0], translate[1]).scale(scale),
+          );
       })
-      .on("mouseover", function() {
+      .on("mouseover", function () {
         const currentStrokeWidth = d3.select(this).attr("stroke-width");
         if (currentStrokeWidth === "0.3") {
           d3.select(this).attr("stroke", "#666").attr("stroke-width", 0.8);
         }
       })
-      .on("mouseout", function() {
+      .on("mouseout", function () {
         const currentStrokeWidth = d3.select(this).attr("stroke-width");
         if (currentStrokeWidth !== "1.5") {
           d3.select(this).attr("stroke", "#fff").attr("stroke-width", 0.3);
@@ -228,7 +250,6 @@ export default function MansionTaxMap() {
       .attr("height", CHART_LOGO.height)
       .attr("x", width - CHART_LOGO.width - CHART_LOGO.padding)
       .attr("y", height - CHART_LOGO.height - CHART_LOGO.padding);
-
   }, [geoData, impactData, colorExtent]);
 
   // Handle search
@@ -240,7 +261,7 @@ export default function MansionTaxMap() {
 
     const query = searchQuery.toLowerCase();
     const results = Object.values(impactData)
-      .filter(d => d.name.toLowerCase().includes(query))
+      .filter((d) => d.name.toLowerCase().includes(query))
       .slice(0, 5);
 
     setSearchResults(results);
@@ -269,7 +290,8 @@ export default function MansionTaxMap() {
     setTooltipData(null);
     if (svgRef.current) {
       const svg = d3.select(svgRef.current);
-      svg.selectAll(".constituency-path")
+      svg
+        .selectAll(".constituency-path")
         .attr("stroke", "#fff")
         .attr("stroke-width", 0.3);
     }
@@ -282,12 +304,14 @@ export default function MansionTaxMap() {
     if (!geoData || !svgRef.current) return;
 
     const svg = d3.select(svgRef.current);
-    svg.selectAll(".constituency-path")
+    svg
+      .selectAll(".constituency-path")
       .attr("stroke", "#fff")
       .attr("stroke-width", 0.3);
 
-    const selectedPath = svg.selectAll(".constituency-path")
-      .filter(d => d.properties.SPC21NM === data.name);
+    const selectedPath = svg
+      .selectAll(".constituency-path")
+      .filter((d) => d.properties.SPC21NM === data.name);
 
     selectedPath.attr("stroke", "#1D4044").attr("stroke-width", 1.5);
 
@@ -301,15 +325,21 @@ export default function MansionTaxMap() {
     setTooltipData(data);
     setTooltipPosition({ x: centerX, y: centerY });
 
-    const scale = Math.min(4, 0.9 / Math.max(bbox.width / 700, bbox.height / 900));
+    const scale = Math.min(
+      4,
+      0.9 / Math.max(bbox.width / 700, bbox.height / 900),
+    );
     const translate = [700 / 2 - scale * centerX, 900 / 2 - scale * centerY];
 
     if (window.mansionTaxMapZoomBehavior) {
       const { svg: svgZoom, zoom } = window.mansionTaxMapZoomBehavior;
-      svgZoom.transition().duration(750).call(
-        zoom.transform,
-        d3.zoomIdentity.translate(translate[0], translate[1]).scale(scale)
-      );
+      svgZoom
+        .transition()
+        .duration(750)
+        .call(
+          zoom.transform,
+          d3.zoomIdentity.translate(translate[0], translate[1]).scale(scale),
+        );
     }
   };
 
@@ -327,9 +357,11 @@ export default function MansionTaxMap() {
       <div className="map-header">
         <div className="chart-header">
           <div>
-            <h3 className="chart-title">Mansion tax: affected properties by constituency</h3>
+            <h3 className="chart-title">
+              Mansion tax: share of properties affected by constituency
+            </h3>
             <p className="chart-description">
-              Distribution of properties valued over £1m that would be affected by new council tax bands
+              Percentage of properties in each constituency valued over £1m
             </p>
           </div>
         </div>
@@ -356,7 +388,7 @@ export default function MansionTaxMap() {
                   >
                     <div className="result-name">{result.name}</div>
                     <div className="result-value">
-                      £{(result.rev / 1000000).toFixed(2)}m | {result.pct.toFixed(2)}%
+                      {result.pct.toFixed(2)}% of local properties
                     </div>
                   </button>
                 ))}
@@ -370,12 +402,12 @@ export default function MansionTaxMap() {
             <div
               className="legend-gradient-horizontal"
               style={{
-                background: "linear-gradient(to right, #A8DDD8, #0B7D73)"
+                background: "linear-gradient(to right, #A8DDD8, #0B7D73)",
               }}
             />
             <div className="legend-labels-horizontal">
               <span>0%</span>
-              <span>{colorExtent.max.toFixed(1)}%</span>
+              <span>{colorExtent.max.toFixed(2)}%</span>
             </div>
           </div>
         </div>
@@ -394,7 +426,8 @@ export default function MansionTaxMap() {
               setTooltipData(null);
               if (svgRef.current) {
                 const svg = d3.select(svgRef.current);
-                svg.selectAll(".constituency-path")
+                svg
+                  .selectAll(".constituency-path")
                   .attr("stroke", "#fff")
                   .attr("stroke-width", 0.3);
               }
@@ -402,26 +435,85 @@ export default function MansionTaxMap() {
           />
 
           {/* Map controls */}
-          <div className="map-controls-container" onClick={(e) => e.stopPropagation()}>
+          <div
+            className="map-controls-container"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="zoom-controls">
-              <button className="zoom-control-btn" onClick={handleZoomIn} title="Zoom in">
+              <button
+                className="zoom-control-btn"
+                onClick={handleZoomIn}
+                title="Zoom in"
+              >
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                  <circle cx="10" cy="10" r="7" stroke="currentColor" strokeWidth="2" />
-                  <path d="M10 7V13M7 10H13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                  <path d="M15 15L20 20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                  <circle
+                    cx="10"
+                    cy="10"
+                    r="7"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  />
+                  <path
+                    d="M10 7V13M7 10H13"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                  />
+                  <path
+                    d="M15 15L20 20"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                  />
                 </svg>
               </button>
-              <button className="zoom-control-btn" onClick={handleZoomOut} title="Zoom out">
+              <button
+                className="zoom-control-btn"
+                onClick={handleZoomOut}
+                title="Zoom out"
+              >
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                  <circle cx="10" cy="10" r="7" stroke="currentColor" strokeWidth="2" />
-                  <path d="M7 10H13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                  <path d="M15 15L20 20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                  <circle
+                    cx="10"
+                    cy="10"
+                    r="7"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  />
+                  <path
+                    d="M7 10H13"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                  />
+                  <path
+                    d="M15 15L20 20"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                  />
                 </svg>
               </button>
-              <button className="zoom-control-btn" onClick={handleResetZoom} title="Reset zoom">
+              <button
+                className="zoom-control-btn"
+                onClick={handleResetZoom}
+                title="Reset zoom"
+              >
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                  <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  <path d="M3 3v5h5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  <path
+                    d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M3 3v5h5"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
                 </svg>
               </button>
             </div>
@@ -448,7 +540,7 @@ export default function MansionTaxMap() {
               <p className="tooltip-value" style={{ color: "#0B7D73" }}>
                 {tooltipData.pct.toFixed(2)}%
               </p>
-              <p className="tooltip-label">Share of affected properties</p>
+              <p className="tooltip-label">of local properties affected</p>
             </div>
           )}
         </div>
