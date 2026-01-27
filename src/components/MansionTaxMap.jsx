@@ -358,7 +358,7 @@ export default function MansionTaxMap() {
         <div className="chart-header">
           <div>
             <h3 className="chart-title">
-              Mansion tax: Band H properties by constituency
+              Higher-value property bands: Band H properties by constituency
             </h3>
             <p className="chart-description">
               The Scottish Budget 2026-27 introduced two new council tax bands

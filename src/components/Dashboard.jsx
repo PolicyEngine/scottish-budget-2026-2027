@@ -130,7 +130,7 @@ const TOP_RATE_THRESHOLD_DATA = [
 const SECTIONS = [
   { id: "introduction", label: "Introduction" },
   { id: "income-tax-benefits", label: "Income tax and benefits" },
-  { id: "mansion-tax", label: "Mansion tax" },
+  { id: "mansion-tax", label: "Higher-value property bands" },
 ];
 
 // Common table styles
@@ -869,9 +869,9 @@ export default function Dashboard({ selectedPolicies = [] }) {
             }
           }}
         >
-          mansion tax
+          higher-value property bands
         </a>{" "}
-        on high-value properties from April 2028, detailed in the last section.
+        from April 2028, detailed in the last section.
       </p>
       <details
         className="budget-measures-details"
@@ -1126,7 +1126,7 @@ export default function Dashboard({ selectedPolicies = [] }) {
           <span className="expand-icon" style={{ fontSize: "12px" }}>
             ▶
           </span>
-          Mansion tax
+          Higher-value property bands
         </summary>
         <p className="chart-description" style={{ marginTop: "12px" }}>
           The Scottish Budget 2026-27{" "}
