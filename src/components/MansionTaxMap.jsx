@@ -361,7 +361,14 @@ export default function MansionTaxMap() {
               Mansion tax: share of properties affected by constituency
             </h3>
             <p className="chart-description">
-              Percentage of properties in each constituency valued over £1m
+              The Scottish Budget 2026-27 introduced two new council tax bands
+              for properties with a 2026 market value above £1 million,
+              effective from April 2028. The Finance Secretary estimated £16m in
+              annual revenue. The SFC does not cost this policy as Council Tax
+              is a local tax outside their remit. Using UK benchmark rates, we
+              estimate £18.5m in annual revenue. The map below shows each
+              constituency's share. Edinburgh constituencies account for ~47% of
+              total revenue.
             </p>
           </div>
         </div>
