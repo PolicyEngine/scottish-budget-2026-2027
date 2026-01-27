@@ -1155,9 +1155,8 @@ export default function Dashboard({ selectedPolicies = [] }) {
             SFC
           </a>{" "}
           does not cost this policy as Council Tax is a local tax outside their
-          remit. Using UK benchmark rates, we estimate £18.5m in annual revenue.
-          The map below shows each constituency's share. Edinburgh
-          constituencies account for ~47% of total revenue.
+          remit. The map shows the share of properties in each constituency that
+          would be affected.
         </p>
         <details
           className="methodology-details"
@@ -1195,8 +1194,8 @@ export default function Dashboard({ selectedPolicies = [] }) {
               <div style={{ display: "flex", gap: "10px" }}>
                 <span style={{ color: "#0F766E", fontWeight: 600 }}>1.</span>
                 <span>
-                  We estimate total revenue of £18.5m by multiplying 11,481 £1m+
-                  properties in Scotland (from{" "}
+                  We estimate 11,481 properties in Scotland valued over £1m
+                  using data from{" "}
                   <a
                     href="https://www.savills.com/insight-and-opinion/savills-news/339380/"
                     target="_blank"
@@ -1205,28 +1204,7 @@ export default function Dashboard({ selectedPolicies = [] }) {
                   >
                     Savills
                   </a>
-                  ) by a £1,607 average annual rate. This rate is based on the
-                  UK's{" "}
-                  <a
-                    href="https://www.gov.uk/government/publications/high-value-council-tax-surcharge/high-value-council-tax-surcharge"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ color: "#0F766E" }}
-                  >
-                    High Value Council Tax Surcharge
-                  </a>{" "}
-                  of £2,500/year for properties over £2m, from which we
-                  extrapolate £1,500/year for the Scottish £1-2m band. Using{" "}
-                  <a
-                    href="https://github.com/PolicyEngine/scotland-mansion-tax"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ color: "#0F766E" }}
-                  >
-                    Savills 2024 sales data
-                  </a>{" "}
-                  (89% of sales £1-2m, 11% over £2m), we calculate the weighted
-                  average of £1,607/year.
+                  .
                 </span>
               </div>
               <div style={{ display: "flex", gap: "10px" }}>

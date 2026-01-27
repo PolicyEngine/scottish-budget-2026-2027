@@ -85,11 +85,11 @@ export default function MansionTaxMap() {
 
   // Compute color scale extent
   const colorExtent = useMemo(() => {
-    if (!impactData) return { min: 0, max: 0.12 };
+    if (!impactData) return { min: 0, max: 3 };
     const values = Object.values(impactData).map((d) => d.pct);
     return {
       min: 0,
-      max: Math.ceil(Math.max(...values) * 100) / 100,
+      max: Math.ceil(Math.max(...values) * 10) / 10,
     };
   }, [impactData]);
 
@@ -158,7 +158,7 @@ export default function MansionTaxMap() {
     window.mansionTaxMapZoomBehavior = { svg, zoom, pathGenerator };
 
     // Color scale (log scale for better variation)
-    const minPct = 0.001;
+    const minPct = 0.01;
     const maxPct = colorExtent.max;
     const logScale = d3
       .scaleLog()
@@ -364,11 +364,8 @@ export default function MansionTaxMap() {
               The Scottish Budget 2026-27 introduced two new council tax bands
               for properties with a 2026 market value above £1 million,
               effective from April 2028. The Finance Secretary estimated £16m in
-              annual revenue. The SFC does not cost this policy as Council Tax
-              is a local tax outside their remit. Using UK benchmark rates, we
-              estimate £18.5m in annual revenue. The map below shows each
-              constituency's share. Edinburgh constituencies account for ~47% of
-              total revenue.
+              annual revenue. The map shows the share of properties in each
+              constituency that would be affected.
             </p>
           </div>
         </div>
@@ -414,7 +411,7 @@ export default function MansionTaxMap() {
             />
             <div className="legend-labels-horizontal">
               <span>0%</span>
-              <span>{colorExtent.max.toFixed(2)}%</span>
+              <span>{colorExtent.max.toFixed(1)}%</span>
             </div>
           </div>
         </div>
