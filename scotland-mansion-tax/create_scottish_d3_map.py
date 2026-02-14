@@ -57,7 +57,7 @@ def generate_d3_map_html(geojson, impact_data):
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scottish Mansion Tax by Parliament Constituency</title>
     <script src="https://d3js.org/d3.v7.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             box-sizing: border-box;
@@ -65,7 +65,7 @@ def generate_d3_map_html(geojson, impact_data):
             padding: 0;
         }
         body {
-            font-family: 'Roboto', sans-serif;
+            font-family: 'Inter', sans-serif;
             background: white;
         }
         .map-wrapper {
@@ -117,7 +117,7 @@ def generate_d3_map_html(geojson, impact_data):
             border: 1px solid #d1d5db;
             border-radius: 4px;
             font-size: 0.75rem;
-            font-family: 'Roboto', sans-serif;
+            font-family: 'Inter', sans-serif;
         }
         .constituency-search:focus {
             outline: none;
@@ -145,7 +145,7 @@ def generate_d3_map_html(geojson, impact_data):
             border: none;
             border-bottom: 1px solid #f3f4f6;
             cursor: pointer;
-            font-family: 'Roboto', sans-serif;
+            font-family: 'Inter', sans-serif;
         }
         .search-result-item:last-child {
             border-bottom: none;

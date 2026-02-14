@@ -237,7 +237,7 @@ def create_html_report(df: pd.DataFrame) -> str:
     <title>Scottish Mansion Tax - Parliament Constituency Analysis</title>
     <style>
         body {{
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, sans-serif;
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
