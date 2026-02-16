@@ -209,7 +209,7 @@ def create_html_report(df):
     <title>Scottish Mansion Tax - Parliament Constituency Analysis</title>
     <style>
         body {{
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, Oxygen, Ubuntu, sans-serif;
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
