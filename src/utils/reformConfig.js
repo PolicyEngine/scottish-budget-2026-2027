@@ -3,7 +3,7 @@
  */
 
 // Backend API URL - Modal deployment
-export const API_BASE_URL = import.meta.env.VITE_API_URL || "https://policyengine--scottish-budget-api-flask-app.modal.run";
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://policyengine--scottish-budget-api-flask-app.modal.run";
 
 /**
  * Reform metadata for UI display.

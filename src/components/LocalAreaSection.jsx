@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, useEffect, useMemo } from "react";
 import ScotlandMap from "./ScotlandMap";
 import "./LocalAreaSection.css";
