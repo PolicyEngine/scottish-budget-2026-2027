@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import D3LineChart from "./D3LineChart";
 import "./ValidationTab.css";

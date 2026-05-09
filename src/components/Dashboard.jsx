@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import DecileChart from "./DecileChart";
 import BudgetBarChart from "./BudgetBarChart";

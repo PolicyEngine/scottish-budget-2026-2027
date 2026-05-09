@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, useCallback, useEffect, useRef } from "react";
 import * as d3 from "d3";
 import { REFORMS, API_BASE_URL } from "../utils/reformConfig";

@@ -1,9 +1,10 @@
+'use client';
+
 import { useState, useEffect, useRef } from "react";
-import BaselineScotlandTab from "./components/BaselineScotlandTab";
-import Dashboard from "./components/Dashboard";
-import HouseholdCalculator from "./components/HouseholdCalculator";
-import ValidationTab from "./components/ValidationTab";
-import "./App.css";
+import BaselineScotlandTab from "@/components/BaselineScotlandTab";
+import Dashboard from "@/components/Dashboard";
+import HouseholdCalculator from "@/components/HouseholdCalculator";
+import ValidationTab from "@/components/ValidationTab";
 
 const POLICIES = [
   // Income tax threshold uplifts (costs to government)
