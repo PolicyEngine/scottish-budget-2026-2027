@@ -5,7 +5,7 @@
 
 // Logo configuration - smaller, consistent size across all charts
 export const CHART_LOGO = {
-  href: "/assets/logos/policyengine-teal.png",
+  href: `${process.env.NEXT_PUBLIC_BASE_PATH || ""}/assets/logos/policyengine-teal.png`,
   width: 80,
   height: 17, // Maintains aspect ratio (996:207 ≈ 4.8:1)
   padding: 8,

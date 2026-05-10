@@ -71,7 +71,7 @@ export default function LocalAreaSection({
   useEffect(() => {
     async function loadData() {
       try {
-        const res = await fetch("/data/local_authorities.csv");
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_PATH || ""}/data/local_authorities.csv`);
         if (res.ok) {
           const csvText = await res.text();
           const data = parseCSV(csvText);

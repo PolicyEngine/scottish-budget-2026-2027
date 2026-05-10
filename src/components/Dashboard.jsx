@@ -527,9 +527,9 @@ export default function Dashboard({ selectedPolicies = [] }) {
 
       try {
         const [distRes, metricsRes, budgetRes] = await Promise.all([
-          fetch("/data/distributional_impact.csv"),
-          fetch("/data/metrics.csv"),
-          fetch("/data/budgetary_impact.csv"),
+          fetch(`${process.env.NEXT_PUBLIC_BASE_PATH || ""}/data/distributional_impact.csv`),
+          fetch(`${process.env.NEXT_PUBLIC_BASE_PATH || ""}/data/metrics.csv`),
+          fetch(`${process.env.NEXT_PUBLIC_BASE_PATH || ""}/data/budgetary_impact.csv`),
         ]);
 
         if (distRes.ok) {

@@ -182,8 +182,8 @@ export default function ValidationTab() {
       try {
         // Load baseline data
         const [baselineRes, tclRes] = await Promise.all([
-          fetch("/data/scotland_baseline.csv"),
-          fetch("/data/two_child_limit_validation.csv"),
+          fetch(`${process.env.NEXT_PUBLIC_BASE_PATH || ""}/data/scotland_baseline.csv`),
+          fetch(`${process.env.NEXT_PUBLIC_BASE_PATH || ""}/data/two_child_limit_validation.csv`),
         ]);
 
         const baselineCsvText = await baselineRes.text();
