@@ -155,7 +155,7 @@ export default function BaselineScotlandTab() {
     const loadData = async () => {
       try {
         // Load baseline data
-        const response = await fetch("/data/scotland_baseline.csv");
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_PATH || ""}/data/scotland_baseline.csv`);
         const csvText = await response.text();
         const parsed = parseCSV(csvText);
 

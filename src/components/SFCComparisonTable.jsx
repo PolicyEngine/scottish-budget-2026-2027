@@ -10,8 +10,8 @@ function SFCComparisonTable() {
   useEffect(() => {
     // Fetch both SFC comparison data and PolicyEngine budgetary impact data
     Promise.all([
-      fetch("/data/sfc_comparison.csv").then((res) => res.text()),
-      fetch("/data/budgetary_impact.csv").then((res) => res.text()),
+      fetch(`${process.env.NEXT_PUBLIC_BASE_PATH || ""}/data/sfc_comparison.csv`).then((res) => res.text()),
+      fetch(`${process.env.NEXT_PUBLIC_BASE_PATH || ""}/data/budgetary_impact.csv`).then((res) => res.text()),
     ])
       .then(([sfcCsvText, peCsvText]) => {
         // Parse SFC data

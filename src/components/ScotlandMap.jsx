@@ -60,7 +60,7 @@ export default function ScotlandMap({
 
   // Load GeoJSON data (Scotland local authorities)
   useEffect(() => {
-    fetch("/data/scotland_local_authorities_2021.geojson")
+    fetch(`${process.env.NEXT_PUBLIC_BASE_PATH || ""}/data/scotland_local_authorities_2021.geojson`)
       .then((r) => r.json())
       .then((geojson) => {
         setGeoData(geojson);

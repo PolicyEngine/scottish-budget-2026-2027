@@ -24,8 +24,8 @@ export default function MansionTaxMap() {
     async function loadData() {
       try {
         const [geoRes, impactRes] = await Promise.all([
-          fetch("/data/scottish_parliament_constituencies.geojson"),
-          fetch("/data/mansion_tax_constituency_impact.csv"),
+          fetch(`${process.env.NEXT_PUBLIC_BASE_PATH || ""}/data/scottish_parliament_constituencies.geojson`),
+          fetch(`${process.env.NEXT_PUBLIC_BASE_PATH || ""}/data/mansion_tax_constituency_impact.csv`),
         ]);
 
         if (geoRes.ok) {
