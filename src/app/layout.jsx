@@ -1,4 +1,5 @@
 import './globals.css';
+import PolicyEngineHeader from '@/components/PolicyEngineHeader';
 
 const SITE_URL = 'https://scottish-budget-2026-2027.vercel.app';
 const TITLE = 'Scottish Budget 2026-27 Dashboard | PolicyEngine';
@@ -49,7 +50,10 @@ export default function RootLayout({ children }) {
           rel="stylesheet"
         />
       </head>
-      <body>{children}</body>
+      <body>
+        <PolicyEngineHeader />
+        {children}
+      </body>
     </html>
   );
 }
