@@ -1,3 +1,6 @@
+import { PolicyEngineShell } from "@policyengine/ui-kit/layout";
+import "@policyengine/ui-kit/styles.css";
+
 import './globals.css';
 
 const SITE_URL = 'https://scottish-budget-2026-2027.vercel.app';
@@ -49,7 +52,9 @@ export default function RootLayout({ children }) {
           rel="stylesheet"
         />
       </head>
-      <body>{children}</body>
+      <body>
+        <PolicyEngineShell country="uk">{children}        </PolicyEngineShell>
+      </body>
     </html>
   );
 }
