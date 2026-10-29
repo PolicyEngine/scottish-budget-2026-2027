@@ -4,7 +4,9 @@ import "@policyengine/ui-kit/styles.css";
 import './globals.css';
 import Script from 'next/script';
 
-const SITE_URL = 'https://scottish-budget-2026-2027.vercel.app';
+// The canonical address: policyengine.org serves this app through a zone
+// rewrite, so links and link previews name it, not the Vercel deployment.
+const SITE_URL = 'https://policyengine.org/uk/scottish-budget-2026-27';
 const TITLE = 'Scottish Budget 2026-27 Dashboard | PolicyEngine';
 const DESCRIPTION =
   'Interactive analysis of the Scottish Budget 2026-27. Explore distributional impacts, household calculations, and validation against the SFC.';

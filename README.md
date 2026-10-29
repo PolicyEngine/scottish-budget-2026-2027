@@ -1,6 +1,6 @@
 # Post-Scottish Budget 2026 Dashboard
 
-**Live Dashboard:** [post-scottish-budget-dashboard.vercel.app](https://post-scottish-budget-dashboard.vercel.app)
+**Live dashboard:** [policyengine.org/uk/scottish-budget-2026-27](https://policyengine.org/uk/scottish-budget-2026-27)
 
 An interactive dashboard analysing the impact of the Scottish Budget 2026–27 on living standards, poverty, and local areas across Scotland. Built by [PolicyEngine](https://policyengine.org).
 
